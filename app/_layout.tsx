@@ -1,15 +1,16 @@
 import './global.css';
 
-import {SessionProvider, useSession} from '@/context/authContext';
+import {SessionProvider, useSession} from '@/utils/authContext';
 import {Stack} from 'expo-router';
-import SplashScreenController from './splash';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-export default function Root() {
+export default function RootLayout() {
 	// Set up the auth context and render your layout inside of it.
 	return (
 		<SessionProvider>
-			<SplashScreenController />
-			<RootNavigator />
+			<SafeAreaProvider>
+				<RootNavigator />
+			</SafeAreaProvider>
 		</SessionProvider>
 	);
 }
@@ -20,12 +21,11 @@ function RootNavigator() {
 
 	return (
 		<Stack>
-			<Stack.Protected guard={!!session}>
-				<Stack.Screen name="(app)" />
-			</Stack.Protected>
-
 			<Stack.Protected guard={!session}>
-				<Stack.Screen name="sign-in" />
+				<Stack.Screen name="index" options={{headerShown: false, animation: 'none'}} />
+			</Stack.Protected>
+			<Stack.Protected guard={!!session}>
+				<Stack.Screen name="(private)" options={{headerShown: false, animation: 'none'}} />
 			</Stack.Protected>
 		</Stack>
 	);
