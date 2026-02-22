@@ -25,9 +25,9 @@ const ChatScreen = () => {
 	}, []);
 
 	return (
-		<SafeAreaView className="flex-1">
+		<SafeAreaView edges={['bottom']} className="flex-1">
 			<View className="flex-1">
-				<ChatHeader friend={friendList[Number(id)]} />
+				{/* <ChatHeader friend={friendList[Number(id)]} /> */}
 				<KeyboardAvoidingView
 					style={{flex: 1}}
 					behavior={Platform.OS === 'ios' ? 'padding' : undefined}
