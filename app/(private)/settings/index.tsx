@@ -11,15 +11,22 @@ const SettingsScreen = () => {
 				iconName="shield-account-variant-outline"
 				title="Account"
 				info="Security notifications, change number"
-			></IconCard>
-			<IconCard iconName="lock-outline" title="Privacy" info="Block contacts, disappearing messages"></IconCard>
-			<IconCard iconName="theme-light-dark" title="Theme" info="System default"></IconCard>
-			<IconCard iconName="bell-outline" title="Notifications" info="Message, group & call tones"></IconCard>
+				route="/settings"
+			/>
+			<IconCard
+				iconName="lock-outline"
+				title="Privacy"
+				info="Block contacts, disappearing messages"
+				route="/settings"
+			/>
+			<IconCard iconName="theme-light-dark" title="Theme" info="System default" route="/settings" />
+			<IconCard iconName="bell-outline" title="Notifications" info="Message, group & call tones" route="/settings" />
 			<IconCard
 				iconName="cellphone-check"
 				title="App updates"
 				info="Block contacts, disappearing messages"
-			></IconCard>
+				route="/settings"
+			/>
 		</SafeAreaView>
 	);
 };

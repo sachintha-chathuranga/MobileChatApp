@@ -13,3 +13,9 @@ export type Friend = {
 	profil_pic: string;
 	status: boolean;
 };
+
+export type AboutItem = {
+	id: number;
+	emoji: string;
+	label: string;
+}

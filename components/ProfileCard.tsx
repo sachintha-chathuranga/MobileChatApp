@@ -5,7 +5,7 @@ import {Image, Pressable, Text, TouchableHighlight, TouchableOpacity, View} from
 const ProfileCard = () => {
 	const router = useRouter();
 	return (
-		<TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={()=> router.replace('/settings')}>
+		<TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={()=> router.push('/settings/profile')}>
 			<View className="flex-row items-center border-b border-b-gray-200 p-3 pl-5">
 				<Image source={friends[0].profil_pic} style={{width: 70, height: 70, borderRadius: 50 }} />
 				<View className="px-4">

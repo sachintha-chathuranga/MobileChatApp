@@ -1,5 +1,6 @@
 import {useSession} from '@/utils/authContext';
 import {Text, View} from 'react-native';
+import "react-native-gesture-handler";
 
 export default function LogginScreen() {
 	const {signIn} = useSession();
