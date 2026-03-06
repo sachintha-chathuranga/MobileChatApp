@@ -39,8 +39,8 @@ const ProfileScreen = () => {
 				</Pressable>
 				<TouchableHighlight
 					activeOpacity={0.6}
-					underlayColor="#bbf7d0"
-					className="rounded-3xl py-2 px-5"
+					underlayColor={colorScheme==='dark' ? Colors.dark.underlay.primary : Colors.light.underlay.primary}
+					className="rounded-3xl py-2 px-5 "
 					onPress={() => handlePresentModalPress()}
 				>
 					<Text className="text-light-txtcolor-primary font-semibold dark:text-dark-txtcolor-primary">Edit</Text>

@@ -15,8 +15,8 @@ const InputField: React.FC<InputFieldProps> = ({messages, setMessages}) => {
 	const sendMessage = () => {
 		const msg = {
 			id: messages.length + 1,
-			sender_id: 2,
-			receiver_id: 1,
+			sender_id: 1,
+			receiver_id: 2,
 			message: input,
 		};
 		setMessages((prev) => [msg, ...prev]);
@@ -37,7 +37,7 @@ const InputField: React.FC<InputFieldProps> = ({messages, setMessages}) => {
 			/>
 
 			<TouchableWithoutFeedback onPress={sendMessage}>
-				<View className="flex justify-center items-center rounded-full bg-primary-bg p-3">
+				<View className="flex justify-center items-center rounded-full bg-light-bgcolor-primary p-3 dark:bg-dark-bgcolor-primary">
 					<MaterialIcons color={'white'} size={23} name="send" />
 				</View>
 			</TouchableWithoutFeedback>

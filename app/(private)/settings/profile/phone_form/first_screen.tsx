@@ -23,7 +23,7 @@ const ChangePhoneFirst = () => {
 				</View>
 			</View>
 			<Pressable
-				className="bg-primary-bg py-3 px-7 w-fit self-center rounded-full mb-6"
+				className="bg-light-bgcolor-primary py-3 px-7 w-fit self-center rounded-full mb-6 dark:bg-dark-bgcolor-primary"
 				onPress={() => router.push('/settings/profile/phone_form/second_screen')}
 			>
 				<Text className="color-white font-semibold">Next</Text>

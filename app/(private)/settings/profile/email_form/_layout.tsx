@@ -29,6 +29,7 @@ const PhoneFormLayout = () => {
 					headerTintColor: colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100],
 					headerBlurEffect: 'regular',
 					headerTitleStyle: {fontSize: 22},
+					headerShadowVisible: false,
 				}}
 			/>
 			<Stack.Screen
@@ -51,6 +52,7 @@ const PhoneFormLayout = () => {
 					headerTintColor: colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100],
 					headerBlurEffect: 'regular',
 					headerTitleStyle: {fontSize: 22},
+					headerShadowVisible: false,
 				}}
 			/>
 			<Stack.Screen
@@ -73,6 +75,7 @@ const PhoneFormLayout = () => {
 					headerTintColor: colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100],
 					headerBlurEffect: 'regular',
 					headerTitleStyle: {fontSize: 22},
+					headerShadowVisible: false,
 				}}
 			/>
 		</Stack>

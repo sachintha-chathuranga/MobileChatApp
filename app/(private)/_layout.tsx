@@ -22,7 +22,7 @@ export default function HomeLayout() {
 					headerStyle: {
 						backgroundColor: colorScheme === 'dark' ? Colors.dark.bgcolor[100] : Colors.light.bgcolor[100],
 					},
-					headerTintColor: colorScheme === 'dark' ? 'white' : Colors.light.txtcolor.primary,
+					headerTintColor: colorScheme === 'dark' ? Colors.dark.txtcolor.primary : Colors.light.txtcolor.primary,
 					headerBlurEffect: 'regular',
 
 					headerTitleStyle: {

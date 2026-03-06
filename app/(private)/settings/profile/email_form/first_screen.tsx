@@ -13,7 +13,7 @@ const ChangeEmailFirst = () => {
 	return (
 		<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 			<View className="px-4 pt-8">
-				<Text className="text-light-txtcolor-200 mb-5 dark:text-dark-txtcolor-200">
+				<Text className="text-light-txtcolor-100 mb-5 dark:text-dark-txtcolor-100">
 					Email helps you access your account. It isn't visible to others.
 				</Text>
 				<Text className="text-light-txtcolor-200 mb-3 dark:text-dark-txtcolor-200">Email</Text>
@@ -32,18 +32,19 @@ const ChangeEmailFirst = () => {
 					/>
 				</TouchableOpacity>
 
-				<View className="flex-row items-center gap-1">
+				<View className="flex-row items-center gap-1 pt-1">
 					<MaterialCommunityIcons
-						color={`${isVerifyEmail ? '#16a34a' : '#fb923c'}`}
+						color={`${isVerifyEmail ? (colorScheme==='dark' ? Colors.dark.txtcolor.primary : Colors.light.txtcolor.primary) : '#fb923c'}`}
 						size={18}
+						className='pr-1'
 						name={`${isVerifyEmail ? 'check-circle-outline' : 'alert-outline'}`}
 					/>
-					<Text className={`${isVerifyEmail ? 'color-green-600' : 'color-gray-500'}`}>
+					<Text className={`${isVerifyEmail ? ('text-light-txtcolor-primary dark:text-dark-txtcolor-primary') : ('text-light-txtcolor-200 dark:text-dark-txtcolor-200')}`}>
 						{isVerifyEmail ? 'Verified' : 'Pending verification.'}
 					</Text>
 					{!isVerifyEmail && (
 						<Link href={'/(private)/settings/profile/email_form/verify_screen'}>
-							<Text className="font-semibold text-green-700">Verify email</Text>
+							<Text className="font-semibold text-light-txtcolor-primary dark:text-dark-txtcolor-primary">Verify email</Text>
 						</Link>
 					)}
 				</View>

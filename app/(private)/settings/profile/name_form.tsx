@@ -57,12 +57,12 @@ const NameForm = () => {
 							/>
 							<TouchableHighlight
 								activeOpacity={0.6}
-								underlayColor={colorScheme === 'dark' ? Colors.dark.underlay : Colors.light.underlay}
+								underlayColor={colorScheme === 'dark' ? Colors.dark.underlay[100] : Colors.light.underlay[100]}
 								className="rounded-full p-1 justify-center items-center "
 								onPress={() => toggleEmojiKeyboard()}
 							>
 								<MaterialIcons
-									color={colorScheme === 'dark' ? Colors.dark.txtcolor[200] : Colors.light.txtcolor[200]}
+									color={colorScheme === 'dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
 									size={24}
 									name={showEmojiKeyboard ? 'keyboard' : 'tag-faces'}
 								/>
@@ -75,7 +75,7 @@ const NameForm = () => {
 					</View>
 					<View className={`${showEmojiKeyboard && 'mb-40'}`}>
 						<View className="my-4 mx-8">
-							<TouchableHighlight className="p-3 rounded-full mx-3 bg-primary-bg items-center">
+							<TouchableHighlight className="p-3 rounded-full mx-3 bg-light-bgcolor-primary items-center dark:bg-dark-bgcolor-primary">
 								<Text className="text-white font-bold">Save</Text>
 							</TouchableHighlight>
 						</View>

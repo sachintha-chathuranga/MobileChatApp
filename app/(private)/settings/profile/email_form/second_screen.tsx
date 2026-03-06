@@ -1,5 +1,6 @@
 import {Colors} from '@/constants/theme';
 import {useFocusEffect, useRouter} from 'expo-router';
+import { useColorScheme } from 'nativewind';
 import React, {useState} from 'react';
 import {
 	Keyboard,
@@ -40,6 +41,7 @@ const hostnames = [
 const ChangeEmailSecond = () => {
 	const [input, setInput] = useState('');
 	const router = useRouter();
+	const {colorScheme} = useColorScheme();
 	useFocusEffect(
 		React.useCallback(() => {
 			return () => Keyboard.dismiss();
@@ -64,20 +66,21 @@ const ChangeEmailSecond = () => {
 			>
 				<View className="flex-1 justify-between">
 					<View className="p-6 gap-8">
-						<Text className="text-light-txtcolor-200 dark:text-dark-txtcolor-200 ">
+						<Text className="text-light-txtcolor-100 dark:text-dark-txtcolor-100 ">
 							Email helps us verify your account or reach you in case of security or support issues. Your email
 							address won't be visible to others.
 						</Text>
 						<View>
-							<View className="">
+							<View >
 								<TextInput
 									cursorColor={'#4ade80'}
 									onChangeText={setInput}
-									className={`text-base rounded-lg border-2 border-primary-bg p-3`}
+									className={`text-light-txtcolor-100 dark:text-dark-txtcolor-100 text-base rounded-lg border-2 border-light-border-primary p-3 dark:border-dark-border-primary`}
 									value={input}
 									underlineColorAndroid="transparent"
 									autoFocus
 									placeholder="Email"
+									placeholderTextColor={colorScheme==='dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
 								/>
 							</View>
 							<ScrollView
@@ -91,7 +94,7 @@ const ChangeEmailSecond = () => {
 								{hostnames.map((item) => (
 									<TouchableOpacity
 										key={item.id}
-										className="mr-2 py-2 px-3 border rounded-full border-light-border dark:border-dark-border"
+										className="mr-2 py-2 px-3 border rounded-full border-light-border-100 dark:border-dark-border-100"
 										onPress={() => addHostName(item.name)}
 									>
 										<Text className="font-semibold text-light-txtcolor-200 dark:text-dark-txtcolor-200">
@@ -104,10 +107,10 @@ const ChangeEmailSecond = () => {
 					</View>
 					<Pressable
 						disabled={!input}
-						className={`${input ? Colors.light.bgcolor.primary : 'bg-gray-300'} py-3 rounded-full mb-6 mx-8`}
+						className={`${input ? 'bg-light-bgcolor-primary dark:bg-dark-bgcolor-primary' : 'bg-light-bgcolor-inactive dark:bg-dark-bgcolor-inactive'} py-3 rounded-full mb-6 mx-8`}
 						onPress={() => router.push('/settings/profile/email_form/verify_screen')}
 					>
-						<Text className={`${input ? 'color-white' : 'color-gray-400'} text-center font-semibold`}>Next</Text>
+						<Text className={` ${input ? 'color-white' : 'text-light-txtcolor-inactive dark:text-dark-txtcolor-inactive'} text-center font-semibold`}>Next</Text>
 					</Pressable>
 				</View>
 			</KeyboardAvoidingView>

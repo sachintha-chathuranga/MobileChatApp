@@ -88,7 +88,7 @@ const AboutForm = () => {
 
 				<View className={`${showEmojiKeyboard ? 'mb-40' : 'relative'}`}>
 					<Pressable
-						className={`absolute z-20 -top-20 right-0 bg-light-bgcolor-primary dark:bg-green-600 w-fit self-end p-3 m-3 rounded-xl `}
+						className={`absolute z-20 -top-20 right-0 bg-light-bgcolor-primary dark:bg-dark-bgcolor-primary w-fit self-end p-3 m-3 rounded-xl `}
 					>
 						<MaterialCommunityIcons color={'white'} size={23} name="check" />
 					</Pressable>
