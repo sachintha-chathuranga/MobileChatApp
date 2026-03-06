@@ -17,8 +17,8 @@ type OutgoingMsgProps = {
 
 const OutgoingMsg: React.FC<OutgoingMsgProps> = ({isLoading, msg}) => {
 	return (
-		<View className="flex-auto p-3 rounded-2xl rounded-ss-none bg-white w-fit max-w-72">
-			<Text>{msg}</Text>
+		<View className="flex-auto p-3 rounded-2xl rounded-ss-none bg-light-outbg w-fit max-w-72 dark:bg-dark-outbg">
+			<Text className='text-light-txtcolor-100 dark:text-dark-txtcolor-100'>{msg}</Text>
 		</View>
 	);
 };

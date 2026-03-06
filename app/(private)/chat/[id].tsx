@@ -24,7 +24,7 @@ const ChatScreen = () => {
 	}, []);
 
 	return (
-		<SafeAreaView edges={['bottom']} className="flex-1">
+		<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-300 dark:bg-dark-bgcolor-300">
 			<KeyboardAvoidingView
 				style={{flex: 1}}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

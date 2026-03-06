@@ -5,7 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SettingsScreen = () => {
 	return (
-		<SafeAreaView edges={['bottom']} className="flex-1 bg-white">
+		<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 			<ProfileCard />
 			<IconCard
 				iconName="shield-account-variant-outline"

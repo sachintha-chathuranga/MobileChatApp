@@ -12,13 +12,15 @@ const ChangePhoneSecond = () => {
 	const [activeInput, setActiveInput] = useState(0);
 	const router = useRouter();
 	return (
-		<SafeAreaView edges={['bottom']} className="flex-1 justify-between">
+		<SafeAreaView edges={['bottom']} className="flex-1 justify-between bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 			<View className="p-5 gap-8">
 				<View className="gap-2">
-					<Text className="text-base">Enter your old phone number with country code:</Text>
+					<Text className="text-base text-light-txtcolor-100  dark:text-dark-txtcolor-100">
+						Enter your old phone number with country code:
+					</Text>
 					<View className="flex-row gap-4">
 						<View
-							className={`flex-row items-center gap-2 border-b ${activeInput === 1 ? 'border-b-2 border-green-600' : 'border-gray-400'}  w-14`}
+							className={`flex-row items-center gap-2 border-b ${activeInput === 1 ? 'border-b-2 border-primary-bg' : 'border-gray-400'}  w-14`}
 						>
 							<Text className="text-base">+</Text>
 							<TextInput
@@ -35,7 +37,7 @@ const ChangePhoneSecond = () => {
 						<TextInput
 							cursorColor={'#4ade80'}
 							onChangeText={setInput2}
-							className={`text-base border-b ${activeInput === 2 ? 'border-b-2 border-green-600' : 'border-gray-400'} flex-1`}
+							className={`text-base border-b ${activeInput === 2 ? 'border-b-2 border-primary-bg' : 'border-gray-400'} flex-1`}
 							value={input2}
 							underlineColorAndroid="transparent"
 							autoFocus
@@ -48,7 +50,7 @@ const ChangePhoneSecond = () => {
 					<Text className="text-base">Enter your new phone number with country code:</Text>
 					<View className="flex-row gap-4">
 						<View
-							className={`flex-row items-center gap-2 border-b ${activeInput === 3 ? 'border-b-2 border-green-600' : 'border-gray-400'}  w-14`}
+							className={`flex-row items-center gap-2 border-b ${activeInput === 3 ? 'border-b-2 border-primary-bg' : 'border-gray-400'}  w-14`}
 						>
 							<Text className="text-base">+</Text>
 							<TextInput
@@ -65,7 +67,7 @@ const ChangePhoneSecond = () => {
 						<TextInput
 							cursorColor={'#4ade80'}
 							onChangeText={setInput4}
-							className={`text-base border-b ${activeInput === 4 ? 'border-b-2 border-green-600' : 'border-gray-400'} flex-1`}
+							className={`text-base border-b ${activeInput === 4 ? 'border-b-2 border-primary-bg' : 'border-gray-400'} flex-1`}
 							value={input4}
 							underlineColorAndroid="transparent"
 							autoFocus
@@ -76,7 +78,7 @@ const ChangePhoneSecond = () => {
 				</View>
 			</View>
 			<Pressable
-				className="bg-green-600 py-3 px-7 w-fit self-center rounded-full mb-6"
+				className="bg-primary-bg py-3 px-7 w-fit self-center rounded-full mb-6"
 				onPress={() => router.push('/settings/profile/phone_form/second_screen')}
 			>
 				<Text className="color-white font-semibold">Next</Text>

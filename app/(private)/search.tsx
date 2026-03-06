@@ -7,13 +7,13 @@ import { ScrollView, View } from 'react-native';
 
 const SearchScreen = () => {
 	return (
-		<SafeAreaView edges={['bottom']} className="flex-1 bg-white p-4">
+		<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-100 p-4 dark:bg-dark-bgcolor-100">
 			<ScrollView
 				showsVerticalScrollIndicator={false}
 				contentInsetAdjustmentBehavior="automatic"
-				contentContainerStyle={{paddingTop: 5, backgroundColor: '#fff'}}
+				contentContainerStyle={{paddingTop: 5}}
 			>
-				{friends.map((item, index) => (
+				{friends.map((item) => (
 					<View key={item.id} className="py-3">
 						<Card friend={item} />
 					</View>

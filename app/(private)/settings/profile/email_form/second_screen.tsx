@@ -1,3 +1,4 @@
+import {Colors} from '@/constants/theme';
 import {useFocusEffect, useRouter} from 'expo-router';
 import React, {useState} from 'react';
 import {
@@ -55,7 +56,7 @@ const ChangeEmailSecond = () => {
 		});
 	};
 	return (
-		<SafeAreaView edges={['bottom']} className="flex-1">
+		<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 			<KeyboardAvoidingView
 				style={{flex: 1}}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -63,7 +64,7 @@ const ChangeEmailSecond = () => {
 			>
 				<View className="flex-1 justify-between">
 					<View className="p-6 gap-8">
-						<Text className="text-gray-500 ">
+						<Text className="text-light-txtcolor-200 dark:text-dark-txtcolor-200 ">
 							Email helps us verify your account or reach you in case of security or support issues. Your email
 							address won't be visible to others.
 						</Text>
@@ -72,7 +73,7 @@ const ChangeEmailSecond = () => {
 								<TextInput
 									cursorColor={'#4ade80'}
 									onChangeText={setInput}
-									className={`text-base rounded-lg border-2 border-green-600 p-3`}
+									className={`text-base rounded-lg border-2 border-primary-bg p-3`}
 									value={input}
 									underlineColorAndroid="transparent"
 									autoFocus
@@ -90,10 +91,12 @@ const ChangeEmailSecond = () => {
 								{hostnames.map((item) => (
 									<TouchableOpacity
 										key={item.id}
-										className="mr-2 py-2 px-3 border rounded-full border-gray-400"
+										className="mr-2 py-2 px-3 border rounded-full border-light-border dark:border-dark-border"
 										onPress={() => addHostName(item.name)}
 									>
-										<Text className="font-semibold text-gray-600">{item.name}</Text>
+										<Text className="font-semibold text-light-txtcolor-200 dark:text-dark-txtcolor-200">
+											{item.name}
+										</Text>
 									</TouchableOpacity>
 								))}
 							</ScrollView>
@@ -101,7 +104,7 @@ const ChangeEmailSecond = () => {
 					</View>
 					<Pressable
 						disabled={!input}
-						className={`${input ? 'bg-green-600' : 'bg-gray-300'} py-3 rounded-full mb-6 mx-8`}
+						className={`${input ? Colors.light.bgcolor.primary : 'bg-gray-300'} py-3 rounded-full mb-6 mx-8`}
 						onPress={() => router.push('/settings/profile/email_form/verify_screen')}
 					>
 						<Text className={`${input ? 'color-white' : 'color-gray-400'} text-center font-semibold`}>Next</Text>

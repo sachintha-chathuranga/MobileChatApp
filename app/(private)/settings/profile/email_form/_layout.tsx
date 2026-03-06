@@ -1,9 +1,12 @@
+import {Colors} from '@/constants/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {Stack, useRouter} from 'expo-router';
+import {useColorScheme} from 'nativewind';
 import React from 'react';
 
 const PhoneFormLayout = () => {
 	const router = useRouter();
+	const {colorScheme} = useColorScheme();
 	return (
 		<Stack>
 			<Stack.Screen
@@ -12,8 +15,18 @@ const PhoneFormLayout = () => {
 					title: 'Email address',
 					headerTitleAlign: 'left',
 					headerLeft: () => (
-						<MaterialIcons size={23} name="arrow-back" className="pr-4" onPress={() => router.back()} />
+						<MaterialIcons
+							color={colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
+							size={23}
+							name="arrow-back"
+							className="pr-4"
+							onPress={() => router.back()}
+						/>
 					),
+					headerStyle: {
+						backgroundColor: colorScheme === 'dark' ? Colors.dark.bgcolor[100] : Colors.light.bgcolor[100],
+					},
+					headerTintColor: colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100],
 					headerBlurEffect: 'regular',
 					headerTitleStyle: {fontSize: 22},
 				}}
@@ -24,8 +37,18 @@ const PhoneFormLayout = () => {
 					title: 'Change your email',
 					headerTitleAlign: 'left',
 					headerLeft: () => (
-						<MaterialIcons size={23} name="arrow-back" className="pr-4" onPress={() => router.back()} />
+						<MaterialIcons
+							color={colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
+							size={23}
+							name="arrow-back"
+							className="pr-4"
+							onPress={() => router.back()}
+						/>
 					),
+					headerStyle: {
+						backgroundColor: colorScheme === 'dark' ? Colors.dark.bgcolor[100] : Colors.light.bgcolor[100],
+					},
+					headerTintColor: colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100],
 					headerBlurEffect: 'regular',
 					headerTitleStyle: {fontSize: 22},
 				}}
@@ -36,8 +59,18 @@ const PhoneFormLayout = () => {
 					title: 'Verify your email',
 					headerTitleAlign: 'left',
 					headerLeft: () => (
-						<MaterialIcons size={23} name="arrow-back" className="pr-4" onPress={() => router.back()} />
+						<MaterialIcons
+							color={colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
+							size={23}
+							name="arrow-back"
+							className="pr-4"
+							onPress={() => router.back()}
+						/>
 					),
+					headerStyle: {
+						backgroundColor: colorScheme === 'dark' ? Colors.dark.bgcolor[100] : Colors.light.bgcolor[100],
+					},
+					headerTintColor: colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100],
 					headerBlurEffect: 'regular',
 					headerTitleStyle: {fontSize: 22},
 				}}

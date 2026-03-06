@@ -1,8 +1,10 @@
 import EmojiKeyboard from '@/components/EmojiKeyboard';
 import SelectionList from '@/components/SelectionList';
 import {AboutItem} from '@/constants/types';
+import {Colors} from '@/constants/theme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import {useColorScheme} from 'nativewind';
 import React, {useRef, useState} from 'react';
 import {Keyboard, KeyboardAvoidingView, Platform, Pressable, Text, TextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -20,7 +22,7 @@ const AboutForm = () => {
 	const [showEmojiKeyboard, setShowEmojiKeyboard] = useState(false);
 	const [emoji, setEmoji] = useState('');
 	const inputRef = useRef<TextInput>(null);
-
+	const {colorScheme} = useColorScheme();
 	const setAbout = (item: AboutItem) => {
 		setEmoji(item.emoji);
 		setInput(item.label);
@@ -30,7 +32,7 @@ const AboutForm = () => {
 		setShowEmojiKeyboard(true);
 	};
 	return (
-		<SafeAreaView edges={['bottom']} className="flex-1 bg-white">
+		<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 			<KeyboardAvoidingView
 				style={{flex: 1}}
 				enabled={!showEmojiKeyboard}
@@ -40,11 +42,15 @@ const AboutForm = () => {
 				<ScrollView automaticallyAdjustKeyboardInsets keyboardShouldPersistTaps="always">
 					<View className="flex-row items-start gap-4 p-5">
 						<Pressable
-							className="rounded-lg justify-center p-1 items-center border text-center border-gray-400"
+							className="rounded-lg justify-center p-1 items-center border text-center border-light-border-100 dark:border-dark-border-100"
 							onPress={() => openEmojiKeyboard()}
 						>
 							{emoji === '' ? (
-								<MaterialIcons color={'gray'} size={24} name="tag-faces" />
+								<MaterialIcons
+									color={colorScheme === 'dark' ? Colors.dark.txtcolor[200] : Colors.light.txtcolor[200]}
+									size={24}
+									name="tag-faces"
+								/>
 							) : (
 								<Text className="text-xl">{emoji}</Text>
 							)}
@@ -54,36 +60,41 @@ const AboutForm = () => {
 								ref={inputRef}
 								cursorColor={'#4ade80'}
 								onChangeText={setInput}
-								className="border-b-2 border-green-600 py-2"
+								className="text-light-txtcolor-100 border-b-2 border-light-border-primary py-2 dark:border-dark-border-primary dark:text-dark-txtcolor-100"
 								value={input}
 								placeholder="What's happening?"
+								placeholderTextColor={colorScheme === 'dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
 								underlineColorAndroid="transparent"
 								autoFocus
 								onFocus={() => setShowEmojiKeyboard(false)}
 							/>
-							<Text className="color-gray-700 text-justify">
+							<Text className="text-light-txtcolor-200 text-justify dark:text-dark-txtcolor-200">
 								Visible in chats to:
-								<Text className="font-semibold color-green-700"> My contacts</Text>
+								<Text className="font-semibold text-light-txtcolor-primary dark:text-dark-txtcolor-primary">
+									{' '}
+									My contacts
+								</Text>
 							</Text>
 						</View>
 					</View>
 
-					<View className="border-t border-gray-300">
-						<Text className="font-semibold color-gray-700 pl-4 pt-2">Select</Text>
+					<View className="border-t border-light-border-100 dark:border-dark-border-100">
+						<Text className="font-semibold text-light-txtcolor-200 dark:text-dark-txtcolor-200 pl-4 pt-2">
+							Select
+						</Text>
 						<SelectionList options={options} onSelect={(item) => setAbout(item)} />
 					</View>
 				</ScrollView>
 
 				<View className={`${showEmojiKeyboard ? 'mb-40' : 'relative'}`}>
-					<Pressable className={`absolute z-20 -top-20 right-0 bg-green-600 w-fit self-end p-3 m-3 rounded-xl `}>
+					<Pressable
+						className={`absolute z-20 -top-20 right-0 bg-light-bgcolor-primary dark:bg-green-600 w-fit self-end p-3 m-3 rounded-xl `}
+					>
 						<MaterialCommunityIcons color={'white'} size={23} name="check" />
 					</Pressable>
-					{showEmojiKeyboard && (
-						<EmojiKeyboard editable={false} onEmojiSelect={(emoji) => setEmoji(emoji)} />
-					)}
+					{showEmojiKeyboard && <EmojiKeyboard editable={false} onEmojiSelect={(emoji) => setEmoji(emoji)} />}
 				</View>
 			</KeyboardAvoidingView>
-		
 		</SafeAreaView>
 	);
 };

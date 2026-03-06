@@ -21,10 +21,11 @@ const ChatHeader: React.FC<FriendCardProps> = ({friend}) => {
 		<View className="flex-1 flex-row items-center gap-1">
 			<Image source={friend?.profil_pic || images.noperson} style={{width: 43, height: 43, borderRadius: 50}} />
 			<View className="px-2 flex-1">
-				<Text className="text-lg font-semibold line-clamp-1">{friend?.fname + ' ' + friend?.lname}</Text>
-				<Text className="color-gray-500 line-clamp-1">Online</Text>
+				<Text className="text-light-txtcolor-100 text-lg font-semibold line-clamp-1 dark:text-dark-txtcolor-100">
+					{friend?.fname + ' ' + friend?.lname}
+				</Text>
+				<Text className="text-light-txtcolor-200 line-clamp-1  dark:text-dark-txtcolor-200">Online</Text>
 			</View>
-			{/* <Menu /> */}
 		</View>
 	);
 };

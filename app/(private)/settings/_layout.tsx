@@ -1,11 +1,13 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { Stack, useRouter } from 'expo-router'
+import {Colors} from '@/constants/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import {Stack, useRouter} from 'expo-router';
+import {useColorScheme} from 'nativewind';
+import React from 'react';
 
 const SettingsLayout = () => {
-   		const router = useRouter();
-  return (
+	const router = useRouter();
+	const {colorScheme} = useColorScheme();
+	return (
 		<Stack>
 			<Stack.Screen
 				name="index"
@@ -13,8 +15,18 @@ const SettingsLayout = () => {
 					title: 'Settings',
 					headerTitleAlign: 'left',
 					headerLeft: () => (
-						<MaterialIcons size={23} name="arrow-back" className="pr-4" onPress={() => router.back()} />
+						<MaterialIcons
+							color={colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
+							size={23}
+							name="arrow-back"
+							className="pr-4"
+							onPress={() => router.back()}
+						/>
 					),
+					headerStyle: {
+						backgroundColor: colorScheme === 'dark' ? Colors.dark.bgcolor[100] : Colors.light.bgcolor[100],
+					},
+					headerTintColor: colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100],
 					headerBlurEffect: 'regular',
 					headerTitleStyle: {fontSize: 22},
 				}}
@@ -22,11 +34,11 @@ const SettingsLayout = () => {
 			<Stack.Screen
 				name="profile"
 				options={{
-               headerShown: false
+					headerShown: false,
 				}}
 			/>
 		</Stack>
-  );
-}
+	);
+};
 
-export default SettingsLayout
+export default SettingsLayout;

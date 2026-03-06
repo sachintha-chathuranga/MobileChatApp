@@ -1,22 +1,28 @@
+import {Colors} from '@/constants/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import {Alert, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {useRouter} from 'expo-router';
+import {useColorScheme} from 'nativewind';
+import React from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
 
-const SearchButton = ()=> {
-	const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
+const SearchButton = () => {
+	const {colorScheme} = useColorScheme();
 	const router = useRouter();
-	const onPress = ()=> {
-		router.push("/search")
+	const onPress = () => {
+		router.push('/search');
 	};
 	return (
-		<View className='pb-2'>
+		<View className="pb-2">
 			<TouchableOpacity
-				className="bg-gray-200 py-3 px-5 rounded-full flex-row items-center gap-1 "
+				className="bg-light-inputbg py-3 px-5 rounded-full flex-row items-center gap-1 dark:bg-dark-inputbg"
 				onPress={onPress}
 			>
-				<MaterialIcons color={'gray'} size={23} name="search" />
-				<Text className={currentTheme === 'dark' ? 'text-gray-100 text-base ' : 'text-gray-500 text-base '}>
+				<MaterialIcons
+					color={colorScheme === 'dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
+					size={23}
+					name="search"
+				/>
+				<Text className={'text-light-inputtxt text-base dark:text-dark-inputtxt'}>
 					Search Friends for start chatting
 				</Text>
 			</TouchableOpacity>

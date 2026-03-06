@@ -1,11 +1,16 @@
 import Menu from '@/components/Menu';
 import SearchBar from '@/components/SearchBar';
 import {CONSTANT} from '@/constants/values';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import {Colors} from '@/constants/theme'
+import {ThemeContext} from '@/utils/themeContext';
 import {Stack, useRouter} from 'expo-router';
+import {useColorScheme} from 'nativewind';
+import {useContext} from 'react';
 
 export default function HomeLayout() {
-			const router = useRouter();
+	const router = useRouter();
+	const {colorScheme} = useColorScheme();
+	const {toggleTheme, theme} = useContext(ThemeContext);
 	return (
 		<Stack>
 			<Stack.Screen
@@ -14,8 +19,15 @@ export default function HomeLayout() {
 					title: CONSTANT.appName || 'AppName',
 					headerLargeTitleEnabled: true,
 					headerShadowVisible: false,
+					headerStyle: {
+						backgroundColor: colorScheme === 'dark' ? Colors.dark.bgcolor[100] : Colors.light.bgcolor[100],
+					},
+					headerTintColor: colorScheme === 'dark' ? 'white' : Colors.light.txtcolor.primary,
 					headerBlurEffect: 'regular',
-					headerTitleStyle: {fontSize: 25},
+
+					headerTitleStyle: {
+						fontSize: 25,
+					},
 
 					headerRight: () => <Menu />,
 				}}
@@ -24,7 +36,6 @@ export default function HomeLayout() {
 			<Stack.Screen
 				name="search"
 				options={{
-					headerStyle: {backgroundColor: '#fff'},
 					header: () => <SearchBar />,
 					headerShadowVisible: false,
 					headerBlurEffect: 'regular',
@@ -33,7 +44,7 @@ export default function HomeLayout() {
 			<Stack.Screen
 				name="settings"
 				options={{
-					headerShown: false
+					headerShown: false,
 				}}
 			/>
 
