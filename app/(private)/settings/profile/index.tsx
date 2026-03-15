@@ -1,6 +1,7 @@
 import {images} from '@/assets/images';
 import IconCard from '@/components/IconCard';
 import {Colors} from '@/constants/theme';
+import { useAuth } from '@/context/authContext';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from '@gorhom/bottom-sheet';
 import {useColorScheme} from 'nativewind';
@@ -13,6 +14,8 @@ const ProfileScreen = () => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ['30%'], []);
 	const {colorScheme} = useColorScheme();
+	const {user} = useAuth();
+
 	const renderBackdrop = useCallback(
 		(props: any) => (
 			<BottomSheetBackdrop
@@ -39,7 +42,7 @@ const ProfileScreen = () => {
 				</Pressable>
 				<TouchableHighlight
 					activeOpacity={0.6}
-					underlayColor={colorScheme==='dark' ? Colors.dark.underlay.primary : Colors.light.underlay.primary}
+					underlayColor={colorScheme === 'dark' ? Colors.dark.underlay.primary : Colors.light.underlay.primary}
 					className="rounded-3xl py-2 px-5 "
 					onPress={() => handlePresentModalPress()}
 				>
@@ -50,25 +53,25 @@ const ProfileScreen = () => {
 			<IconCard
 				iconName="account-outline"
 				title="Name"
-				info="sachintha chathuranga"
+				info={user ? user?.fname + ' ' + user?.lname : ''}
 				route="/settings/profile/name_form"
-			></IconCard>
+			/>
 			<IconCard
 				iconName="information-variant-circle-outline"
 				title="About"
-				info="Free to chat"
+				info={user ? user?.about : ''}
 				route="/settings/profile/about_form"
 			/>
 			<IconCard
 				iconName="phone-outline"
 				title="Phone"
-				info="+94719057364"
+				info={user ? user?.phone : ''}
 				route="/settings/profile/phone_form/first_screen"
 			/>
 			<IconCard
 				iconName="email-outline"
 				title="Email"
-				info="sachintha.financial@gmail.com"
+				info={user ? user?.email : ''}
 				route="/settings/profile/email_form/first_screen"
 			/>
 

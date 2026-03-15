@@ -1,6 +1,13 @@
 export const Colors = {
 	light: {
-		txtcolor: {100: '#374151', 200: '#6B7280', primary: '#16a34a', inactive: ' #9ca3af'},
+		txtcolor: {
+			100: '#374151',
+			200: '#6B7280',
+			primary: '#16a34a',
+			secondary: 'rgb(45 108 205)',
+			inactive: ' #9ca3af',
+			title: 'black',
+		},
 		bgcolor: {100: 'white', 200: '#F9FAFB', 300: '#efefef', primary: '#22c55e', inactive: '#d1d5db'},
 		inputbg: '#e7e7e7c4',
 		inputtxt: '#9ca3af',
@@ -10,7 +17,14 @@ export const Colors = {
 		outbg: '#b4f9bd',
 	},
 	dark: {
-		txtcolor: {100: '#E2E8F0', 200: '#94A3B8', primary: '#22c55e', inactive: ' #757b87'},
+		txtcolor: {
+			100: '#E2E8F0',
+			200: '#94A3B8',
+			primary: '#22c55e',
+			secondary: '#1e57c5',
+			inactive: ' #757b87',
+			title: 'white',
+		},
 		bgcolor: {100: '#060d1e', 200: '#0f172a', 300: '#0a1725', primary: '#16a34a', inactive: '#2f3949'},
 		inputbg: '#0f1b2d',
 		inputtxt: '#94a3b8',

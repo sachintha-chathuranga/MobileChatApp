@@ -1,7 +1,7 @@
-import React, {PropsWithChildren, createContext, useEffect, useState} from 'react';
-import {useColorScheme as useNativeWindColorScheme} from 'nativewind';
-import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import {useColorScheme as useNativeWindColorScheme} from 'nativewind';
+import React, {PropsWithChildren, createContext, useEffect, useState} from 'react';
+import {Platform} from 'react-native';
 type ThemeType = 'light' | 'dark';
 
 export const ThemeContext = createContext({
@@ -29,7 +29,6 @@ export async function setStorageItemAsync(key: string, value: string | null) {
 	}
 }
 
-
 export const ThemeProvider = ({children}: PropsWithChildren) => {
 	const {setColorScheme} = useNativeWindColorScheme();
 	const [theme, setTheme] = useState<ThemeType>('light');
@@ -40,25 +39,28 @@ export const ThemeProvider = ({children}: PropsWithChildren) => {
 	}, []);
 
 	const loadTheme = async () => {
-      let savedTheme:string | null = null;
-      if (Platform.OS === 'web') {
+		let savedTheme: string | null = null;
+		if (Platform.OS === 'web') {
 			try {
 				if (typeof localStorage !== 'undefined') {
-				   savedTheme = localStorage.getItem('APP_THEME');
+					savedTheme = localStorage.getItem('APP_THEME');
 				}
 			} catch (e) {
 				console.error('Local storage is unavailable:', e);
 			}
 		} else {
 			SecureStore.getItemAsync('APP_THEME').then((value: string | null) => {
-				savedTheme = value
-	
+				savedTheme = value;
 			});
 		}
 
 		if (savedTheme === 'dark' || savedTheme === 'light') {
 			setTheme(savedTheme);
 			setColorScheme(savedTheme);
+		} else {
+			setTheme('light');
+			setColorScheme('light');
+			await setStorageItemAsync('APP_THEME', 'light');
 		}
 	};
 

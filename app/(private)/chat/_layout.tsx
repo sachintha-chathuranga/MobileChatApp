@@ -1,8 +1,8 @@
 import ChatHeader from '@/components/ChatHeader';
 import Menu from '@/components/Menu';
 import {friends} from '@/constants/data';
-import {Friend} from '@/constants/types';
 import {Colors} from '@/constants/theme';
+import {Friend} from '@/constants/types';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {Stack, useLocalSearchParams, useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';

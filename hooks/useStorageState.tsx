@@ -1,68 +1,96 @@
-import {useEffect, useCallback, useReducer} from 'react';
 import * as SecureStore from 'expo-secure-store';
+import {useCallback, useEffect, useReducer} from 'react';
 import {Platform} from 'react-native';
 
-type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void];
+type StorageState<T> = [T | null, (value: T | null) => void, boolean | null];
 
-function useAsyncState<T>(initialValue: [boolean, T | null] = [true, null]): UseStateHook<T> {
-	return useReducer(
-		(state: [boolean, T | null], action: T | null = null): [boolean, T | null] => [false, action],
-		initialValue
-	) as UseStateHook<T>;
+function useAsyncState<T>(initialValue: T | null = null): [T | null, (value: T | null) => void] {
+	return useReducer((state: T | null, action: T | null) => action, initialValue) as [
+		T | null,
+		(value: T | null) => void,
+	];
 }
 
-export async function setStorageItemAsync(key: string, value: string | null) {
+export async function setStorageItemAsync(key: string, value: any | null) {
+	const stringValue = value ? JSON.stringify(value) : null;
 	if (Platform.OS === 'web') {
 		try {
-			if (value === null) {
+			if (stringValue === null) {
 				localStorage.removeItem(key);
 			} else {
-				localStorage.setItem(key, value);
+				localStorage.setItem(key, stringValue);
 			}
 		} catch (e) {
 			console.error('Local storage is unavailable:', e);
 		}
 	} else {
-		if (value == null) {
+		if (stringValue == null) {
 			await SecureStore.deleteItemAsync(key);
 		} else {
-			await SecureStore.setItemAsync(key, value);
+			await SecureStore.setItemAsync(key, stringValue);
 		}
 	}
 }
 
-export function useStorageState(key: string): UseStateHook<string> {
+export function useStorageState<T>(key: string): StorageState<T> {
 	// Public
-	const [state, setState] = useAsyncState<string>();
-
+	const [state, setState] = useAsyncState<T>(null);
+	const [loading, setLoading] = useAsyncState<boolean>(true);
 	// Get
-	useEffect(() => {
-		if (Platform.OS === 'web') {
-			try {
-				if (typeof localStorage !== 'undefined') {
-					// setState(localStorage.getItem(key));
-					setState('xxx');
-				}
-			} catch (e) {
-				console.error('Local storage is unavailable:', e);
-			}
-		} else {
-			SecureStore.getItemAsync(key).then((value: string | null) => {
-				// setState(value);
-				setState('xxx');
+	async function load() {
+		try {
+			let value: string | null = null;
 
-			});
+			if (Platform.OS === 'web') {
+				value = localStorage.getItem(key);
+			} else {
+				value = await SecureStore.getItemAsync(key);
+			}
+
+			setState(
+				value
+					? JSON.parse(value)
+					: {
+							user_id: 1,
+							fname: 'Sachintha',
+							lname: 'Chathuranga',
+							phone: '+94 71 9057364',
+							profil_pic: null,
+							status: true,
+						}
+			);
+		} finally {
+			setLoading(false);
 		}
+	}
+
+	async function clearStorage() {
+		try {
+			if (Platform.OS === 'web') {
+				localStorage.removeItem(key);
+			} else {
+				await SecureStore.deleteItemAsync(key);
+			}
+
+			setState(null);
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	useEffect(() => {
+		load();
+		// clearStorage();
 	}, [key]);
 
 	// Set
 	const setValue = useCallback(
-		(value: string | null) => {
+		(value: T | null) => {
 			setState(value);
 			setStorageItemAsync(key, value);
 		},
 		[key]
 	);
 
-	return [state, setValue];
+	return [state, setValue, loading];
 }

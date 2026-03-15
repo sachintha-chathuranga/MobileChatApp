@@ -1,11 +1,11 @@
 {
 	"expo": {
-		"name": "MobileChatApp",
-		"slug": "MobileChatApp",
+		"name": "BlissChat",
+		"slug": "BlissChat",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"icon": "./assets/images/icon.png",
-		"scheme": "mobilechatapp",
+		"icon": "./assets/images/app-logo.png",
+		"scheme": "BlissChat",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": true,
 		"ios": {
@@ -32,7 +32,7 @@
 			[
 				"expo-splash-screen",
 				{
-					"image": "./assets/images/splash-icon.png",
+					"image": "./assets/images/app-logo.png",
 					"imageWidth": 200,
 					"resizeMode": "contain",
 					"backgroundColor": "#ffffff",

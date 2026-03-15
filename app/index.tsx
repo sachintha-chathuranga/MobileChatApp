@@ -1,20 +1,44 @@
-import {useSession} from '@/utils/authContext';
-import {Text, View} from 'react-native';
-import "react-native-gesture-handler";
+import AnimatedChatLogo from '@/components/AnimatedLogo';
+import {CONSTANT} from '@/constants/values';
+import {Link} from 'expo-router';
+import {Linking, Pressable, Text, View} from 'react-native';
+import 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function LogginScreen() {
-	const {signIn} = useSession();
+	const openLink = () => {
+		Linking.openURL('https://galaxies.dev');
+	};
 	return (
-		<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-			<Text>Loggin Screen</Text>
-			<Text
-				onPress={() => {
-					signIn();
-					// Navigate after signing in. You may want to tweak this to ensure sign-in is successful before navigating.
-				}}
-			>
-				Sign In
+		<SafeAreaView className="flex-1 items-center justify-center bg-light-bgcolor-100 dark:bg-dark-bgcolor-100 px-5">
+			<View className="mb-10">
+				<AnimatedChatLogo />
+			</View>
+			<Text className=" text-3xl text-light-txtcolor-title dark:text-dark-txtcolor-title">
+				Welcome to {CONSTANT.appName}{' '}
 			</Text>
-		</View>
+			<Text className="text-light-txtcolor-200 dark:text-dark-txtcolor-200 text-center mt-5 mx-6">
+				Read our{' '}
+				<Text
+					onPress={openLink}
+					className="text-light-txtcolor-secondary dark:text-dark-txtcolor-ptext-light-txtcolor-secondary font-semibold"
+				>
+					Privacy Policy
+				</Text>
+				. {'Tap "Agree & Continue" to accept the '}
+				<Text
+					onPress={openLink}
+					className="text-light-txtcolor-secondary dark:text-dark-txtcolor-ptext-light-txtcolor-secondary font-semibold"
+				>
+					Terms of Service
+				</Text>
+				.
+			</Text>
+			<Link href={'./sign'} className="mt-20" replace asChild>
+				<Pressable className="bg-light-bgcolor-primary dark:bg-dark-bgcolor-primary w-full p-3 rounded-full items-center">
+					<Text className="text-lg font-bold text-white">Agree & Continue</Text>
+				</Pressable>
+			</Link>
+		</SafeAreaView>
 	);
 }

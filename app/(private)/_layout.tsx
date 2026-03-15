@@ -1,8 +1,8 @@
 import Menu from '@/components/Menu';
 import SearchBar from '@/components/SearchBar';
+import {Colors} from '@/constants/theme';
 import {CONSTANT} from '@/constants/values';
-import {Colors} from '@/constants/theme'
-import {ThemeContext} from '@/utils/themeContext';
+import {ThemeContext} from '@/context/themeContext';
 import {Stack, useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 import {useContext} from 'react';
