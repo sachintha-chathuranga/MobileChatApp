@@ -6,5 +6,5 @@
 			"@/*": ["./*"]
 		}
 	},
-	"include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts", "app/splash.tsx", "constants/theme.ts"]
+	"include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts", "src/app/splash.tsx", "src/constants/theme.ts"]
 }
