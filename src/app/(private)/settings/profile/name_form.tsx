@@ -1,6 +1,11 @@
 import EmojiKeyboard from '@/src/components/EmojiKeyboard';
 import {Colors} from '@/src/constants/theme';
+import {UpdateUser} from '@/src/constants/types';
+import {useAuth} from '@/src/context/authContext';
+import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
+import {userUpdateCall} from '@/src/services/apiCalls';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import {useRouter} from 'expo-router';
 import GraphemeSplitter from 'grapheme-splitter';
 import {useColorScheme} from 'nativewind';
 import React, {useRef, useState} from 'react';
@@ -8,10 +13,13 @@ import {Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, TouchableHigh
 import {SafeAreaView} from 'react-native-safe-area-context';
 const splitter = new GraphemeSplitter();
 const NameForm = () => {
-	const [input, setInput] = useState('');
+	const router = useRouter();
+	const {user, setUser} = useAuth();
+	const [input, setInput] = useState(user?.fname + ' ' + user?.lname);
 	const [showEmojiKeyboard, setShowEmojiKeyboard] = useState(false);
 	const inputRef = useRef<TextInput>(null);
 	const {colorScheme} = useColorScheme();
+	const axiosPrivate = useAxiosPrivate();
 
 	const toggleEmojiKeyboard = () => {
 		if (showEmojiKeyboard) {
@@ -29,6 +37,23 @@ const NameForm = () => {
 			const graphemes = splitter.splitGraphemes(prev);
 			graphemes.pop();
 			return graphemes.join('');
+		});
+	};
+
+	const handleSubmit = () => {
+		if (!user) return;
+		const data: UpdateUser = {
+			user_id: user.user_id,
+		};
+		const [fname, lname] = input.split(' ');
+		console.log('Fname: ' + fname);
+		console.log('Lname: ' + lname);
+
+		userUpdateCall(axiosPrivate, {...data, fname, lname}).then((res) => {
+			if (res === 200) {
+				setUser({...user, fname, lname});
+				router.back();
+			}
 		});
 	};
 
@@ -75,7 +100,10 @@ const NameForm = () => {
 					</View>
 					<View className={`${showEmojiKeyboard && 'mb-40'}`}>
 						<View className="my-4 mx-8">
-							<TouchableHighlight className="p-3 rounded-full mx-3 bg-light-bgcolor-primary items-center dark:bg-dark-bgcolor-primary">
+							<TouchableHighlight
+								onPress={handleSubmit}
+								className="p-3 rounded-full mx-3 bg-light-bgcolor-primary items-center dark:bg-dark-bgcolor-primary"
+							>
 								<Text className="text-white font-bold">Save</Text>
 							</TouchableHighlight>
 						</View>

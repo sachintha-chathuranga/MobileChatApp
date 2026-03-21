@@ -20,6 +20,17 @@ export type User = {
 	status: boolean;
 };
 
+export type UpdateUser = {
+	user_id: number;
+	fname?: string;
+	lname?: string;
+	phone?: string;
+	email?: string;
+	about?: string;
+	profil_pic?: string | null;
+	status?: boolean;
+};
+
 export type Message = {
 	id: number;
 	sender_id: number;

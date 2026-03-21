@@ -36,7 +36,7 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type}) => {
 					source={friend.profil_pic ? friend.profil_pic : images.noperson}
 					style={{width: 45, height: 45, borderRadius: 50}}
 				/>
-				<View className='flex-row w-full justify-between'>
+				<View className='flex-1 flex-row justify-between'>
 					<View className="px-2 justify-center">
 						<Text className="text-lg text-light-txtcolor-100 font-semibold line-clamp-1 dark:text-dark-txtcolor-100">
 							{friend.fname + ' ' + friend.lname}

@@ -46,9 +46,9 @@ export function useStorageState<T>(key: string): StorageState<T> {
 			} else {
 				value = await SecureStore.getItemAsync(key);
 			}
-
+			console.log(`Onload ${key}: ${value}`);
 			setState(
-				value ? JSON.parse(value) :  null
+				value ? JSON.parse(value) : null
 				// {
 				// 		user_id: 1,
 				// 		fname: 'Sachintha',

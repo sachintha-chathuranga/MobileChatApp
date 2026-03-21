@@ -15,7 +15,7 @@ const Menu: React.FC<MenuProps> = ({list}) => {
 	const {theme} = useTheme();
 
 	return (
-		<View className="p-1">
+		<View>
 			<TouchableHighlight
 				activeOpacity={0.6}
 				underlayColor={theme === 'dark' ? Colors.dark.underlay[100] : Colors.light.underlay[100]}

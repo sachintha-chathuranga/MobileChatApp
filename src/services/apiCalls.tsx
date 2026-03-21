@@ -1,6 +1,6 @@
 import {Axios} from 'axios';
 import {Alert} from 'react-native';
-import {Message, NewMessage} from '../constants/types';
+import {Message, NewMessage, UpdateUser, User} from '../constants/types';
 import {axiosPublic} from './requestConfig';
 
 function handleError(error: any) {
@@ -80,20 +80,16 @@ export const postMessage = async (axiosPrivate: Axios, msg: NewMessage) => {
 // 		}
 // 	}
 // };
-// export const userUpdateCall = async (axiosPrivate, userCredintial) => {
-// 	try {
-// 		const res = await axiosPrivate.put(`users/`, userCredintial);
-// 		return res.status;
-// 	} catch (err) {
-// 		if (!err?.response) {
-// 			return 500;
-// 		} else if (err.response?.data) {
-// 			return err.response.status;
-// 		} else {
-// 			return 500;
-// 		}
-// 	}
-// };
+export const userUpdateCall = async (axiosPrivate: Axios, userDetails: UpdateUser) => {
+	try {
+		const res = await axiosPrivate.put(`users/`, userDetails);
+		console.log(res);
+		return res.status;
+	} catch (err) {
+		handleError(err)
+		return 500;
+	}
+};
 // export const userDeleteCall = async (axiosPrivate, userCredintial) => {
 // 	try {
 // 		const res = await axiosPrivate.delete(`users/`, {data: userCredintial});

@@ -2,10 +2,10 @@ import {useAuth} from '@/src/context/authContext';
 import {getNewToken} from '@/src/services/apiCalls';
 import {axiosPublic} from '@/src/services/requestConfig';
 import {AxiosResponse} from 'axios';
-import {memo, useEffect} from 'react';
+import {useEffect} from 'react';
 
 const useAxiosPrivate = () => {
-	const {accessToken, refreshToken, signOut} = useAuth();
+	const {accessToken, refreshToken, signOut, setAccessToken} = useAuth();
 
 	useEffect(() => {
 		const requestIntercept = axiosPublic.interceptors.request.use(
@@ -26,6 +26,7 @@ const useAxiosPrivate = () => {
 					prevRequest.sent = true;
 					const newAccessToken = await getNewToken(refreshToken);
 					if (newAccessToken) {
+						setAccessToken(newAccessToken);
 						prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 						return axiosPublic(prevRequest);
 					}

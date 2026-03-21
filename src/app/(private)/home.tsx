@@ -1,5 +1,6 @@
 import FriendCard from '@/src/components/FriendCard';
 import HomeComponant from '@/src/components/Home';
+import HomeHeader from '@/src/components/HomeHeader';
 import Loading from '@/src/components/Loading';
 import SearchButton from '@/src/components/SearchButton';
 import useRecentChats from '@/src/hooks/useRecentChats';
@@ -16,7 +17,8 @@ export default function HomeScreen() {
 	const {friends, isFetching, hasMore} = useRecentChats(index);
 
 	return (
-		<SafeAreaView edges={['bottom']} className=" bg-light-bgcolor-100 flex-1 dark:bg-dark-bgcolor-100">
+		<SafeAreaView className=" bg-light-bgcolor-100 flex-1 dark:bg-dark-bgcolor-100">
+			<HomeHeader />
 			<SearchButton />
 
 			{friends.length === 0 && !isFetching ? (
@@ -31,7 +33,7 @@ export default function HomeScreen() {
 						showsVerticalScrollIndicator={false}
 						contentContainerStyle={{
 							paddingVertical: 10,
-							paddingHorizontal: 8,
+							paddingHorizontal: 15,
 							gap: 20,
 						}}
 						keyExtractor={(item) => item.user_id.toString()}

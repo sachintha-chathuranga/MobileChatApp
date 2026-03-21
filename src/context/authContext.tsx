@@ -1,6 +1,6 @@
 import {User} from '@/src/constants/types';
 import {useStorageState} from '@/src/hooks/useStorageState';
-import {createContext, useContext, useMemo, type PropsWithChildren} from 'react';
+import {createContext, useContext, useMemo, useState, type PropsWithChildren} from 'react';
 
 const AuthContext = createContext<{
 	signIn: (user: User, accToken: string, refToken: string) => void;
@@ -9,6 +9,8 @@ const AuthContext = createContext<{
 	isLoading: boolean | null;
 	refreshToken: string | null;
 	accessToken: string | null;
+	setAccessToken: (token:string | null) => void;
+	setUser: (user: User | null) => void;
 }>({
 	signIn: () => null,
 	signOut: () => null,
@@ -16,6 +18,8 @@ const AuthContext = createContext<{
 	isLoading: false,
 	refreshToken: null,
 	accessToken: null,
+	setAccessToken: () => null,
+	setUser: () => null
 });
 
 // Use this hook to access the user info.
@@ -30,7 +34,7 @@ export function useAuth() {
 
 export function AuthProvider({children}: PropsWithChildren) {
 	const [refreshToken, setRefreshToken] = useStorageState<string>('REF_TOKEN');
-	const [accessToken, setAccessToken] = useStorageState<string>('ACCESS_TOKEN');
+	const [accessToken, setAccessToken] = useState<string | null>('');
 	const [user, setUser, isLoading] = useStorageState<User>('USER');
 
 	const signIn = (user: User, accToken: string, refToken: string) => {
@@ -51,6 +55,8 @@ export function AuthProvider({children}: PropsWithChildren) {
 			isLoading,
 			refreshToken,
 			accessToken,
+			setAccessToken,
+			setUser
 		}),
 		[user, isLoading, refreshToken, accessToken]
 	);
