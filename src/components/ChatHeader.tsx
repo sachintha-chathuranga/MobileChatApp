@@ -34,7 +34,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 			},
 			{
 				id: 3,
-				icon: 'chat-remove-outline',
+				icon: 'delete-outline',
+				// icon: 'chat-remove-outline',
 				name: 'Clear chat',
 				function: () => {
 					clear([]);

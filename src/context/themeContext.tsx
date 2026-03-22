@@ -22,14 +22,11 @@ export const ThemeProvider = ({children}: PropsWithChildren) => {
 	const [theme, setTheme, isThemeLoad] = useStorageState<ThemeType>('APP_THEME');
 	// Load saved theme on app start
 	useEffect(() => {
-		console.log("Theme :" +theme)
 		setColorScheme(theme as ThemeType)
 	}, [theme]);
 	
 	const toggleTheme = useCallback(async () => {
 		const newTheme = theme === 'light' ? 'dark' : 'light';
-		console.log('Old them: ' + theme);
-		console.log('neThem : ' + newTheme);
 		setTheme(newTheme);
 	}, [theme]);
 

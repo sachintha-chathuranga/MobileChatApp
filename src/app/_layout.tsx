@@ -5,19 +5,22 @@ import {ThemeProvider} from '@/src/context/themeContext';
 import {Stack} from 'expo-router';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {SocketProvider} from '../context/socketContext';
 import SplashScreenController from './splash';
 
 export default function RootLayout() {
 	return (
 		<AuthProvider>
-			<ThemeProvider>
-				<SafeAreaProvider>
-					<GestureHandlerRootView style={{flex: 1}}>
-						<SplashScreenController />
-						<RootNavigator />
-					</GestureHandlerRootView>
-				</SafeAreaProvider>
-			</ThemeProvider>
+			<SocketProvider>
+				<ThemeProvider>
+					<SafeAreaProvider>
+						<GestureHandlerRootView style={{flex: 1}}>
+							<SplashScreenController />
+							<RootNavigator />
+						</GestureHandlerRootView>
+					</SafeAreaProvider>
+				</ThemeProvider>
+			</SocketProvider>
 		</AuthProvider>
 	);
 }

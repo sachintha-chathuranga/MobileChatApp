@@ -1,6 +1,7 @@
 import {Friend} from '@/src/constants/types';
 import {fetchRecentChats} from '@/src/services/apiCalls';
-import {useEffect, useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+import {useCallback, useEffect, useState} from 'react';
 import useAxiosPrivate from './useAxiosPrivate';
 
 const useRecentChats = (index: number) => {
@@ -8,28 +9,32 @@ const useRecentChats = (index: number) => {
 	const [isFetching, setIsFetching] = useState(false);
 	const [hasMore, sethasMore] = useState(true);
 	const axiosPrivate = useAxiosPrivate();
+	// Initial load
+	useFocusEffect(
+		useCallback(() => {
+			if (!axiosPrivate) return;
+			console.log('Initial Fetchfriend');
+			setIsFetching(true);
+			fetchRecentChats(axiosPrivate, index).then((data) => {
+				setFriends(data);
+				setIsFetching(false);
+			});
+		}, [axiosPrivate])
+	);
 
 	// Pagination
 	useEffect(() => {
-		let isMounted = true;
-		const fetchMore = async () => {
-			try {
-				setIsFetching(true);
-				const data = await fetchRecentChats(axiosPrivate, index);
-				if (isMounted) {
-					setFriends((prev) => [...prev, ...data]);
-					sethasMore(data.length === 15);
-				}
-			} catch (error) {
-				console.log(error);
-			} finally {
-				if (isMounted) setIsFetching(false);
-			}
-		};
-		fetchMore();
-		return () => {
-			isMounted = false;
-		};
+		if (!axiosPrivate) return;
+		if (friends.length >= 15) {
+			setIsFetching(true);
+			console.log('pagination fetchFriend');
+			fetchRecentChats(axiosPrivate, index).then((data) => {
+				setFriends((prev) => [...prev, ...data]);
+				sethasMore(data.length === 15);
+				setIsFetching(false);
+			});
+		}
+
 		// eslint-disable-next-line
 	}, [index, axiosPrivate]);
 

@@ -1,15 +1,17 @@
 import {User} from '@/src/constants/types';
 import {useStorageState} from '@/src/hooks/useStorageState';
-import {createContext, useContext, useMemo, useState, type PropsWithChildren} from 'react';
+import {Axios} from 'axios';
+import {createContext, useCallback, useContext, useMemo, useState, type PropsWithChildren} from 'react';
+import {logOutCall} from '../services/apiCalls';
 
 const AuthContext = createContext<{
 	signIn: (user: User, accToken: string, refToken: string) => void;
-	signOut: () => void;
+	signOut: (axiosPrivate: Axios) => void;
 	user: User | null;
 	isLoading: boolean | null;
 	refreshToken: string | null;
 	accessToken: string | null;
-	setAccessToken: (token:string | null) => void;
+	setAccessToken: (token: string | null) => void;
 	setUser: (user: User | null) => void;
 }>({
 	signIn: () => null,
@@ -19,7 +21,7 @@ const AuthContext = createContext<{
 	refreshToken: null,
 	accessToken: null,
 	setAccessToken: () => null,
-	setUser: () => null
+	setUser: () => null,
 });
 
 // Use this hook to access the user info.
@@ -42,11 +44,19 @@ export function AuthProvider({children}: PropsWithChildren) {
 		setRefreshToken(refToken);
 		setUser(user);
 	};
-	const signOut = () => {
-		setUser(null);
-		setAccessToken(null);
-		setRefreshToken(null);
-	};
+	const signOut = useCallback(
+		(axiosPrivate: Axios) => {
+			logOutCall(axiosPrivate).then((data) => {
+				if (data) {
+					setUser(null);
+					setAccessToken(null);
+					setRefreshToken(null);
+				}
+			});
+		},
+		[]
+	);
+
 	const memorizeValues = useMemo(
 		() => ({
 			signIn,
@@ -56,7 +66,7 @@ export function AuthProvider({children}: PropsWithChildren) {
 			refreshToken,
 			accessToken,
 			setAccessToken,
-			setUser
+			setUser,
 		}),
 		[user, isLoading, refreshToken, accessToken]
 	);

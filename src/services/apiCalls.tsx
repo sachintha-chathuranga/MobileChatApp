@@ -1,15 +1,13 @@
 import {Axios} from 'axios';
 import {Alert} from 'react-native';
-import {Message, NewMessage, UpdateUser, User} from '../constants/types';
+import {NewMessage, UpdateUser} from '../constants/types';
 import {axiosPublic} from './requestConfig';
 
 function handleError(error: any) {
 	if (!error?.response) {
-		console.log(error);
 		Alert.alert('Server Error', 'Server does not respond!');
 	} else if (error.response?.data) {
-		console.log(error.response.data);
-		Alert.alert('Server Error', error.response.data.message);
+		Alert.alert('Server Error', error.response.data);
 	} else {
 		Alert.alert('Network Error', 'Check your Internet Connection');
 	}
@@ -63,30 +61,22 @@ export const postMessage = async (axiosPrivate: Axios, msg: NewMessage) => {
 	}
 };
 
-// export const logOutCall = async (axiosPrivate) => {
-// 	try {
-// 		const res = await axiosPrivate.post(`users/logout`);
-
-// 		localStorage.removeItem('user');
-// 		sessionStorage.removeItem('user');
-// 		return res.status;
-// 	} catch (err) {
-// 		if (!err?.response) {
-// 			return 500;
-// 		} else if (err.response?.data) {
-// 			return err.response.status;
-// 		} else {
-// 			return 500;
-// 		}
-// 	}
-// };
+export const logOutCall = async (axiosPrivate:Axios) => {
+	try {
+		const res = await axiosPrivate.put(`auth/sign-out`);
+		return res.status;
+	} catch (err) {
+		handleError(err)
+		return null;
+	}
+};
 export const userUpdateCall = async (axiosPrivate: Axios, userDetails: UpdateUser) => {
 	try {
 		const res = await axiosPrivate.put(`users/`, userDetails);
 		console.log(res);
 		return res.status;
 	} catch (err) {
-		handleError(err)
+		handleError(err);
 		return 500;
 	}
 };
@@ -158,25 +148,29 @@ export const fetchMessages = async (axiosPrivate: Axios, friend_id: number) => {
 export const clearMessages = (axiosPrivate: Axios, friend_id: number) => {
 	axiosPrivate
 		.delete(`messages/messages/clear?friend_id=${friend_id}`)
-		.then((res) => {console.log(res)})
-		.catch((err) => {handleError(err)});
+		.then((res) => {
+			
+		})
+		.catch((err) => {
+			handleError(err);
+		});
 };
-// export const readAllMessages = async (axiosPrivate, friend_id) => {
-// 	try {
-// 		axiosPrivate.put(`messages/messages/update?friend_id=${friend_id}`);
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// };
-// export const fetchAllNotification = async (axiosPrivate) => {
-// 	try {
-// 		const res = await axiosPrivate.get(`messages/messages/notifications`);
-// 		return res.data;
-// 	} catch (err) {
-// 		console.log(err);
-// 		return null;
-// 	}
-// };
+export const readAllMessages = async (axiosPrivate: Axios, friend_id: number) => {
+	try {
+		await axiosPrivate.put(`messages/messages/update?friend_id=${friend_id}`);
+	} catch (err) {
+		console.log(err);
+	}
+};
+export const fetchAllNotification = async (axiosPrivate: Axios) => {
+	try {
+		const res = await axiosPrivate.get(`messages/messages/notifications`);
+		return res.data;
+	} catch (err) {
+		console.log(err);
+		return null;
+	}
+};
 
 // export const getSignRequest = async (axiosPrivate, file) => {
 // 	try {

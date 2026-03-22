@@ -17,7 +17,7 @@ type IncomeMsgProps = {
 
 const IncomeMsg: React.FC<IncomeMsgProps> = ({isLoading, msg}) => {
 	return (
-		<View className="flex-auto p-3  rounded-2xl rounded-ss-none bg-light-incomebg w-fit max-w-72 dark:bg-dark-incomebg">
+		<View className="p-3 self-start rounded-xl rounded-ss-none bg-light-incomebg w-fit max-w-72 dark:bg-dark-incomebg">
 			<Text className="text-light-txtcolor-100 dark:text-dark-txtcolor-100">{msg}</Text>
 		</View>
 	);

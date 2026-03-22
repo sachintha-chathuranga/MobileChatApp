@@ -51,6 +51,7 @@ export type Friend = {
 	fname: string;
 	lname: string;
 	lastMessage: string;
+	lastMessageTime: number;
 	profil_pic: string;
 	status: boolean;
 };

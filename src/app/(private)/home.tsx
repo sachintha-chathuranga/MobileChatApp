@@ -3,18 +3,69 @@ import HomeComponant from '@/src/components/Home';
 import HomeHeader from '@/src/components/HomeHeader';
 import Loading from '@/src/components/Loading';
 import SearchButton from '@/src/components/SearchButton';
+import {Friend, Message} from '@/src/constants/types';
+import {useSocket} from '@/src/context/socketContext';
+import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import useRecentChats from '@/src/hooks/useRecentChats';
+import {fetchAllNotification, fetchFriend} from '@/src/services/apiCalls';
+import { useFocusEffect } from '@react-navigation/native';
 
-import {useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, View} from 'react-native';
 
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const notifications = ['dsfsd', 'dsfdsf', 'DSfsdf'];
 export default function HomeScreen() {
+	console.log('Home Screen Render');
 	const [index, setindex] = useState(1);
-	console.log('home screen render');
-	const {friends, isFetching, hasMore} = useRecentChats(index);
+	const [notification, setNotification] = useState<Message[]>([]);
+	const {friends, setFriends, isFetching, hasMore} = useRecentChats(index);
+	const friendList = useRef<Friend[]>(null);
+	const axiosPrivate = useAxiosPrivate();
+	const {socket} = useSocket();
+
+	useFocusEffect(
+		useCallback(
+		  () => {
+			 if (!axiosPrivate) return;
+			 console.log("Fetch Notifications at Home")
+			 fetchAllNotification(axiosPrivate).then((data) => {
+				setNotification(data);
+			 });
+		  },
+		  [axiosPrivate],
+		)
+		
+	);
+
+	useEffect(() => {
+		friendList.current = friends;
+	}, [friends]);
+
+	useEffect(() => {
+		console.log("Socket At Home: "+socket)
+		if (!socket) return;
+		console.log('HomeScreen getMessage listening...');
+		const handler = (data:any) => {
+			console.log('Message Comming Background');
+			const sender = friendList?.current?.find((f: Friend) => f.user_id === data.sender_id);
+			console.log(data)
+			setNotification((prev) => [...prev, data]);
+			if (!sender) {
+				console.log('RealTime Fetch Freind');
+				fetchFriend(axiosPrivate, data.sender_id).then((friend) => {
+					friend && setFriends((list) => [friend, ...list]);
+				});
+				return
+			}
+		};
+		socket.on('getMessage', handler);
+		return () => {
+			console.log("Home getMessage listner Off")
+			socket.off('getMessage', handler);
+		};
+		// eslint-disable-next-line
+	}, [socket]);
 
 	return (
 		<SafeAreaView className=" bg-light-bgcolor-100 flex-1 dark:bg-dark-bgcolor-100">
@@ -37,7 +88,7 @@ export default function HomeScreen() {
 							gap: 20,
 						}}
 						keyExtractor={(item) => item.user_id.toString()}
-						renderItem={({item}) => <FriendCard friend={{...item}} />}
+						renderItem={({item}) => <FriendCard friend={{...item}} notifications={notification} />}
 						onEndReached={() => {
 							if (!isFetching && hasMore) {
 								console.log('Bottom touch');
