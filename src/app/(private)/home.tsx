@@ -8,7 +8,7 @@ import {useSocket} from '@/src/context/socketContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import useRecentChats from '@/src/hooks/useRecentChats';
 import {fetchAllNotification, fetchFriend, fetchRecentChats} from '@/src/services/apiCalls';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect} from 'expo-router';
 
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, View} from 'react-native';
@@ -24,18 +24,20 @@ export default function HomeScreen() {
 	const {friends, setFriends, isFetching, hasMore} = useRecentChats(index);
 	const {socket} = useSocket();
 
-		useEffect(() => {
-			console.log('Home Screen mount');
+	// useFocuseEffect use to update notifications every time home screen focus.
+	useFocusEffect(
+		useCallback(() => {
+			console.log('Home Screen Focus');
 			if (!axiosPrivate) return;
 			fetchAllNotification(axiosPrivate).then((data) => {
 				setNotification(data);
 			});
-			return () => console.log("Home Screen unmount");
-		}, [axiosPrivate]);
-	
+			return () => console.log('Home Screen unmount');
+		}, [axiosPrivate])
+	);
 
 	const onRefresh = useCallback(() => {
-		setRefreshing(true)
+		setRefreshing(true);
 		fetchRecentChats(axiosPrivate, index).then((data) => {
 			setFriends(data);
 			setRefreshing(false);

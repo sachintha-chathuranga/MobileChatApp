@@ -13,7 +13,7 @@ const ProfileCard = () => {
 		<TouchableHighlight
 			activeOpacity={0.6}
 			underlayColor={colorScheme === 'dark' ? Colors.dark.underlay[100] : Colors.light.underlay[100]}
-			onPress={() => router.push('/settings/profile')}
+			onPress={() => router.replace('/settings')}
 		>
 			<View className="flex-row items-center border-b border-b-light-border-100 p-3 pl-5 dark:border-b-dark-border-100">
 				<Image

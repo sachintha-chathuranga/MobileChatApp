@@ -127,8 +127,8 @@ const SignUpScreen = () => {
 							</View>
 						</View>
 						<View className="px-4">
-							<IconCard iconName="camera-outline" title="Camera" info="" route="/settings/profile" />
-							<IconCard iconName="image-frame" title="Gallery" info="" route="/settings/profile" />
+							<IconCard iconName="camera-outline" title="Camera" info="" route="/profile" />
+							<IconCard iconName="image-frame" title="Gallery" info="" route="/profile" />
 						</View>
 					</BottomSheetView>
 				</BottomSheet>

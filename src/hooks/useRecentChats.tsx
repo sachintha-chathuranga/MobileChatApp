@@ -1,17 +1,18 @@
 import {Friend} from '@/src/constants/types';
 import {fetchRecentChats} from '@/src/services/apiCalls';
-import {useFocusEffect} from '@react-navigation/native';
 import {useCallback, useEffect, useState} from 'react';
 import useAxiosPrivate from './useAxiosPrivate';
+import { useFocusEffect } from 'expo-router';
 
 const useRecentChats = (index: number) => {
 	const [friends, setFriends] = useState<Friend[]>([]);
 	const [isFetching, setIsFetching] = useState(false);
 	const [hasMore, sethasMore] = useState(true);
 	const axiosPrivate = useAxiosPrivate();
-	// Initial load & Focus load
-	// useFocusEffect(
-		useEffect(() => {
+	// Initial load & Focus load, // useFocus use to update friend last msg every time when Home screen focus 
+	useFocusEffect(
+
+		useCallback(() => {
 			if (!axiosPrivate) return;
 			setIsFetching(true);
 			fetchRecentChats(axiosPrivate, index).then((data) => {
@@ -19,7 +20,7 @@ const useRecentChats = (index: number) => {
 				setIsFetching(false);
 			});
 		}, [axiosPrivate])
-	// );
+	);
 
 	// Pagination
 	useEffect(() => {

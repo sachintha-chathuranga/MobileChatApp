@@ -23,8 +23,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 			{
 				id: 1,
 				icon: 'cog-outline',
-				name: 'Settings',
-				function: () => router.push('/settings'),
+				name: 'Profile',
+				function: () => router.push('/profile'),
 			},
 			{
 				id: 2,

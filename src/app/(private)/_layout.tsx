@@ -18,7 +18,7 @@ export default function HomeLayout() {
 				}}
 			/>
 			<Stack.Screen
-				name="settings"
+				name="profile"
 				options={{
 					headerShown: false,
 				}}

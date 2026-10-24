@@ -21,8 +21,8 @@ const HomeHeader = () => {
 			{
 				id: 1,
 				icon: 'cog-outline',
-				name: 'Settings',
-				function: () => router.push('/settings'),
+				name: 'Profile',
+				function: () => router.push('/profile'),
 			},
 			{
 				id: 2,
@@ -33,7 +33,7 @@ const HomeHeader = () => {
 			{
 				id: 3,
 				icon: 'logout',
-				name: 'Signout',
+				name: 'Logout',
 				function: () => {
 					disconnectSocket();
 					signOut(axiosPrivate);

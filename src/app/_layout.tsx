@@ -14,10 +14,10 @@ export default function RootLayout() {
 			<SocketProvider>
 				<ThemeProvider>
 					<SafeAreaProvider>
-						<GestureHandlerRootView style={{flex: 1}}>
+						
 							<SplashScreenController />
 							<RootNavigator />
-						</GestureHandlerRootView>
+				
 					</SafeAreaProvider>
 				</ThemeProvider>
 			</SocketProvider>

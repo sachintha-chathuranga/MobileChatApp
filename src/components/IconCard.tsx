@@ -29,7 +29,7 @@ const IconCard: React.FC<IconCardProps> = ({iconName, title, info, route}) => {
 			underlayColor={colorScheme === 'dark' ? Colors.dark.underlay[100] : Colors.light.underlay[100]}
 			onPress={() => router.push(route)}
 		>
-			<View className={`flex-row items-center p-3 gap-1`}>
+			<View className={`flex-row items-center gap-1`}>
 				<MaterialCommunityIcons
 					name={iconName}
 					size={26}

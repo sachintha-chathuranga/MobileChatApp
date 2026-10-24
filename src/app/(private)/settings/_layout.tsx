@@ -32,12 +32,12 @@ const SettingsLayout = () => {
 					headerShadowVisible: false,
 				}}
 			/>
-			<Stack.Screen
+			{/* <Stack.Screen
 				name="profile"
 				options={{
 					headerShown: false,
 				}}
-			/>
+			/> */}
 		</Stack>
 	);
 };

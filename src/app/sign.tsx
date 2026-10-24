@@ -36,7 +36,7 @@ const SignInScreen = () => {
 	const handleSubmit = () => {
 		setLoading(true);
 		sendOTP(phone).then((data) => {
-			setLoading(false)
+			setLoading(false);
 			if (data) {
 				router.replace(`/verify/${phone}`);
 			}
