@@ -1,10 +1,9 @@
-import {Colors} from '@/src/constants/theme';
+import Loading from '@/src/components/Loading';
 import {useAuth} from '@/src/context/authContext';
 import {sendOTP, verifyOTP} from '@/src/services/apiCalls';
 import {Link, useLocalSearchParams, useRouter} from 'expo-router';
-import {StyleSheet} from 'nativewind';
 import React, {useState} from 'react';
-import {ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, Text, TextInputProps, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, Pressable, Text, TextInputProps, View} from 'react-native';
 import {CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell} from 'react-native-confirmation-code-field';
 import {SafeAreaView} from 'react-native-safe-area-context';
 const CELL_COUNT = 6;
@@ -14,6 +13,7 @@ const autoComplete = Platform.select<TextInputProps['autoComplete']>({
 });
 const VerificationScreen = () => {
 	const [loading, setLoading] = useState(false);
+	const [sending, setSending] = useState(false);
 	const {phone} = useLocalSearchParams<{phone: string}>();
 	const [otp, setOtp] = useState('');
 	const router = useRouter();
@@ -23,7 +23,6 @@ const VerificationScreen = () => {
 	const {signIn} = useAuth();
 
 	const validateInput = (text: string) => {
-		console.log(text);
 		text.length === CELL_COUNT ? setIsValide(true) : setIsValide(false);
 	};
 	const handleInputChange = (text: string) => {
@@ -31,25 +30,26 @@ const VerificationScreen = () => {
 		validateInput(text);
 	};
 	const handleSubmit = () => {
+		setLoading(true)
 		verifyOTP(phone, otp)
 			.then((data) => {
-				console.log(data);
 				if (data.user.fname) {
-					console.log('first name exist');
 					signIn(data.user, data.accessToken, data.refreshToken);
 				} else {
 					router.replace(`/signup/${data.user.user_id}`);
 				}
 			})
-			.catch((error) => console.log(error));
+			.catch((error) => console.log(error)).finally(() => setLoading(false));
 	};
 
 	const resendOTP = () => {
-		sendOTP(phone)
-			.then((data) => {
+		setSending(true);
+		sendOTP(phone).then((data) => {
+			setSending(false);
+			if (data) {
 				console.log(data.message);
-			})
-			.catch((error) => console.log(error));
+			}
+		});
 	};
 	return (
 		<SafeAreaView className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
@@ -58,15 +58,7 @@ const VerificationScreen = () => {
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 10}
 			>
-				{loading && (
-					<View
-						style={[StyleSheet.absoluteFillObject]}
-						className="z-10 bg-light-bgcolor-200 dark:bg-dark-bgcolor-200 justify-center items-center"
-					>
-						<ActivityIndicator size={'large'} color={Colors.light.txtcolor.primary} />
-						<Text className="text-light-txtcolor-100 dark:text-dark-txtcolor-100 p-2">Sending OTP...</Text>
-					</View>
-				)}
+				{(loading || sending) && <Loading text={loading ? 'Verifying' : 'Sending'} />}
 
 				<View className="px-5 flex-1 justify-between mt-10">
 					<View className="items-center">
@@ -78,7 +70,7 @@ const VerificationScreen = () => {
 							SMS with a code to
 							<Text className="font-semibold text-light-txtcolor-100 dark:text-dark-txtcolor-100"> {phone}</Text>
 							.{' '}
-							<Link href={'./../sign'} className="mt-20" replace>
+							<Link href={'./../sign'}  className="mt-20" replace>
 								<Text className="font-semibold text-light-txtcolor-secondary dark:text-dark-txtcolor-secondary">
 									{' '}
 									Wrong number?{' '}
@@ -113,14 +105,14 @@ const VerificationScreen = () => {
 								</View>
 							)}
 						/>
-						<Pressable onPress={resendOTP}>
+						<Pressable disabled={loading} onPress={resendOTP}>
 							<Text className="font-semibold text-light-txtcolor-primary dark:text-dark-txtcolor-primary">
 								Didn't receive code?
 							</Text>
 						</Pressable>
 					</View>
 					<Pressable
-						disabled={!isValide}
+						disabled={!isValide || loading}
 						className={`w-full p-3  rounded-full items-center ${isValide ? 'bg-light-bgcolor-primary dark:bg-dark-bgcolor-primary ' : 'bg-light-bgcolor-inactive dark:bg-dark-bgcolor-inactive'}`}
 						onPress={handleSubmit}
 					>

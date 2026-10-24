@@ -3,10 +3,11 @@ import {useStorageState} from '@/src/hooks/useStorageState';
 import {Axios} from 'axios';
 import {createContext, useCallback, useContext, useMemo, useState, type PropsWithChildren} from 'react';
 import {logOutCall} from '../services/apiCalls';
+import {useSocket} from './socketContext';
 
 const AuthContext = createContext<{
 	signIn: (user: User, accToken: string, refToken: string) => void;
-	signOut: (axiosPrivate: Axios) => void;
+	signOut: (axiosPrivate?: Axios) => void;
 	user: User | null;
 	isLoading: boolean | null;
 	refreshToken: string | null;
@@ -45,14 +46,21 @@ export function AuthProvider({children}: PropsWithChildren) {
 		setUser(user);
 	};
 	const signOut = useCallback(
-		(axiosPrivate: Axios) => {
-			logOutCall(axiosPrivate).then((data) => {
-				if (data) {
-					setUser(null);
-					setAccessToken(null);
-					setRefreshToken(null);
-				}
-			});
+		(axiosPrivate?: Axios) => {
+			if (axiosPrivate) {
+				logOutCall(axiosPrivate).then((data) => {
+					if (data) {
+					
+						setUser(null);
+						setAccessToken(null);
+						setRefreshToken(null);
+					}
+				});
+			} else {
+				setUser(null);
+				setAccessToken(null);
+				setRefreshToken(null);
+			}
 		},
 		[]
 	);

@@ -1,5 +1,6 @@
 import {images} from '@/src/assets/images';
 import IconCard from '@/src/components/IconCard';
+import Loading from '@/src/components/Loading';
 import {Colors} from '@/src/constants/theme';
 import {useAuth} from '@/src/context/authContext';
 import {signUp} from '@/src/services/apiCalls';
@@ -15,6 +16,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 const splitter = new GraphemeSplitter();
 
 const SignUpScreen = () => {
+	const [loading, setLoading] = useState(false);
 	const [input, setInput] = useState('');
 	const inputRef = useRef<TextInput>(null);
 	const {colorScheme} = useColorScheme();
@@ -22,10 +24,14 @@ const SignUpScreen = () => {
 	const snapPoints = useMemo(() => ['30%'], []);
 	const {user_id} = useLocalSearchParams<{user_id: string}>();
 	const {signIn} = useAuth();
+
 	const handleSubmit = () => {
+		setLoading(true);
 		signUp(user_id, input).then((data) => {
-			console.log(data);
-			signIn(data.user, data.accessToken, data.refreshToken);
+			setLoading(false);
+			if (data) {
+				signIn(data.user, data.accessToken, data.refreshToken);
+			}
 		});
 	};
 
@@ -56,6 +62,7 @@ const SignUpScreen = () => {
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 10}
 			>
+				{loading && <Loading text={'Saving'} />}
 				<View className="px-7 flex-1 justify-between mt-10">
 					<View className="items-center">
 						<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">
@@ -83,7 +90,7 @@ const SignUpScreen = () => {
 					</View>
 					<View className="px-3">
 						<Pressable
-							disabled={!input}
+							disabled={!input || loading}
 							className={`w-full p-3  rounded-full items-center ${input ? 'bg-light-bgcolor-primary dark:bg-dark-bgcolor-primary ' : 'bg-light-bgcolor-inactive dark:bg-dark-bgcolor-inactive'}`}
 							onPress={() => handleSubmit()}
 						>

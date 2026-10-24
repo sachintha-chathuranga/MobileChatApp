@@ -18,10 +18,11 @@ export function useTheme() {
 }
 export const ThemeProvider = ({children}: PropsWithChildren) => {
 	const {setColorScheme} = useNativeWindColorScheme();
-	// const [theme, setTheme] = useState<ThemeType>('light');
 	const [theme, setTheme, isThemeLoad] = useStorageState<ThemeType>('APP_THEME');
-	// Load saved theme on app start
+
 	useEffect(() => {
+		if(!theme) return;
+		console.log("Color Schema Changed to"+theme)
 		setColorScheme(theme as ThemeType)
 	}, [theme]);
 	

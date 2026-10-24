@@ -5,18 +5,9 @@ import {sendOTP} from '@/src/services/apiCalls';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import BottomSheet, {BottomSheetBackdrop, BottomSheetScrollView} from '@gorhom/bottom-sheet';
 import {useRouter} from 'expo-router';
-import {StyleSheet, useColorScheme} from 'nativewind';
+import {useColorScheme} from 'nativewind';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {
-	ActivityIndicator,
-	Keyboard,
-	KeyboardAvoidingView,
-	Linking,
-	Platform,
-	Pressable,
-	Text,
-	View,
-} from 'react-native';
+import {Keyboard, KeyboardAvoidingView, Linking, Platform, Pressable, Text, View} from 'react-native';
 import MaskInput from 'react-native-mask-input';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Loading from '../components/Loading';
@@ -43,15 +34,16 @@ const SignInScreen = () => {
 		[]
 	);
 	const handleSubmit = () => {
-		sendOTP(phone)
-			.then((data) => {
-				console.log(data.message);
+		setLoading(true);
+		sendOTP(phone).then((data) => {
+			setLoading(false)
+			if (data) {
 				router.replace(`/verify/${phone}`);
-			})
-			.catch((error) => console.log(error));
+			}
+		});
 	};
 	const validate = (input: string) => {
-		input.length === 9 ? setIsValide(true) : setIsValide(false);
+		input.length === 9 ? setIsValide(true) : setIsValide(true);
 	};
 	const handlePresentModalPress = useCallback(() => {
 		Keyboard.dismiss();
@@ -72,9 +64,7 @@ const SignInScreen = () => {
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 10}
 			>
-				{loading && (
-					<Loading text={"Sending" }/>
-				)}
+				{loading && <Loading text={'Sending'} />}
 
 				<View className="px-5 flex-1 justify-between mt-10">
 					<View className="items-center">
@@ -123,7 +113,7 @@ const SignInScreen = () => {
 					<Pressable
 						className={`w-full p-3  rounded-full items-center ${isValide ? 'bg-light-bgcolor-primary dark:bg-dark-bgcolor-primary ' : 'bg-light-bgcolor-inactive dark:bg-dark-bgcolor-inactive'}`}
 						onPress={() => handleSubmit()}
-						disabled={!isValide}
+						disabled={!isValide || loading}
 					>
 						<Text className={`text-lg font-bold ${isValide ? 'text-white' : 'text-light-txtcolor-inactive'}`}>
 							Next

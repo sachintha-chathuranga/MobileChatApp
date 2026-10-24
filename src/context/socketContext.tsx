@@ -51,15 +51,15 @@ const SocketContextProvider: React.FC<PropsWithChildren> = ({children}) => {
 		socket.emit('leaveRoom', user.user_id);
 		socket.disconnect();
 		console.log('socket Disconnected');
-		setSocket(null);
-	}, [socket, user]);
+		setSocket(prev => prev =null);
+	}, [socket, user?.user_id]);
 
 	useEffect(() => {
 		if (!user) return;
 		if (user.user_id) {
 			connectSocket(user.user_id);
 		}
-	}, [user]);
+	}, [user?.user_id]);
 
 	const values = useMemo(
 		() => ({

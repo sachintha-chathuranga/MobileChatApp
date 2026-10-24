@@ -22,7 +22,7 @@ const ProfileCard = () => {
 				/>
 				<View className="px-4">
 					<Text className="text-light-txtcolor-100 text-lg line-clamp-1 dark:text-dark-txtcolor-100">
-						{user?.fname + ' ' + user?.lname}
+						{user?.fname + ' ' + (user?.lname ? user?.lname : '')}
 					</Text>
 					<Text className="text-light-txtcolor-200 line-clamp-1 dark:text-dark-txtcolor-200">{user?.phone}</Text>
 					<Pressable className="flex-row flex-grow-0 px-2 py-1 mt-1 rounded-full border border-light-border-100 items-center w-fit self-start gap-2 dark:border-dark-border-100">

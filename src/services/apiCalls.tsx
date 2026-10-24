@@ -7,6 +7,7 @@ function handleError(error: any) {
 	if (!error?.response) {
 		Alert.alert('Server Error', 'Server does not respond!');
 	} else if (error.response?.data) {
+		console.log(error.response.data)
 		Alert.alert('Server Error', error.response.data);
 	} else {
 		Alert.alert('Network Error', 'Check your Internet Connection');
@@ -28,7 +29,7 @@ export const sendOTP = async (phone: string) => {
 		return res.data;
 	} catch (error: any) {
 		handleError(error);
-		throw error;
+		return null;
 	}
 };
 export const verifyOTP = async (phone: string, otp: string) => {
@@ -47,7 +48,7 @@ export const signUp = async (userId: string, userName: string) => {
 		return res.data;
 	} catch (error) {
 		handleError(error);
-		throw error;
+		return null
 	}
 };
 
@@ -66,6 +67,7 @@ export const logOutCall = async (axiosPrivate:Axios) => {
 		const res = await axiosPrivate.put(`auth/sign-out`);
 		return res.status;
 	} catch (err) {
+		
 		handleError(err)
 		return null;
 	}
@@ -100,7 +102,6 @@ export const fetchRecentChats = async (axiosPrivate: Axios, index: number) => {
 		const res = await axiosPrivate.get(`users/friends?index=${index}`);
 		return res.data;
 	} catch (error) {
-		console.log('fetch Recent Chats error');
 		handleError(error);
 		return [];
 	}
@@ -110,13 +111,11 @@ export const fetchFriendList = async (axiosPrivate: Axios, index: number | null)
 		const res = await axiosPrivate.get(index ? `users/all?index=${index}` : `users/all`);
 		return res.data;
 	} catch (error) {
-		console.log('fetch Friend get error');
 		handleError(error);
 		return [];
 	}
 };
 export const fetchFriend = async (axiosPrivate: Axios, friendId: number) => {
-	console.log('getFriend call');
 	try {
 		const res = await axiosPrivate.get(`users/${friendId}`);
 		return res.data;
@@ -138,7 +137,7 @@ export const searchFriends = async (axiosPrivate: Axios, index: number | null, s
 
 export const fetchMessages = async (axiosPrivate: Axios, friend_id: number) => {
 	try {
-		const res = await axiosPrivate.get(`messages/message?friend_id=${friend_id}`);
+		const res = await axiosPrivate.get(`messages/message?friend_id=${friend_id}&order_by=DESC`);
 		return res.data;
 	} catch (error) {
 		handleError(error);
@@ -159,7 +158,7 @@ export const readAllMessages = async (axiosPrivate: Axios, friend_id: number) =>
 	try {
 		await axiosPrivate.put(`messages/messages/update?friend_id=${friend_id}`);
 	} catch (err) {
-		console.log(err);
+		handleError(err)
 	}
 };
 export const fetchAllNotification = async (axiosPrivate: Axios) => {
@@ -167,7 +166,7 @@ export const fetchAllNotification = async (axiosPrivate: Axios) => {
 		const res = await axiosPrivate.get(`messages/messages/notifications`);
 		return res.data;
 	} catch (err) {
-		console.log(err);
+		handleError(err)
 		return null;
 	}
 };

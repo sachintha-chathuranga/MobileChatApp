@@ -11,7 +11,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import {clearMessages} from '../services/apiCalls';
 import Menu from './Menu';
 type ChatHeaderProps = {
-	clear: (list: Message[]) => void;
+	clear: () => void;
 };
 const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 	const {id, name, status, avatar} = useLocalSearchParams();
@@ -38,7 +38,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 				// icon: 'chat-remove-outline',
 				name: 'Clear chat',
 				function: () => {
-					clear([]);
+					clear();
 					clearMessages(axiosPrivate, Number(id));
 				},
 			},

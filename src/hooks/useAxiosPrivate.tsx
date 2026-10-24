@@ -3,9 +3,11 @@ import {getNewToken} from '@/src/services/apiCalls';
 import {axiosPublic} from '@/src/services/requestConfig';
 import {AxiosResponse} from 'axios';
 import {useEffect} from 'react';
+import { useSocket } from '../context/socketContext';
 
 const useAxiosPrivate = () => {
 	const {accessToken, refreshToken, signOut, setAccessToken} = useAuth();
+	const {disconnectSocket} = useSocket();
 
 	useEffect(() => {
 		const requestIntercept = axiosPublic.interceptors.request.use(
@@ -30,6 +32,7 @@ const useAxiosPrivate = () => {
 						prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 						return axiosPublic(prevRequest);
 					}
+					disconnectSocket()
 					signOut();
 				}
 				return Promise.reject(err);
@@ -40,7 +43,7 @@ const useAxiosPrivate = () => {
 			axiosPublic.interceptors.request.eject(requestIntercept);
 			axiosPublic.interceptors.response.eject(responseIntercept);
 		};
-	}, [accessToken, refreshToken]);
+	}, [accessToken, refreshToken, disconnectSocket]);
 
 	return axiosPublic;
 };

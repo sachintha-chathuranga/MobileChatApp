@@ -9,7 +9,7 @@ const Loading: React.FC<{text: string}> = ({text}) => {
 	return (
 		<View
 			style={[StyleSheet.absoluteFillObject]}
-			className="z-10 bg-light-bgcolor-200 dark:bg-dark-bgcolor-200 justify-center items-center pb-32"
+			className="z-10 bg-light-bgcolor-transparent dark:bg-dark-bgcolor-transparent justify-center items-center"
 		>
 			<ActivityIndicator size={45} color={Colors[colorScheme || 'light'].loading} />
 			<Text className="text-light-txtcolor-100 dark:text-dark-txtcolor-100 p-2">{text}...</Text>

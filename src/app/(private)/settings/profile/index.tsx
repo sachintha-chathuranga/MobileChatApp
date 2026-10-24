@@ -53,7 +53,7 @@ const ProfileScreen = () => {
 			<IconCard
 				iconName="account-outline"
 				title="Name"
-				info={user ? user?.fname + ' ' + user?.lname : ''}
+				info={user ? user?.fname + ' ' + (user?.lname ? user.lname : "") : ''}
 				route="/settings/profile/name_form"
 			/>
 			<IconCard
