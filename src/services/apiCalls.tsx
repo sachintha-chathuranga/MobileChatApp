@@ -135,9 +135,9 @@ export const searchFriends = async (axiosPrivate: Axios, index: number | null, s
 	}
 };
 
-export const fetchMessages = async (axiosPrivate: Axios, friend_id: number) => {
+export const fetchMessages = async (axiosPrivate: Axios, friend_id: number,index: number) => {
 	try {
-		const res = await axiosPrivate.get(`messages/message?friend_id=${friend_id}&order_by=DESC`);
+		const res = await axiosPrivate.get(`messages/message?friend_id=${friend_id}&order_by=DESC&index=${index}`);
 		return res.data;
 	} catch (error) {
 		handleError(error);

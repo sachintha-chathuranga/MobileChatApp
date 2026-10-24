@@ -21,7 +21,7 @@ const InputField: React.FC<InputFieldProps> = ({inputRef, onInputChange, onSubmi
 				placeholder="Search Friends for chat"
 				placeholderTextColor={colorScheme === 'dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
 				underlineColorAndroid="transparent"
-				autoFocus
+				// autoFocus
 				// keyboardType="alphabetic"
 			/>
 

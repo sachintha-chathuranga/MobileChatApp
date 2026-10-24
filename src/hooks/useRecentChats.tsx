@@ -9,18 +9,17 @@ const useRecentChats = (index: number) => {
 	const [isFetching, setIsFetching] = useState(false);
 	const [hasMore, sethasMore] = useState(true);
 	const axiosPrivate = useAxiosPrivate();
-	// Initial load
-	useFocusEffect(
-		useCallback(() => {
+	// Initial load & Focus load
+	// useFocusEffect(
+		useEffect(() => {
 			if (!axiosPrivate) return;
-			console.log('Initial Fetchfriend');
 			setIsFetching(true);
 			fetchRecentChats(axiosPrivate, index).then((data) => {
 				setFriends(data);
 				setIsFetching(false);
 			});
 		}, [axiosPrivate])
-	);
+	// );
 
 	// Pagination
 	useEffect(() => {
