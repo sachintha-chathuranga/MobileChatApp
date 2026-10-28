@@ -69,3 +69,5 @@ export type Country = {
 	flag: string;
 	mask: Mask;
 };
+
+export type ThemeType = 'light' | 'dark';

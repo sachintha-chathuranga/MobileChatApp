@@ -4,7 +4,7 @@ import {router, useLocalSearchParams} from 'expo-router';
 import React, {useMemo} from 'react';
 import {Image, Text, View} from 'react-native';
 import {Colors} from '../constants/theme';
-import {MenuItem, Message} from '../constants/types';
+import {MenuItem} from '../constants/types';
 import {useAuth} from '../context/authContext';
 import {useTheme} from '../context/themeContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
@@ -45,7 +45,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 		],
 		[theme, axiosPrivate, id]
 	);
-
 
 	return (
 		<View className="py-3 pl-3 flex-row items-center gap-1 ">

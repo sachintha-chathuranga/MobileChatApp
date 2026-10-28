@@ -1,10 +1,12 @@
 import {images} from '@/src/assets/images';
 import IconCard from '@/src/components/IconCard';
+import ImagePickerComponent from '@/src/components/image_picker';
 import {Colors} from '@/src/constants/theme';
 import {useAuth} from '@/src/context/authContext';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from '@gorhom/bottom-sheet';
+import {router} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 
 import React, {useCallback, useRef} from 'react';
@@ -16,7 +18,7 @@ const ProfileScreen = () => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const snapPoints = ['35%'];
 	const {colorScheme} = useColorScheme();
-	const {user} = useAuth();
+	const {user, isLoading} = useAuth();
 
 	const renderBackdrop = useCallback(
 		(props: any) => (
@@ -58,26 +60,26 @@ const ProfileScreen = () => {
 					<IconCard
 						iconName="account-outline"
 						title="Name"
-						info={user ? user?.fname + ' ' + (user?.lname ? user.lname : '') : ''}
-						route="/profile/name_form"
+						info={user && !isLoading ? user?.fname + ' ' + (user?.lname ? user.lname : '') : ''}
+						onPress={() => router.push('/profile/name_form')}
 					/>
 					<IconCard
 						iconName="information-variant-circle-outline"
 						title="About"
 						info={user ? user?.about : ''}
-						route="/profile/about_form"
+						onPress={() => router.push('/profile/about_form')}
 					/>
 					<IconCard
 						iconName="phone-outline"
 						title="Phone"
 						info={user ? user?.phone : ''}
-						route="/profile/phone_form/first_screen"
+						onPress={() => router.push('/profile/phone_form/first_screen')}
 					/>
 					<IconCard
 						iconName="email-outline"
 						title="Email"
 						info={user ? user?.email : ''}
-						route="/profile/email_form/first_screen"
+						onPress={() => router.push('/profile/email_form/first_screen')}
 					/>
 				</View>
 
@@ -94,7 +96,7 @@ const ProfileScreen = () => {
 						backgroundColor: colorScheme === 'dark' ? Colors.dark.txtcolor[200] : Colors.light.txtcolor[200],
 					}}
 				>
-					<BottomSheetView >
+					<BottomSheetView>
 						<View className="flex-row items-center mx-3 pb-3 pt-2">
 							<Pressable onPress={handleClosePress}>
 								<MaterialIcons
@@ -109,10 +111,7 @@ const ProfileScreen = () => {
 								</Text>
 							</View>
 						</View>
-						<View className="px-4">
-							<IconCard iconName="camera-outline" title="Camera" info="" route="/profile" />
-							<IconCard iconName="image-frame" title="Gallery" info="" route="/profile" />
-						</View>
+						<ImagePickerComponent />
 					</BottomSheetView>
 				</BottomSheet>
 			</SafeAreaView>

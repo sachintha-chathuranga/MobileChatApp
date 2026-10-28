@@ -24,6 +24,14 @@ export default function HomeScreen() {
 	const {friends, setFriends, isFetching, hasMore} = useRecentChats(index);
 	const {socket} = useSocket();
 
+	useEffect(() => {
+		console.log('Home mounted');
+
+		return () => {
+			console.log('Home unmounted');
+		};
+	}, []);
+
 	// useFocuseEffect use to update notifications every time home screen focus.
 	useFocusEffect(
 		useCallback(() => {
@@ -32,7 +40,7 @@ export default function HomeScreen() {
 			fetchAllNotification(axiosPrivate).then((data) => {
 				setNotification(data);
 			});
-			return () => console.log('Home Screen unmount');
+			return () => console.log('Home Screen UnFocus');
 		}, [axiosPrivate])
 	);
 
@@ -78,7 +86,7 @@ export default function HomeScreen() {
 			<HomeHeader />
 			<SearchButton />
 
-			{friends.length === 0 && !isFetching ? (
+			{!isFetching && friends.length === 0 ? (
 				<View className="flex-1 justify-center">
 					<HomeComponant />
 				</View>

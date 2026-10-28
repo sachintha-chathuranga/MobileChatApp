@@ -6,7 +6,7 @@ import { useFocusEffect } from 'expo-router';
 
 const useRecentChats = (index: number) => {
 	const [friends, setFriends] = useState<Friend[]>([]);
-	const [isFetching, setIsFetching] = useState(false);
+	const [isFetching, setIsFetching] = useState(true);
 	const [hasMore, sethasMore] = useState(true);
 	const axiosPrivate = useAxiosPrivate();
 	// Initial load & Focus load, // useFocus use to update friend last msg every time when Home screen focus 

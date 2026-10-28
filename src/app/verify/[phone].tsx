@@ -1,9 +1,9 @@
-import Loading from '@/src/components/Loading';
+import {Colors} from '@/src/constants/theme';
 import {useAuth} from '@/src/context/authContext';
 import {sendOTP, verifyOTP} from '@/src/services/apiCalls';
 import {Link, useLocalSearchParams, useRouter} from 'expo-router';
 import React, {useState} from 'react';
-import {KeyboardAvoidingView, Platform, Pressable, Text, TextInputProps, View} from 'react-native';
+import {ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, Text, TextInputProps, View} from 'react-native';
 import {CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell} from 'react-native-confirmation-code-field';
 import {SafeAreaView} from 'react-native-safe-area-context';
 const CELL_COUNT = 6;
@@ -30,7 +30,7 @@ const VerificationScreen = () => {
 		validateInput(text);
 	};
 	const handleSubmit = () => {
-		setLoading(true)
+		setLoading(true);
 		verifyOTP(phone, otp)
 			.then((data) => {
 				if (data.user.fname) {
@@ -39,7 +39,10 @@ const VerificationScreen = () => {
 					router.replace(`/signup/${data.user.user_id}`);
 				}
 			})
-			.catch((error) => console.log(error)).finally(() => setLoading(false));
+			.catch((error) => {
+				setOtp('');
+			})
+			.finally(() => setLoading(false));
 	};
 
 	const resendOTP = () => {
@@ -47,34 +50,26 @@ const VerificationScreen = () => {
 		sendOTP(phone).then((data) => {
 			setSending(false);
 			if (data) {
-				console.log(data.message);
+				console.log(data);
 			}
 		});
 	};
 	return (
-		<SafeAreaView className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
+		<SafeAreaView className="flex-1 bg-light-bgcolor-100">
 			<KeyboardAvoidingView
 				style={{flex: 1}}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 10}
 			>
-				{(loading || sending) && <Loading text={loading ? 'Verifying' : 'Sending'} />}
-
 				<View className="px-5 flex-1 justify-between mt-10">
 					<View className="items-center">
-						<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">
-							Verifying your number
-						</Text>
-						<Text className="text-center text-light-txtcolor-200 dark:text-dark-txtcolor-200">
+						<Text className="text-2xl mb-5 text-light-txtcolor-title">Verifying your number</Text>
+						<Text className="text-center text-light-txtcolor-200">
 							To complete your phone number verification, please enter the 6-digit otp code. We have sent you an
 							SMS with a code to
-							<Text className="font-semibold text-light-txtcolor-100 dark:text-dark-txtcolor-100"> {phone}</Text>
-							.{' '}
-							<Link href={'./../sign'}  className="mt-20" replace>
-								<Text className="font-semibold text-light-txtcolor-secondary dark:text-dark-txtcolor-secondary">
-									{' '}
-									Wrong number?{' '}
-								</Text>
+							<Text className="font-semibold text-light-txtcolor-100"> {phone}</Text>.{' '}
+							<Link href={'./../sign'} className="mt-20" replace>
+								<Text className="font-semibold text-light-txtcolor-secondary"> Wrong number? </Text>
 							</Link>
 						</Text>
 
@@ -94,29 +89,31 @@ const VerificationScreen = () => {
 									key={index}
 									onLayout={getCellOnLayoutHandler(index)}
 									className={`border-b-2 w-8 h-8 mx-1 justify-center items-center ${
-										isFocused
-											? 'border-light-border-primary dark:border-dark-border-primary'
-											: 'border-light-border-100 dark:border-dark-border-100'
+										isFocused ? 'border-light-border-primary' : 'border-light-border-100 '
 									}`}
 								>
-									<Text className="text-lg text-light-txtcolor-100 dark:text-dark-txtcolor-100">
+									<Text className="text-lg text-light-txtcolor-100">
 										{symbol || (isFocused ? <Cursor /> : null)}
 									</Text>
 								</View>
 							)}
 						/>
 						<Pressable disabled={loading} onPress={resendOTP}>
-							<Text className="font-semibold text-light-txtcolor-primary dark:text-dark-txtcolor-primary">
-								Didn't receive code?
-							</Text>
+							<Text className="font-semibold text-light-txtcolor-primary">Didn't receive code?</Text>
 						</Pressable>
 					</View>
 					<Pressable
 						disabled={!isValide || loading}
-						className={`w-full p-3  rounded-full items-center ${isValide ? 'bg-light-bgcolor-primary dark:bg-dark-bgcolor-primary ' : 'bg-light-bgcolor-inactive dark:bg-dark-bgcolor-inactive'}`}
+						className={`w-full p-3  rounded-full items-center ${isValide ? 'bg-light-bgcolor-primary' : 'bg-light-bgcolor-inactive'}`}
 						onPress={handleSubmit}
 					>
-						<Text className="text-white text-base">Verify</Text>
+						<Text className="text-white text-base">
+							{loading || sending ? (
+								<ActivityIndicator size={25} color={Colors['dark'].txtcolor[100]} />
+							) : (
+								'Verify'
+							)}
+						</Text>
 					</Pressable>
 				</View>
 			</KeyboardAvoidingView>

@@ -1,6 +1,6 @@
 import {Colors} from '@/src/constants/theme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import {Href, useRouter} from 'expo-router';
+import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 
 import React from 'react';
@@ -18,16 +18,16 @@ type IconCardProps = {
 	iconName: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
 	title: string;
 	info: string;
-	route: Href;
+	onPress: () => void;
 };
-const IconCard: React.FC<IconCardProps> = ({iconName, title, info, route}) => {
+const IconCard: React.FC<IconCardProps> = ({iconName, title, info, onPress}) => {
 	const router = useRouter();
 	const {colorScheme} = useColorScheme();
 	return (
 		<TouchableHighlight
 			activeOpacity={0.6}
 			underlayColor={colorScheme === 'dark' ? Colors.dark.underlay[100] : Colors.light.underlay[100]}
-			onPress={() => router.push(route)}
+			onPress={onPress}
 		>
 			<View className={`flex-row items-center gap-1`}>
 				<MaterialCommunityIcons

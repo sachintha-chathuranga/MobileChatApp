@@ -2,7 +2,7 @@ import * as SecureStore from 'expo-secure-store';
 import {useCallback, useEffect, useReducer} from 'react';
 import {Platform} from 'react-native';
 
-type StorageState<T> = [T | null, (value: T | null) => void, boolean | null];
+type StorageState<T> = [T | null, (value: T | null) => void, boolean | null, () => void];
 
 function useAsyncState<T>(initialValue: T | null = null): [T | null, (value: T | null) => void] {
 	return useReducer((state: T | null, action: T | null) => action, initialValue) as [
@@ -63,7 +63,7 @@ export function useStorageState<T>(key: string): StorageState<T> {
 		}
 	}
 
-	async function clearStorage() {
+	const clearStorage = useCallback(async () => {
 		try {
 			if (Platform.OS === 'web') {
 				localStorage.removeItem(key);
@@ -75,12 +75,12 @@ export function useStorageState<T>(key: string): StorageState<T> {
 		} catch (error) {
 			console.log(error);
 		}
-	}
+	}, [key]);
 
 	useEffect(() => {
 		load();
 		// clearStorage();
-	}, [key]);
+	}, []);
 
 	// Set
 	const setValue = useCallback(
@@ -94,5 +94,5 @@ export function useStorageState<T>(key: string): StorageState<T> {
 		[key]
 	);
 
-	return [state, setValue, loading];
+	return [state, setValue, loading, clearStorage];
 }

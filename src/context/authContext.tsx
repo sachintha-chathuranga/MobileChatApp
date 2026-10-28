@@ -1,9 +1,8 @@
-import {User} from '@/src/constants/types';
+import {ThemeType, User} from '@/src/constants/types';
 import {useStorageState} from '@/src/hooks/useStorageState';
 import {Axios} from 'axios';
 import {createContext, useCallback, useContext, useMemo, useState, type PropsWithChildren} from 'react';
 import {logOutCall} from '../services/apiCalls';
-import {useSocket} from './socketContext';
 
 const AuthContext = createContext<{
 	signIn: (user: User, accToken: string, refToken: string) => void;
@@ -39,31 +38,29 @@ export function AuthProvider({children}: PropsWithChildren) {
 	const [refreshToken, setRefreshToken] = useStorageState<string>('REF_TOKEN');
 	const [accessToken, setAccessToken] = useState<string | null>('');
 	const [user, setUser, isLoading] = useStorageState<User>('USER');
+	const [theme, setTheme, isThemeLoad, removeTheme] = useStorageState<ThemeType>('APP_THEME');
 
 	const signIn = (user: User, accToken: string, refToken: string) => {
 		setAccessToken(accToken);
 		setRefreshToken(refToken);
 		setUser(user);
 	};
-	const signOut = useCallback(
-		(axiosPrivate?: Axios) => {
-			if (axiosPrivate) {
-				logOutCall(axiosPrivate).then((data) => {
-					if (data) {
-					
-						setUser(null);
-						setAccessToken(null);
-						setRefreshToken(null);
-					}
-				});
-			} else {
-				setUser(null);
-				setAccessToken(null);
-				setRefreshToken(null);
-			}
-		},
-		[]
-	);
+	const signOut = useCallback((axiosPrivate?: Axios) => {
+		if (axiosPrivate) {
+			logOutCall(axiosPrivate).then((data) => {
+				if (data) {
+					removeTheme();
+					setUser(null);
+					setAccessToken(null);
+					setRefreshToken(null);
+				}
+			});
+		} else {
+			setUser(null);
+			setAccessToken(null);
+			setRefreshToken(null);
+		}
+	}, []);
 
 	const memorizeValues = useMemo(
 		() => ({

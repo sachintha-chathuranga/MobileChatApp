@@ -48,7 +48,7 @@ export const Colors = {
 		border: {100: '#788ba5b3', primary: '#16a34a'},
 		incomebg: '#1c3047ab',
 		outbg: '#1f6337',
-		loading: '#569bffdb',
+		loading: '#22c55e',
 		cursor: '#4ade80',
 	},
 };

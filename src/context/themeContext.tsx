@@ -16,7 +16,7 @@ export function useTheme() {
 
 	return value;
 }
-export const ThemeProvider = ({children}: PropsWithChildren) => {
+export const CustomThemeProvider = ({children}: PropsWithChildren) => {
 	const {setColorScheme} = useNativeWindColorScheme();
 	const [theme, setTheme, isThemeLoad] = useStorageState<ThemeType>('APP_THEME');
 

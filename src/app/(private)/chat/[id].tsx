@@ -10,7 +10,7 @@ import useMessages from '@/src/hooks/useMessages';
 import {postMessage, readAllMessages} from '@/src/services/apiCalls';
 import {useLocalSearchParams} from 'expo-router';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FlatList, KeyboardAvoidingView, Platform, TextInput, View, useWindowDimensions} from 'react-native';
+import {FlatList, KeyboardAvoidingView, Platform, TextInput, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const ChatScreen = () => {
@@ -93,7 +93,6 @@ const ChatScreen = () => {
 								<IncomeMsg isLoading={false} msg={item.message} />
 							)
 						}
-					
 						onEndReached={() => {
 							if (!isMessageFetching && hasMore) {
 								console.log('Upper touch');

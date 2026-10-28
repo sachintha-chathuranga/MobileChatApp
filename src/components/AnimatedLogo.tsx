@@ -10,7 +10,6 @@ import Animated, {
 } from 'react-native-reanimated';
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
-const AnimatedText = Animated.createAnimatedComponent(Text);
 
 export default function BlissChatLogoAnimation() {
 	const scale = useSharedValue(0.8);
@@ -25,8 +24,8 @@ export default function BlissChatLogoAnimation() {
 
 	const logoStyle = useAnimatedStyle(() => ({
 		transform: [{scale: scale.value}],
-		width: 200,
-		height: 200,
+		width: 100,
+		height: 100,
 	}));
 
 	return (
