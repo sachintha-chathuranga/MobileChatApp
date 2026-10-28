@@ -1,15 +1,8 @@
 import * as SecureStore from 'expo-secure-store';
-import {useCallback, useEffect, useReducer} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Platform} from 'react-native';
 
-type StorageState<T> = [T | null, (value: T | null) => void, boolean | null, () => void];
-
-function useAsyncState<T>(initialValue: T | null = null): [T | null, (value: T | null) => void] {
-	return useReducer((state: T | null, action: T | null) => action, initialValue) as [
-		T | null,
-		(value: T | null) => void,
-	];
-}
+type StorageState<T> = [T | null, (value: T | null) => void, boolean, () => void];
 
 export async function setStorageItemAsync(key: string, value: any | null) {
 	const stringValue = value ? JSON.stringify(value) : null;
@@ -33,11 +26,10 @@ export async function setStorageItemAsync(key: string, value: any | null) {
 }
 
 export function useStorageState<T>(key: string): StorageState<T> {
-	// Public
-	const [state, setState] = useAsyncState<T>(null);
-	const [loading, setLoading] = useAsyncState<boolean>(true);
-	// Get
-	async function load() {
+	const [state, setState] = useState<T | null>(null);
+	const [loadingStorage, setLoadingStorage] = useState<boolean>(true);
+
+	const loadStorage = useCallback(async () => {
 		try {
 			let value: string | null = null;
 
@@ -47,21 +39,11 @@ export function useStorageState<T>(key: string): StorageState<T> {
 				value = await SecureStore.getItemAsync(key);
 			}
 			console.log(`Onload ${key}: ${value}`);
-			setState(
-				value ? JSON.parse(value) : null
-				// {
-				// 		user_id: 1,
-				// 		fname: 'Sachintha',
-				// 		lname: 'Chathuranga',
-				// 		phone: '+94 71 9057364',
-				// 		profil_pic: null,
-				// 		status: true,
-				// 	}
-			);
+			setState(value ? JSON.parse(value) : null);
 		} finally {
-			setLoading(false);
+			setLoadingStorage(false);
 		}
-	}
+	}, [key]);
 
 	const clearStorage = useCallback(async () => {
 		try {
@@ -70,7 +52,6 @@ export function useStorageState<T>(key: string): StorageState<T> {
 			} else {
 				await SecureStore.deleteItemAsync(key);
 			}
-
 			setState(null);
 		} catch (error) {
 			console.log(error);
@@ -78,9 +59,9 @@ export function useStorageState<T>(key: string): StorageState<T> {
 	}, [key]);
 
 	useEffect(() => {
-		load();
+		loadStorage();
 		// clearStorage();
-	}, []);
+	}, [key]);
 
 	// Set
 	const setValue = useCallback(
@@ -94,5 +75,5 @@ export function useStorageState<T>(key: string): StorageState<T> {
 		[key]
 	);
 
-	return [state, setValue, loading, clearStorage];
+	return [state, setValue, loadingStorage, clearStorage];
 }

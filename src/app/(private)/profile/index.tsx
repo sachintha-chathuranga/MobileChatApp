@@ -18,7 +18,7 @@ const ProfileScreen = () => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const snapPoints = ['35%'];
 	const {colorScheme} = useColorScheme();
-	const {user, isLoading} = useAuth();
+	const {user} = useAuth();
 
 	const renderBackdrop = useCallback(
 		(props: any) => (
@@ -38,6 +38,7 @@ const ProfileScreen = () => {
 	const handleClosePress = useCallback(() => {
 		bottomSheetRef.current?.close();
 	}, []);
+
 	return (
 		<GestureHandlerRootView style={{flex: 1}}>
 			<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
@@ -60,7 +61,7 @@ const ProfileScreen = () => {
 					<IconCard
 						iconName="account-outline"
 						title="Name"
-						info={user && !isLoading ? user?.fname + ' ' + (user?.lname ? user.lname : '') : ''}
+						info={user ? user?.fname + ' ' + (user?.lname ? user.lname : '') : ''}
 						onPress={() => router.push('/profile/name_form')}
 					/>
 					<IconCard

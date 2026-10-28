@@ -30,9 +30,9 @@ export default function RootLayout() {
 
 // Create a new component that can access the SessionProvider context later.
 function RootNavigator() {
-	const {user, isLoading} = useAuth();
+	const {user, loadingUser} = useAuth();
 
-	if (isLoading) {
+	if (loadingUser) {
 		return (
 			<SafeAreaView className="flex-1 z-10 bg-light-bgcolor-transparent justify-center items-center">
 				<ActivityIndicator size={45} color={Colors['light'].loading} />

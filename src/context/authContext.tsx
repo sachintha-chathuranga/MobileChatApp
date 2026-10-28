@@ -1,14 +1,14 @@
 import {ThemeType, User} from '@/src/constants/types';
 import {useStorageState} from '@/src/hooks/useStorageState';
 import {Axios} from 'axios';
-import {createContext, useCallback, useContext, useMemo, useState, type PropsWithChildren} from 'react';
+import {createContext, useCallback, useContext, useState, type PropsWithChildren} from 'react';
 import {logOutCall} from '../services/apiCalls';
 
 const AuthContext = createContext<{
 	signIn: (user: User, accToken: string, refToken: string) => void;
 	signOut: (axiosPrivate?: Axios) => void;
 	user: User | null;
-	isLoading: boolean | null;
+	loadingUser: boolean;
 	refreshToken: string | null;
 	accessToken: string | null;
 	setAccessToken: (token: string | null) => void;
@@ -17,7 +17,7 @@ const AuthContext = createContext<{
 	signIn: () => null,
 	signOut: () => null,
 	user: null,
-	isLoading: false,
+	loadingUser: false,
 	refreshToken: null,
 	accessToken: null,
 	setAccessToken: () => null,
@@ -30,29 +30,29 @@ export function useAuth() {
 	if (!value) {
 		throw new Error('useAuth must be wrapped in a <AuthProvider />');
 	}
-
 	return value;
 }
 
 export function AuthProvider({children}: PropsWithChildren) {
-	const [refreshToken, setRefreshToken] = useStorageState<string>('REF_TOKEN');
-	const [accessToken, setAccessToken] = useState<string | null>('');
-	const [user, setUser, isLoading] = useStorageState<User>('USER');
-	const [theme, setTheme, isThemeLoad, removeTheme] = useStorageState<ThemeType>('APP_THEME');
+	const [refreshToken, setRefreshToken, loadingRefreshToken, removeRefToken] = useStorageState<string>('REF_TOKEN');
+	const [accessToken, setAccessToken] = useState<string | null>(null);
+	const [user, setUser, loadingUser, removeUser] = useStorageState<User>('USER');
+	const [theme, setTheme, loadingTheme, removeTheme] = useStorageState<ThemeType>('APP_THEME');
 
-	const signIn = (user: User, accToken: string, refToken: string) => {
+	const signIn = useCallback((logedUser: User, accToken: string, refToken: string) => {
 		setAccessToken(accToken);
 		setRefreshToken(refToken);
-		setUser(user);
-	};
+		setUser(logedUser);
+	}, []);
+
 	const signOut = useCallback((axiosPrivate?: Axios) => {
 		if (axiosPrivate) {
 			logOutCall(axiosPrivate).then((data) => {
 				if (data) {
 					removeTheme();
-					setUser(null);
+					removeUser();
+					removeRefToken();
 					setAccessToken(null);
-					setRefreshToken(null);
 				}
 			});
 		} else {
@@ -62,18 +62,20 @@ export function AuthProvider({children}: PropsWithChildren) {
 		}
 	}, []);
 
-	const memorizeValues = useMemo(
-		() => ({
-			signIn,
-			signOut,
-			user,
-			isLoading,
-			refreshToken,
-			accessToken,
-			setAccessToken,
-			setUser,
-		}),
-		[user, isLoading, refreshToken, accessToken]
+	return (
+		<AuthContext.Provider
+			value={{
+				signIn,
+				signOut,
+				user,
+				loadingUser,
+				refreshToken,
+				accessToken,
+				setAccessToken,
+				setUser,
+			}}
+		>
+			{children}
+		</AuthContext.Provider>
 	);
-	return <AuthContext.Provider value={memorizeValues}>{children}</AuthContext.Provider>;
 }
