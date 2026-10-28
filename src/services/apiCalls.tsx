@@ -44,7 +44,7 @@ export const verifyOTP = async (phone: string, otp: string) => {
 
 export const signUp = async (userId: string, userName: string) => {
 	try {
-		const res = await axiosPublic.post(`auth/sign-up`, {userId, userName});
+		const res = await axiosPublic.post(`auth/mobile/sign-up`, {userId, userName});
 		return res.data;
 	} catch (error) {
 		handleError(error);
@@ -75,7 +75,7 @@ export const logOutCall = async (axiosPrivate:Axios) => {
 export const userUpdateCall = async (axiosPrivate: Axios, userDetails: UpdateUser) => {
 	try {
 		const res = await axiosPrivate.put(`users/`, userDetails);
-		console.log(res);
+		console.log(res.data);
 		return res.status;
 	} catch (err) {
 		handleError(err);

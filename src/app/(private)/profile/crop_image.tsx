@@ -1,4 +1,9 @@
+import Loading from '@/src/components/Loading';
+import {UpdateUser} from '@/src/constants/types';
 import {CONSTANT} from '@/src/constants/values';
+import {useAuth} from '@/src/context/authContext';
+import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
+import {userUpdateCall} from '@/src/services/apiCalls';
 import {TouchableOpacity} from '@gorhom/bottom-sheet';
 import {SaveFormat, useImageManipulator} from 'expo-image-manipulator';
 import {
@@ -9,7 +14,7 @@ import {
 	requestPermissionsAsync,
 } from 'expo-media-library';
 import {router, useLocalSearchParams} from 'expo-router';
-import {useCallback, useMemo} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {Alert, Image, Text, View, useWindowDimensions} from 'react-native';
 import {Gesture, GestureDetector, GestureHandlerRootView} from 'react-native-gesture-handler';
 import Animated, {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
@@ -22,9 +27,11 @@ export default function CropImageScreen() {
 		imageHeight: string;
 		ratio: string;
 	}>();
-
+	const {user, setUser} = useAuth();
+	const [saving, setSaving] = useState(false);
 	const {width, height} = useWindowDimensions();
 	const context = useImageManipulator(uri);
+	const axiosPrivate = useAxiosPrivate();
 
 	const IMAGE_CONTAINER_WIDTH = useMemo(() => width - 40, [width]);
 	const IMAGE_CONTAINER_HEIGHT = useMemo(() => height - 100, [height]);
@@ -97,6 +104,7 @@ export default function CropImageScreen() {
 
 	const cropAndSaveImage = useCallback(async () => {
 		// Convert frame coordinates to original image pixels
+		setSaving(true);
 		const scaleY = Number(imageHeight) / IMAGE_HEIGHT;
 		const originY = Math.round(y.value * scaleY);
 		const cropHeight = Math.round(IMAGE_WIDTH * scaleY);
@@ -120,18 +128,25 @@ export default function CropImageScreen() {
 				Alert.alert('Permission required', 'Allow photo library access to save the image.');
 				return;
 			}
+
+
 			// Create an image asset in the gallery
 			const asset = await createAssetAsync(result.uri);
 
-			// Find or create the BlissChat album
-			let album = await getAlbumAsync(CONSTANT.appName);
+			console.log(asset.uri)
+			if (user) {
+				const data: UpdateUser = {
+					user_id: user.user_id,
+					profil_pic: asset.uri,
+				};
 
-			if (album) {
-				await addAssetsToAlbumAsync([asset], album, false);
-			} else {
-				album = await createAlbumAsync(CONSTANT.appName, asset, false);
+				const statusCode = await userUpdateCall(axiosPrivate, data);
+				if (statusCode === 200) {
+					console.log('Save User Profile picture succsufully');
+					setUser({...user, profil_pic: asset.uri});
+				}
 			}
-
+			setSaving(false);
 			Alert.alert('Success', 'Image saved to your gallery!', [
 				{
 					text: 'OK',
@@ -139,6 +154,7 @@ export default function CropImageScreen() {
 				},
 			]);
 		} catch (error) {
+			setSaving(false);
 			console.error('Image crop error:', error);
 			Alert.alert('Error', 'Could not crop and save the image.');
 		}
@@ -147,6 +163,7 @@ export default function CropImageScreen() {
 	return (
 		<SafeAreaView className="flex-1 bg-dark-bgcolor-100">
 			<GestureHandlerRootView className="flex-1 items-center justify-center">
+				{saving && <Loading text="Saving..." />}
 				<View className="flex-1 items-center justify-center">
 					<View
 						className="items-center justify-center bg-black relative"

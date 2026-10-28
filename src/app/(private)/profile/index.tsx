@@ -1,12 +1,12 @@
 import {images} from '@/src/assets/images';
 import IconCard from '@/src/components/IconCard';
-import ImagePickerComponent from '@/src/components/image_picker';
+import ImagePickerComponent from '@/src/components/ImagePicker';
 import {Colors} from '@/src/constants/theme';
 import {useAuth} from '@/src/context/authContext';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from '@gorhom/bottom-sheet';
-import {router} from 'expo-router';
+import {router, useFocusEffect} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 
 import React, {useCallback, useRef} from 'react';
@@ -19,6 +19,14 @@ const ProfileScreen = () => {
 	const snapPoints = ['35%'];
 	const {colorScheme} = useColorScheme();
 	const {user} = useAuth();
+
+	useFocusEffect(
+		useCallback(() => {
+			console.log('Profile Screen Focus');
+			console.log(user?.profil_pic);
+			return () => console.log('Profile Screen UnFocus');
+		}, [])
+	);
 
 	const renderBackdrop = useCallback(
 		(props: any) => (
@@ -44,7 +52,7 @@ const ProfileScreen = () => {
 			<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 				<View className="items-center p-4 pt-6 gap-6">
 					<Pressable onPress={() => handlePresentModalPress()}>
-						<Image source={images.noperson} style={{width: 160, height: 160, borderRadius: 50}} />
+						<Image source={{uri : user?.profil_pic ? user.profil_pic : images.noperson}} style={{width: 160, height: 160, borderRadius: 100}} />
 					</Pressable>
 					<TouchableHighlight
 						activeOpacity={0.6}
@@ -112,7 +120,7 @@ const ProfileScreen = () => {
 								</Text>
 							</View>
 						</View>
-						<ImagePickerComponent />
+						<ImagePickerComponent closeDrawer={handleClosePress} />
 					</BottomSheetView>
 				</BottomSheet>
 			</SafeAreaView>

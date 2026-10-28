@@ -17,14 +17,16 @@ type Friend = {
 type IconCardProps = {
 	iconName: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
 	title: string;
-	info: string;
+	info?: string;
+	disabled?: boolean;
 	onPress: () => void;
 };
-const IconCard: React.FC<IconCardProps> = ({iconName, title, info, onPress}) => {
+const IconCard: React.FC<IconCardProps> = ({iconName, title, info, disabled, onPress}) => {
 	const router = useRouter();
 	const {colorScheme} = useColorScheme();
 	return (
 		<TouchableHighlight
+			disabled={disabled}
 			activeOpacity={0.6}
 			underlayColor={colorScheme === 'dark' ? Colors.dark.underlay[100] : Colors.light.underlay[100]}
 			onPress={onPress}
