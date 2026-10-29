@@ -52,7 +52,10 @@ const ProfileScreen = () => {
 			<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 				<View className="items-center p-4 pt-6 gap-6">
 					<Pressable onPress={() => handlePresentModalPress()}>
-						<Image source={{uri : user?.profil_pic ? user.profil_pic : images.noperson}} style={{width: 160, height: 160, borderRadius: 100}} />
+						<Image
+							source={{uri: user?.profil_pic ? user.profil_pic : images.noperson}}
+							style={{width: 160, height: 160, borderRadius: 100}}
+						/>
 					</Pressable>
 					<TouchableHighlight
 						activeOpacity={0.6}
@@ -75,7 +78,7 @@ const ProfileScreen = () => {
 					<IconCard
 						iconName="information-variant-circle-outline"
 						title="About"
-						info={user ? user?.about : ''}
+						info={user ? user?.about?.replace('|', ' ') : ''}
 						onPress={() => router.push('/profile/about_form')}
 					/>
 					<IconCard

@@ -16,7 +16,7 @@ function handleError(error: any) {
 
 export const getNewToken = async (refreshToken: string | null) => {
 	try {
-		const res = await axiosPublic.put(`auth/update-token`, {refreshToken});
+		const res = await axiosPublic.put(`auth/mobile/update-token`, {refreshToken});
 		return res.data.access_token;
 	} catch (err: any) {
 		handleError(err);
