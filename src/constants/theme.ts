@@ -40,7 +40,7 @@ export const Colors = {
 			300: '#0a1725',
 			primary: '#16a34a',
 			inactive: '#2f3949',
-			transparent: '#0f172ad9',
+			transparent: '#060d1e9e',
 		},
 		inputbg: '#1c2c45',
 		inputtxt: '#708199',

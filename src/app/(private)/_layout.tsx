@@ -6,14 +6,14 @@ export default function HomeLayout() {
 	return (
 		<Stack>
 			<Stack.Screen
-				name="profile"
+				name="home"
 				options={{
 					headerShown: false,
 					animation: 'none',
 				}}
 			/>
 			<Stack.Screen
-				name="home"
+				name="profile"
 				options={{
 					headerShown: false,
 					animation: 'none',

@@ -4,7 +4,7 @@ import React from 'react';
 import {Image, Pressable, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const ChangePhoneFirst = () => {
+const PhoneUpdateFirstScreen = () => {
 	const router = useRouter();
 	return (
 		<SafeAreaView edges={['bottom']} className="flex-1 justify-between bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
@@ -24,7 +24,7 @@ const ChangePhoneFirst = () => {
 			</View>
 			<Pressable
 				className="bg-light-bgcolor-primary py-3 px-7 w-fit self-center rounded-full mb-6 dark:bg-dark-bgcolor-primary"
-				onPress={() => router.push('/settings/profile/phone_form/second_screen')}
+				onPress={() => router.push('/profile/phone_form/form')}
 			>
 				<Text className="color-white font-semibold">Next</Text>
 			</Pressable>
@@ -32,4 +32,4 @@ const ChangePhoneFirst = () => {
 	);
 };
 
-export default ChangePhoneFirst;
+export default PhoneUpdateFirstScreen;

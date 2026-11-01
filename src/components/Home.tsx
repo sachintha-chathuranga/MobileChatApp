@@ -13,7 +13,7 @@ const HomeComponant = () => {
 	const {friends, isFetching, hasMore} = useFriends(index);
 	const router = useRouter();
 
-	return isFetching ? (
+	return !isFetching ? (
 		<Loading text="Loading" />
 	) : (
 		<View className="items-center pb-32">

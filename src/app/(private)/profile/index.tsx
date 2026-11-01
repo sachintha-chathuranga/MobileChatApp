@@ -85,7 +85,7 @@ const ProfileScreen = () => {
 						iconName="phone-outline"
 						title="Phone"
 						info={user ? user?.phone : ''}
-						onPress={() => router.push('/profile/phone_form/first_screen')}
+						onPress={() => router.push('/profile/phone_form')}
 					/>
 					<IconCard
 						iconName="email-outline"

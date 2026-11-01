@@ -14,22 +14,14 @@ export default function LogginScreen() {
 			<View className="mb-10">
 				<AnimatedChatLogo />
 			</View>
-			<Text className=" text-3xl text-light-txtcolor-title">
-				Welcome to {CONSTANT.appName}{' '}
-			</Text>
+			<Text className=" text-3xl text-light-txtcolor-title">Welcome to {CONSTANT.appName} </Text>
 			<Text className="text-light-txtcolor-200 text-center mt-5 mx-6">
 				Read our{' '}
-				<Text
-					onPress={openLink}
-					className="text-light-txtcolor-secondary font-semibold"
-				>
+				<Text onPress={openLink} className="text-light-txtcolor-secondary font-semibold">
 					Privacy Policy
 				</Text>
 				. {'Tap "Agree & Continue" to accept the '}
-				<Text
-					onPress={openLink}
-					className="text-light-txtcolor-secondary font-semibold"
-				>
+				<Text onPress={openLink} className="text-light-txtcolor-secondary font-semibold">
 					Terms of Service
 				</Text>
 				.

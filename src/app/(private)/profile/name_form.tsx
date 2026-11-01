@@ -33,7 +33,6 @@ const NameForm = () => {
 		}
 		setUpdating(true);
 		const data: UpdateUser = {
-			user_id: user.user_id,
 			fname,
 			lname,
 		};

@@ -10,7 +10,7 @@ const PhoneFormLayout = () => {
 	return (
 		<Stack>
 			<Stack.Screen
-				name="first_screen"
+				name="index"
 				options={{
 					title: 'Change number',
 					headerTitleAlign: 'left',
@@ -33,7 +33,7 @@ const PhoneFormLayout = () => {
 				}}
 			/>
 			<Stack.Screen
-				name="second_screen"
+				name="form"
 				options={{
 					title: 'Change number',
 					headerTitleAlign: 'left',
@@ -53,6 +53,12 @@ const PhoneFormLayout = () => {
 					headerBlurEffect: 'regular',
 					headerTitleStyle: {fontSize: 22},
 					headerShadowVisible: false,
+				}}
+			/>
+			<Stack.Screen
+				name="verify_otp"
+				options={{
+					headerShown: false,
 				}}
 			/>
 		</Stack>

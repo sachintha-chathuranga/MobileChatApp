@@ -1,18 +1,11 @@
 import Loading from '@/src/components/Loading';
 import {UpdateUser} from '@/src/constants/types';
-import {CONSTANT} from '@/src/constants/values';
 import {useAuth} from '@/src/context/authContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
 import {TouchableOpacity} from '@gorhom/bottom-sheet';
 import {SaveFormat, useImageManipulator} from 'expo-image-manipulator';
-import {
-	addAssetsToAlbumAsync,
-	createAlbumAsync,
-	createAssetAsync,
-	getAlbumAsync,
-	requestPermissionsAsync,
-} from 'expo-media-library';
+import {createAssetAsync, requestPermissionsAsync} from 'expo-media-library';
 import {router, useLocalSearchParams} from 'expo-router';
 import {useCallback, useMemo, useState} from 'react';
 import {Alert, Image, Text, View, useWindowDimensions} from 'react-native';
@@ -129,14 +122,12 @@ export default function CropImageScreen() {
 				return;
 			}
 
-
 			// Create an image asset in the gallery
 			const asset = await createAssetAsync(result.uri);
 
-			console.log(asset.uri)
+			console.log(asset.uri);
 			if (user) {
 				const data: UpdateUser = {
-					user_id: user.user_id,
 					profil_pic: asset.uri,
 				};
 
@@ -163,7 +154,7 @@ export default function CropImageScreen() {
 	return (
 		<SafeAreaView className="flex-1 bg-dark-bgcolor-100">
 			<GestureHandlerRootView className="flex-1 items-center justify-center">
-				{saving && <Loading text="Saving..." />}
+				{saving && <Loading text="Saving" theme="dark" />}
 				<View className="flex-1 items-center justify-center">
 					<View
 						className="items-center justify-center bg-black relative"

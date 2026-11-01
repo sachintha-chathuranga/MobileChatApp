@@ -21,7 +21,6 @@ export type User = {
 };
 
 export type UpdateUser = {
-	user_id: number;
 	fname?: string;
 	lname?: string;
 	phone?: string;

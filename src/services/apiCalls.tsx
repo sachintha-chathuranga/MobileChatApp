@@ -16,7 +16,7 @@ function handleError(error: any) {
 
 export const getNewToken = async (refreshToken: string | null) => {
 	try {
-		const res = await axiosPublic.put(`auth/mobile/update-token`, {refreshToken});
+		const res = await axiosPublic.put(`auth/update-mobile-token`, {refreshToken});
 		return res.data.access_token;
 	} catch (err: any) {
 		handleError(err);
@@ -32,6 +32,17 @@ export const sendOTP = async (phone: string) => {
 		return null;
 	}
 };
+
+export const checkPhoneNumber = async (axiosPrivate: Axios,phone: string) => {
+	try {
+		const res = await axiosPrivate.get(`users/phone/${phone}`);
+		console.log(res.data)
+		return res.data;
+	} catch (error: any) {
+		handleError(error);
+		return null;
+	}
+};
 export const verifyOTP = async (phone: string, otp: string) => {
 	try {
 		const res = await axiosPublic.post(`auth/verify-otp`, {phone, otp});
@@ -41,10 +52,19 @@ export const verifyOTP = async (phone: string, otp: string) => {
 		throw error;
 	}
 };
+export const signInCall = async (phone: string) => {
+	try {
+		const res = await axiosPublic.post(`auth/mobile-sign-in`, {phone});
+		return res.data;
+	} catch (error: any) {
+		handleError(error);
+		return null;
+	}
+};
 
 export const signUp = async (userId: string, userName: string) => {
 	try {
-		const res = await axiosPublic.post(`auth/mobile/sign-up`, {userId, userName});
+		const res = await axiosPublic.post(`auth/mobile-sign-up`, {userId, userName});
 		return res.data;
 	} catch (error) {
 		handleError(error);
@@ -64,7 +84,7 @@ export const postMessage = async (axiosPrivate: Axios, msg: NewMessage) => {
 
 export const logOutCall = async (axiosPrivate:Axios) => {
 	try {
-		const res = await axiosPrivate.put(`auth/sign-out`);
+		const res = await axiosPrivate.put(`auth/mobile-sign-out`);
 		return res.status;
 	} catch (err) {
 		
@@ -99,7 +119,7 @@ export const userUpdateCall = async (axiosPrivate: Axios, userDetails: UpdateUse
 // };
 export const fetchRecentChats = async (axiosPrivate: Axios, index: number) => {
 	try {
-		const res = await axiosPrivate.get(`users/friends?index=${index}`);
+		const res = await axiosPrivate.get(`users/recentFriends?index=${index}`);
 		return res.data;
 	} catch (error) {
 		handleError(error);
@@ -108,7 +128,7 @@ export const fetchRecentChats = async (axiosPrivate: Axios, index: number) => {
 };
 export const fetchFriendList = async (axiosPrivate: Axios, index: number | null) => {
 	try {
-		const res = await axiosPrivate.get(index ? `users/all?index=${index}` : `users/all`);
+		const res = await axiosPrivate.get(index ? `users/friends?index=${index}` : `users/friends`);
 		return res.data;
 	} catch (error) {
 		handleError(error);
