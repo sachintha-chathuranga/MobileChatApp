@@ -43,10 +43,10 @@ function RootNavigator() {
 	return (
 		<Stack>
 			<Stack.Protected guard={!user}>
+				<Stack.Screen name="signup" options={{headerShown: false, animation: 'fade'}} />
 				<Stack.Screen name="index" options={{headerShown: false, animation: 'none'}} />
 				<Stack.Screen name="sign" options={{headerShown: false, animation: 'fade'}} />
 				<Stack.Screen name="verify" options={{headerShown: false, animation: 'fade'}} />
-				<Stack.Screen name="signup" options={{headerShown: false, animation: 'fade'}} />
 			</Stack.Protected>
 			<Stack.Protected guard={!!user}>
 				<Stack.Screen name="(private)" options={{headerShown: false, animation: 'none'}} />

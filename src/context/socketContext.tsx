@@ -61,15 +61,7 @@ const SocketContextProvider: React.FC<PropsWithChildren> = ({children}) => {
 		}
 	}, [user?.user_id]);
 
-	const values = useMemo(
-		() => ({
-			socket,
-			connectSocket,
-			disconnectSocket,
-		}),
-		[socket, connectSocket, disconnectSocket]
-	);
-	return <SocketContext.Provider value={values}>{children}</SocketContext.Provider>;
+	return <SocketContext.Provider value={{socket,connectSocket,disconnectSocket}}>{children}</SocketContext.Provider>;
 };
 
 export const SocketProvider = memo(SocketContextProvider);

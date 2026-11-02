@@ -29,27 +29,26 @@ const PhoneInput: React.FC<PhoneInputProps> = ({phone, setPhone, country, setIsV
 	}
 
 	return (
-		<View>
-			<View className=" rounded-md p-4 my-5 gap-3">
-				<View className="mx-6 rounded-md border border-light-border-100 p-3 pl-3">
-					<Pressable
-						className=" w-full flex-row justify-between items-cente"
-						onPress={() => handlePresentModalPress()}
-					>
-						<Text className="text-base text-black">
-							{country ? `${country.flag} ${country.name}` : 'Select country'}
-						</Text>
-						<MaterialCommunityIcons size={20} name="chevron-right" color={Colors.light.txtcolor[100]} />
-					</Pressable>
-				</View>
-				<MaskInput
-					className="text-light-txtcolor-100 text-lg mx-6 rounded-md border border-light-border-100 p-2 pl-3"
-					value={phone}
-					onChangeText={handleTextChange}
-					mask={country?.mask ?? [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
-					keyboardType="phone-pad"
-				/>
+		<View className="p-4 gap-3">
+			<View className="mx-6 rounded-md border border-light-border-100 p-3 pl-3">
+				<Pressable
+					className=" w-full flex-row justify-between items-cente"
+					onPress={() => handlePresentModalPress()}
+				>
+					<Text className="text-base text-black">
+						{country ? `${country.flag} ${country.name}` : 'Select country'}
+					</Text>
+					<MaterialCommunityIcons size={20} name="chevron-right" color={Colors.light.txtcolor[100]} />
+				</Pressable>
 			</View>
+			<MaskInput
+				className="text-light-txtcolor-100 text-lg mx-6 rounded-md border border-light-border-100 p-2 pl-3"
+				value={phone}
+				onChangeText={handleTextChange}
+				mask={country?.mask ?? [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
+				keyboardType="phone-pad"
+				autoFocus
+			/>
 		</View>
 	);
 };

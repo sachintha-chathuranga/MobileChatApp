@@ -5,12 +5,11 @@ import {useAuth} from '@/src/context/authContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
 import {useRouter} from 'expo-router';
-import GraphemeSplitter from 'grapheme-splitter';
 import {useColorScheme} from 'nativewind';
 import React, {useRef, useState} from 'react';
 import {KeyboardAvoidingView, Platform, Text, TextInput, TouchableHighlight, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-const splitter = new GraphemeSplitter();
+
 const NameForm = () => {
 	const router = useRouter();
 	const {user, setUser} = useAuth();

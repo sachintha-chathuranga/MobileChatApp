@@ -70,3 +70,5 @@ export type Country = {
 };
 
 export type ThemeType = 'light' | 'dark';
+
+export type VerifyType = 'update-phone' | 'sign-in' | 'update-mail'

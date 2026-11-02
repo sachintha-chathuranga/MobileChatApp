@@ -43,6 +43,15 @@ export const checkPhoneNumber = async (axiosPrivate: Axios,phone: string) => {
 		return null;
 	}
 };
+export const checkEmail = async (axiosPrivate: Axios,email: string) => {
+	try {
+		const res = await axiosPrivate.get(`users/email/${email}`);
+		return res.data;
+	} catch (error: any) {
+		handleError(error);
+		return null;
+	}
+};
 export const verifyOTP = async (phone: string, otp: string) => {
 	try {
 		const res = await axiosPublic.post(`auth/verify-otp`, {phone, otp});

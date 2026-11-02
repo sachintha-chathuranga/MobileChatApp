@@ -1,24 +1,14 @@
-import {Colors} from '@/src/constants/theme';
 import {sendOTP, signInCall, userUpdateCall, verifyOTP} from '@/src/services/apiCalls';
 import {Link, useLocalSearchParams, useRouter} from 'expo-router';
 import React, {useEffect, useState} from 'react';
-import {
-	ActivityIndicator,
-	Alert,
-	Keyboard,
-	KeyboardAvoidingView,
-	Platform,
-	Pressable,
-	Text,
-	TextInputProps,
-	View,
-} from 'react-native';
+import {Alert, Keyboard, KeyboardAvoidingView, Platform, Pressable, Text, TextInputProps, View} from 'react-native';
 import {CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell} from 'react-native-confirmation-code-field';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {UpdateUser} from '../constants/types';
+import {VerifyType} from '../constants/types';
 import {useAuth} from '../context/authContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import Loading from './Loading';
+import SubmitButton from './SubmitButton';
 const CELL_COUNT = 6;
 
 const autoComplete = Platform.select<TextInputProps['autoComplete']>({
@@ -26,12 +16,12 @@ const autoComplete = Platform.select<TextInputProps['autoComplete']>({
 	default: 'one-time-code',
 });
 type VerifyOTPProps = {
-	type: string;
+	type: VerifyType;
 };
 const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 	const [verifying, setVerifying] = useState(false);
 	const [sending, setSending] = useState(false);
-	const {phone} = useLocalSearchParams<{phone: string}>();
+	const {param} = useLocalSearchParams<{param: string}>();
 	const [otp, setOtp] = useState('');
 	const router = useRouter();
 	const ref = useBlurOnFulfill({value: otp, cellCount: CELL_COUNT});
@@ -40,7 +30,7 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 	const {user, setUser, signIn} = useAuth();
 	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 	const axiosPrivate = useAxiosPrivate();
-
+	const textToShow = type === 'update-mail' ? 'email' : 'phone number';
 	const validateInput = (text: string) => {
 		text.length === CELL_COUNT ? setIsValide(true) : setIsValide(false);
 	};
@@ -50,39 +40,51 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 	};
 	const handleSubmit = () => {
 		setVerifying(true);
-		verifyOTP(phone, otp)
-			.then((data) => {
-				console.log(type);
-				console.log(data);
-				if (type === 'sign-in') {
-					signInCall(data).then((res) => {
-						console.log(res);
-						if (res) {
-							if (res.user.fname) {
-								signIn(res.user, res.accessToken, res.refreshToken);
-							} else {
+		verifyOTP(param, otp)
+			.then((verifyRes) => {
+				switch (type) {
+					case 'sign-in':
+						signInCall(verifyRes)
+							.then((res) => {
+								if (!res) return;
+								if (res.user.fname) return signIn(res.user, res.accessToken, res.refreshToken);
 								router.replace(`/signup/${res.user.user_id}`);
-							}
-						}
-					});
-				} else if (type === 'update-phone') {
-					if (!user) return;
-					console.log('update-phone block');
-					console.log(data);
-					const updateValues: UpdateUser = {
-						phone: data,
-					};
-					userUpdateCall(axiosPrivate, updateValues).then((res) => {
-						if (res === 200) {
-							setUser({...user, phone: data});
-							Alert.alert('Success', 'Your phone number changed succesfully.', [
-								{
-									text: 'OK',
-									onPress: () => router.dismissTo('/(private)/profile'),
-								},
-							]);
-						}
-					});
+							})
+							.finally(() => setVerifying(false));
+						break;
+					case 'update-phone':
+						if (!user) return;
+						userUpdateCall(axiosPrivate, {phone: verifyRes})
+							.then((res) => {
+								if (res !== 200) return;
+								setUser({...user, phone: verifyRes});
+								Alert.alert('Success', 'Your phone number changed succesfully.', [
+									{
+										text: 'OK',
+										onPress: () => router.dismissTo('/(private)/profile'),
+									},
+								]);
+							})
+							.finally(() => setVerifying(false));
+						break;
+					case 'update-mail':
+						console.log('On update-mail');
+						if (!user) return;
+						userUpdateCall(axiosPrivate, {email: param})
+							.then((res) => {
+								if (res !== 200) return;
+								setUser({...user, email: param});
+								Alert.alert('Success', 'Your email changed succesfully.', [
+									{
+										text: 'OK',
+										onPress: () => router.dismissTo('/(private)/profile'),
+									},
+								]);
+							})
+							.finally(() => setVerifying(false));
+						break;
+					default:
+						break;
 				}
 			})
 			.catch((error) => {
@@ -92,7 +94,7 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 	};
 	const resendOTP = () => {
 		setSending(true);
-		sendOTP(phone).then((data) => {
+		sendOTP(param).then((data) => {
 			setSending(false);
 			if (data) {
 				console.log(data);
@@ -117,19 +119,19 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
 			>
 				{(sending || verifying) && <Loading text={`${sending ? 'Sending' : 'Verifying'}`} />}
-				<View className="px-5 flex-1 justify-between mt-10">
+				<View className={`px-6 flex-1 justify-between mt-10 ${isKeyboardVisible ? 'pb-3' : 'pb-0'}`}>
 					<View className="items-center">
-						<Text className="text-2xl mb-5 text-light-txtcolor-title">Verifying your number</Text>
-						<Text className="text-center text-light-txtcolor-200">
-							To complete your phone number verification, please enter the 6-digit otp code. We have sent you an
-							SMS with a code to
-							<Text className="font-semibold text-light-txtcolor-100"> {phone}</Text>.{' '}
+						<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">Verifying your {textToShow}</Text>
+						<Text className="text-justify text-light-txtcolor-200 dark:text-dark-txtcolor-200">
+							To complete your {textToShow} verification, please enter the 6-digit otp code. We have sent to your{' '}
+							{textToShow}
+							<Text className="font-semibold text-light-txtcolor-100 dark:text-dark-txtcolor-100"> {param}</Text>.
 							<Link
-								href={`${type === 'sign-in' ? '/sign' : '/(private)/profile/phone_form/form'}`}
+								href={`${type === 'sign-in' ? '/sign' : type === 'update-phone' ? '/profile/phone_form/form' : '/profile/email_form'}`}
 								className="mt-20"
 								replace
 							>
-								<Text className="font-semibold text-light-txtcolor-secondary"> Wrong number? </Text>
+								<Text className="font-semibold text-light-txtcolor-secondary dark:text-dark-txtcolor-secondary"> Wrong {textToShow}? </Text>
 							</Link>
 						</Text>
 
@@ -148,28 +150,20 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 									key={index}
 									onLayout={getCellOnLayoutHandler(index)}
 									className={`border-b-2 w-8 h-8 mx-1 justify-center items-center ${
-										isFocused ? 'border-light-border-primary' : 'border-light-border-100 '
+										isFocused ? 'border-light-border-primary dark:border-dark-border-primary' : 'border-light-border-100 dark:border-dark-border-100'
 									}`}
 								>
-									<Text className="text-lg text-light-txtcolor-100">
+									<Text className="text-lg text-light-txtcolor-100 dark:text-dark-txtcolor-100">
 										{symbol || (isFocused ? <Cursor /> : null)}
 									</Text>
 								</View>
 							)}
 						/>
 						<Pressable disabled={verifying || sending} onPress={resendOTP}>
-							<Text className="font-semibold text-light-txtcolor-primary">Didn't receive code?</Text>
+							<Text className="font-semibold text-light-txtcolor-primary dark:text-dark-txtcolor-primary">Didn't receive code?</Text>
 						</Pressable>
 					</View>
-					<Pressable
-						disabled={!isValide || verifying || sending}
-						className={`${isKeyboardVisible ? 'mb-3' : 'mb-0'} w-full p-3  rounded-full items-center ${isValide ? 'bg-light-bgcolor-primary' : 'bg-light-bgcolor-inactive'}`}
-						onPress={handleSubmit}
-					>
-						<Text className={`text-lg font-bold ${isValide ? 'text-white' : 'text-light-txtcolor-inactive'}`}>
-							{verifying ? <ActivityIndicator size={25} color={Colors['dark'].txtcolor[100]} /> : 'Verify'}
-						</Text>
-					</Pressable>
+					<SubmitButton text='Verify' disable={!isValide} onSubmit={handleSubmit} />
 				</View>
 			</KeyboardAvoidingView>
 		</SafeAreaView>
