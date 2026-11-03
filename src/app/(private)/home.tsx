@@ -1,5 +1,5 @@
 import FriendCard from '@/src/components/FriendCard';
-import HomeComponant from '@/src/components/Home';
+import GuestList from '@/src/components/GuestList';
 import HomeHeader from '@/src/components/HomeHeader';
 import Loading from '@/src/components/Loading';
 import SearchButton from '@/src/components/SearchButton';
@@ -23,7 +23,27 @@ export default function HomeScreen() {
 	const [refreshing, setRefreshing] = useState(false);
 	const {friends, setFriends, isFetching, hasMore} = useRecentChats(index);
 	const {socket} = useSocket();
+	const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set());
+	const handleSelectAll = () => {
+		if (selectedUsers.size === friends.length) {
+			setSelectedUsers(new Set());
+		} else {
+			setSelectedUsers(new Set(friends.map((user) => user.user_id)));
+		}
+	};
+	const handleSelectUser = (userId: number) => {
+		setSelectedUsers((prev) => {
+			const updated = new Set(prev);
 
+			if (updated.has(userId)) {
+				updated.delete(userId);
+			} else {
+				updated.add(userId);
+			}
+
+			return updated;
+		});
+	};
 	useEffect(() => {
 		console.log('Home mounted');
 
@@ -85,37 +105,48 @@ export default function HomeScreen() {
 		<SafeAreaView className=" bg-light-bgcolor-100 flex-1 dark:bg-dark-bgcolor-100">
 			<HomeHeader />
 			<SearchButton />
-
-			{!isFetching && friends.length === 0 ? (
-				<View className="flex-1 justify-center">
-					<HomeComponant />
-				</View>
-			) : (
-				<View className="flex-1">
-					{isFetching && <Loading text="Loading" />}
-					<FlatList
-						data={friends}
-						refreshing={refreshing}
-						onRefresh={onRefresh}
-						showsVerticalScrollIndicator={false}
-						contentInsetAdjustmentBehavior="automatic"
-						contentContainerStyle={{
-							paddingVertical: 10,
-							paddingHorizontal: 15,
-							gap: 20,
-						}}
-						keyExtractor={(item) => item.user_id.toString()}
-						renderItem={({item}) => <FriendCard friend={{...item}} notifications={notification} />}
-						onEndReached={() => {
-							if (!isFetching && hasMore) {
-								console.log('Bottom touch');
-								setindex((prev) => prev + 1);
-							}
-						}}
-						onEndReachedThreshold={0.5}
-					/>
-				</View>
-			)}
+			<View className="flex-1">
+				{isFetching && <Loading text="Loading" />}
+				<FlatList
+					data={friends}
+					refreshing={refreshing}
+					onRefresh={onRefresh}
+					showsVerticalScrollIndicator={false}
+					contentInsetAdjustmentBehavior="automatic"
+					contentContainerStyle={{
+						flexGrow: 1,
+						paddingVertical: 10,
+						paddingHorizontal: 15,
+						gap: 20,
+					}}
+					ListEmptyComponent={
+						!isFetching ? <View className="flex-1 justify-center">
+							<GuestList />
+						</View> : <></>
+					}
+					keyExtractor={(item) => item.user_id.toString()}
+					renderItem={({item}) => {
+						const isSelected = selectedUsers.has(item.user_id);
+						return (
+							<FriendCard
+								friend={{...item}}
+								notifications={notification}
+								isSelect={isSelected}
+								handleLongPress={() => handleSelectUser(item.user_id)}
+							/>
+						);
+					}}
+					extraData={selectedUsers}
+					onEndReached={() => {
+						if (!isFetching && hasMore) {
+							console.log('Bottom touch');
+							setindex((prev) => prev + 1);
+						}
+					}}
+					onEndReachedThreshold={0.5}
+				/>
+			</View>
+			{/* )} */}
 		</SafeAreaView>
 	);
 }

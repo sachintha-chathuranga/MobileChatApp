@@ -8,15 +8,14 @@ import {Pressable, ScrollView, Text, View} from 'react-native';
 import GuestCard from './GuestCard';
 import Loading from './Loading';
 
-const HomeComponant = () => {
+const GuestList = () => {
 	const [index, setindex] = useState(1);
 	const {friends, isFetching, hasMore} = useFriends(index);
 	const router = useRouter();
 
-	return isFetching ? (
-		<Loading text="Loading" />
-	) : (
-		<View className="items-center pb-32">
+	return (
+		<View className="items-center mb-32">
+			{isFetching && <Loading />}
 			<Text className="text-2xl text-light-txtcolor-title dark:text-dark-txtcolor-title pb-1">Start chatting</Text>
 			<Text className="text-light-txtcolor-100 dark:text-dark-txtcolor-100 text-center px-4 pb-2">
 				Chat with your 297 {CONSTANT.appName} contacts, or invite a friend to {CONSTANT.appName}.
@@ -24,13 +23,6 @@ const HomeComponant = () => {
 
 			<ScrollView showsHorizontalScrollIndicator={false} horizontal contentContainerClassName="pt-2 gap-2">
 				{friends.map((item, index) => {
-					if (index === 0) {
-						return (
-							<View key={item.user_id} className="pl-4">
-								<GuestCard friend={{...item}} />
-							</View>
-						);
-					}
 					return <GuestCard key={item.user_id} friend={{...item}} />;
 				})}
 				<Pressable onPress={() => router.push('/search')} className="justify-center items-center p-2 mr-4">
@@ -44,4 +36,4 @@ const HomeComponant = () => {
 	);
 };
 
-export default HomeComponant;
+export default GuestList;

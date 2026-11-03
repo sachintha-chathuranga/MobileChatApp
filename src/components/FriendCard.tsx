@@ -1,16 +1,19 @@
 import {images} from '@/src/assets/images';
 import {Friend, Message} from '@/src/constants/types';
 import {useRouter} from 'expo-router';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {formatDateTime} from '../services/formatter';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 type FriendCardProps = {
 	friend: Friend;
 	type?: string;
 	notifications?: Message[];
+	isSelect?: boolean;
+	handleLongPress?: () => void
 };
-const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications}) => {
+const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isSelect, handleLongPress}) => {
 	const [notification, setNotification] = useState<Message[]>([]);
 	const router = useRouter();
 
@@ -44,7 +47,11 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications}) =>
 	}, [params]);
 
 	return (
-		<TouchableOpacity onPress={handlePress}>
+		<TouchableOpacity
+			className={`${isSelect ? 'bg-green-100 dark:bg-green-900' : ''}`}
+			onLongPress={handleLongPress}
+			onPress={handlePress}
+		>
 			<View className="flex-row items-center gap-2">
 				<Image
 					source={friend.profil_pic ? {uri: friend.profil_pic} : images.noperson}
@@ -80,8 +87,9 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications}) =>
 					)}
 				</View>
 			</View>
+			{isSelect && <MaterialIcons name="check" size={22} color="green" />}
 		</TouchableOpacity>
 	);
 };
 
-export default FriendCard;
+export default memo(FriendCard);
