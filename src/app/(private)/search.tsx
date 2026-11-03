@@ -2,7 +2,7 @@ import FriendCard from '@/src/components/FriendCard';
 import SearchBar from '@/src/components/SearchBar';
 import useFriends from '@/src/hooks/useFriends';
 import React, {useState} from 'react';
-import {FlatList, KeyboardAvoidingView, Platform, View} from 'react-native';
+import {FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SearchScreen = () => {
@@ -12,34 +12,36 @@ const SearchScreen = () => {
 	const {friends, isFetching, hasMore} = useFriends(index, searchInput);
 	return (
 		<SafeAreaView className="flex-1 bg-light-bgcolor-100 p-4 dark:bg-dark-bgcolor-100">
-			<KeyboardAvoidingView
+			{/* <KeyboardAvoidingView
 				style={{flex: 1}}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
-			>
-				<SearchBar value={searchInput} onChangeText={setSearchInput} />
-				<FlatList
-					data={friends}
-					showsVerticalScrollIndicator={false}
-					contentContainerStyle={{
-						paddingTop: 20,
-						paddingHorizontal: 2,
-					}}
-					keyExtractor={(item) => item.user_id.toString()}
-					renderItem={({item}) => (
-						<View className="mb-5">
-							<FriendCard friend={item} type="normal" />
-						</View>
-					)}
-					onEndReached={() => {
-						if (!isFetching && hasMore) {
-							console.log('Bottom touch');
-							setindex((prev) => prev + 1);
-						}
-					}}
-					onEndReachedThreshold={0.5}
-				/>
-			</KeyboardAvoidingView>
+			> */}
+			<SearchBar value={searchInput} onChangeText={setSearchInput} />
+			<FlatList
+				data={friends}
+				showsVerticalScrollIndicator={false}
+				contentInsetAdjustmentBehavior="automatic"
+				contentContainerStyle={{
+					paddingTop: 20,
+					paddingHorizontal: 2,
+					gap: 20,
+				}}
+				keyExtractor={(item) => item.user_id.toString()}
+				renderItem={({item}) => (
+					// <View className="mb-5">
+					<FriendCard friend={item} type="normal" />
+					// </View>
+				)}
+				onEndReached={() => {
+					if (!isFetching && hasMore) {
+						console.log('Bottom touch');
+						setindex((prev) => prev + 1);
+					}
+				}}
+				onEndReachedThreshold={0.5}
+			/>
+			{/* </KeyboardAvoidingView> */}
 		</SafeAreaView>
 	);
 };

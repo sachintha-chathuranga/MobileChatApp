@@ -98,6 +98,7 @@ export default function HomeScreen() {
 						refreshing={refreshing}
 						onRefresh={onRefresh}
 						showsVerticalScrollIndicator={false}
+						contentInsetAdjustmentBehavior="automatic"
 						contentContainerStyle={{
 							paddingVertical: 10,
 							paddingHorizontal: 15,
