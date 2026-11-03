@@ -1,4 +1,5 @@
 import {images} from '@/src/assets/images';
+import SubmitButton from '@/src/components/SubmitButton';
 import {useRouter} from 'expo-router';
 import React from 'react';
 import {Image, Pressable, Text, View} from 'react-native';
@@ -7,8 +8,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 const PhoneUpdateFirstScreen = () => {
 	const router = useRouter();
 	return (
-		<SafeAreaView edges={['bottom']} className="flex-1 justify-between bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
-			<View className="items-center px-10">
+		<SafeAreaView
+			edges={['bottom']}
+			className="flex-1 px-10 pb-5 justify-between bg-light-bgcolor-100 dark:bg-dark-bgcolor-100"
+		>
+			<View className="items-center">
 				<Image source={images.sim} style={{width: 160, height: 160}} resizeMode="contain" />
 				<View className="gap-6">
 					<Text className="text-base text-light-txtcolor-100 dark:text-dark-txtcolor-100">
@@ -22,12 +26,7 @@ const PhoneUpdateFirstScreen = () => {
 					</Text>
 				</View>
 			</View>
-			<Pressable
-				className="bg-light-bgcolor-primary py-3 px-7 w-fit self-center rounded-full mb-6 dark:bg-dark-bgcolor-primary"
-				onPress={() => router.push('/profile/phone_form/form')}
-			>
-				<Text className="color-white font-semibold">Next</Text>
-			</Pressable>
+			<SubmitButton text="Next" onSubmit={() => router.push('/profile/phone_form/form')} />
 		</SafeAreaView>
 	);
 };

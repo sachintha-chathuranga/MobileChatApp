@@ -17,7 +17,7 @@ const ProfileCard = () => {
 		>
 			<View className="flex-row items-center border-b border-b-light-border-100 p-3 pl-5 dark:border-b-dark-border-100">
 				<Image
-					source={user?.profil_pic ? user?.profil_pic : images.noperson}
+					source={user?.profil_pic ? {uri: user?.profil_pic} : images.noperson}
 					style={{width: 70, height: 70, borderRadius: 50}}
 				/>
 				<View className="px-4">

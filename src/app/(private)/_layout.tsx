@@ -13,28 +13,19 @@ export default function HomeLayout() {
 				}}
 			/>
 			<Stack.Screen
-				name="profile"
-				options={{
-					headerShown: false,
-					animation: 'none',
-				}}
-			/>
-
-			<Stack.Screen
 				name="search"
 				options={{
 					headerShown: false,
 					animation: 'flip',
 				}}
 			/>
-			{/* <Stack.Screen
+			<Stack.Screen
 				name="profile"
 				options={{
 					headerShown: false,
-					animation: 'simple_push'
+					animation: 'simple_push',
 				}}
-			/> */}
-
+			/>
 			<Stack.Screen
 				name="chat"
 				options={{

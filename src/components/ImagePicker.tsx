@@ -2,8 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import {router} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 import {useCallback, useState} from 'react';
-import {ActivityIndicator, Alert, View} from 'react-native';
-import {Colors} from '../constants/theme';
+import {Alert, View} from 'react-native';
 import IconCard from './IconCard';
 import Loading from './Loading';
 
@@ -28,7 +27,7 @@ const ImagePickerComponent: React.FC<ImagePickerProps> = ({closeDrawer}) => {
 				Alert.alert('Permission required', 'Permission to access the media library is required.');
 				return;
 			}
-			
+
 			let result = await ImagePicker.launchImageLibraryAsync({
 				mediaTypes: ['images'],
 				allowsEditing: false,
@@ -66,12 +65,12 @@ const ImagePickerComponent: React.FC<ImagePickerProps> = ({closeDrawer}) => {
 				Alert.alert('Permission required', 'Permission to access the camera is required.');
 				return;
 			}
-			
+
 			let result = await ImagePicker.launchCameraAsync({
 				allowsEditing: false,
 				quality: 1,
 			});
-			
+
 			setLoading(false);
 			closeDrawer();
 

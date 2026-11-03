@@ -5,7 +5,6 @@ import React, {useMemo} from 'react';
 import {Image, Text, View} from 'react-native';
 import {Colors} from '../constants/theme';
 import {MenuItem} from '../constants/types';
-import {useAuth} from '../context/authContext';
 import {useTheme} from '../context/themeContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import {clearMessages} from '../services/apiCalls';
@@ -16,7 +15,6 @@ type ChatHeaderProps = {
 const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 	const {id, name, status, avatar} = useLocalSearchParams();
 	const {theme, toggleTheme} = useTheme();
-	const {signOut} = useAuth();
 	const axiosPrivate = useAxiosPrivate();
 	const menuItems: MenuItem[] = useMemo(
 		() => [
@@ -55,7 +53,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 				className="pr-2"
 				onPress={() => router.back()}
 			/>
-			<Image source={avatar || images.noperson} style={{width: 43, height: 43, borderRadius: 50}} />
+			<Image source={avatar ? {uri: avatar} : images.noperson} style={{width: 43, height: 43, borderRadius: 50}} />
 			<View className="px-2 flex-1">
 				<Text className="text-light-txtcolor-100 text-lg font-semibold line-clamp-1 dark:text-dark-txtcolor-100">
 					{name}

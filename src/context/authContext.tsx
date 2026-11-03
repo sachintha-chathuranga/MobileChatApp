@@ -1,4 +1,4 @@
-import {ThemeType, User} from '@/src/constants/types';
+import {User} from '@/src/constants/types';
 import {useStorageState} from '@/src/hooks/useStorageState';
 import {Axios} from 'axios';
 import {createContext, useCallback, useContext, useState, type PropsWithChildren} from 'react';
@@ -37,7 +37,6 @@ export function AuthProvider({children}: PropsWithChildren) {
 	const [refreshToken, setRefreshToken, loadingRefreshToken, removeRefToken] = useStorageState<string>('REF_TOKEN');
 	const [accessToken, setAccessToken] = useState<string | null>(null);
 	const [user, setUser, loadingUser, removeUser] = useStorageState<User>('USER');
-	const [theme, setTheme, loadingTheme, removeTheme] = useStorageState<ThemeType>('APP_THEME');
 
 	const signIn = useCallback((logedUser: User, accToken: string, refToken: string) => {
 		setAccessToken(accToken);
@@ -49,7 +48,6 @@ export function AuthProvider({children}: PropsWithChildren) {
 		if (axiosPrivate) {
 			logOutCall(axiosPrivate).then((data) => {
 				if (data) {
-					removeTheme();
 					removeUser();
 					removeRefToken();
 					setAccessToken(null);

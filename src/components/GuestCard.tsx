@@ -28,7 +28,7 @@ const GuestCard: React.FC<FriendCardProps> = ({friend}) => {
 		>
 			<View className="justify-center items-center p-2">
 				<Image
-					source={friend.profil_pic ? friend.profil_pic : images.noperson}
+					source={friend.profil_pic ? {uri: friend.profil_pic} : images.noperson}
 					style={{width: 70, height: 70, borderRadius: 50}}
 				/>
 				<Text className="text-sm text-light-txtcolor-100 dark:text-dark-txtcolor-100 pt-1">{friend.fname}</Text>

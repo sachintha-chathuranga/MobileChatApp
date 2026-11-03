@@ -4,6 +4,7 @@ import {axiosPublic} from '@/src/services/requestConfig';
 import {AxiosResponse} from 'axios';
 import {useEffect} from 'react';
 import { useSocket } from '../context/socketContext';
+import { router } from 'expo-router';
 
 const useAxiosPrivate = () => {
 	const {accessToken, refreshToken, signOut, setAccessToken} = useAuth();
@@ -32,7 +33,8 @@ const useAxiosPrivate = () => {
 						prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 						return axiosPublic(prevRequest);
 					}
-					disconnectSocket()
+					disconnectSocket();
+					router.dismissAll();
 					signOut();
 				}
 				return Promise.reject(err);

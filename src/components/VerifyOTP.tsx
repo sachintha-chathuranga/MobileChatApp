@@ -119,7 +119,7 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
 			>
 				{(sending || verifying) && <Loading text={`${sending ? 'Sending' : 'Verifying'}`} />}
-				<View className={`px-6 flex-1 justify-between mt-10 ${isKeyboardVisible ? 'pb-3' : 'pb-0'}`}>
+				<View className={`px-8 flex-1 justify-between mt-10 ${isKeyboardVisible ? 'pb-3' : 'pb-0'}`}>
 					<View className="items-center">
 						<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">Verifying your {textToShow}</Text>
 						<Text className="text-justify text-light-txtcolor-200 dark:text-dark-txtcolor-200">

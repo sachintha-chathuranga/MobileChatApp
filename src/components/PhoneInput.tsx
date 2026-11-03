@@ -2,6 +2,7 @@ import {Colors} from '@/src/constants/theme';
 import {Country} from '@/src/constants/types';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import BottomSheet from '@gorhom/bottom-sheet';
+import {useColorScheme} from 'nativewind';
 import React, {useCallback} from 'react';
 import {Keyboard, Pressable, Text, View} from 'react-native';
 import MaskInput from 'react-native-mask-input';
@@ -14,6 +15,7 @@ type PhoneInputProps = {
 	bottomSheetRef: React.RefObject<BottomSheet | null>;
 };
 const PhoneInput: React.FC<PhoneInputProps> = ({phone, setPhone, country, setIsValide, bottomSheetRef}) => {
+	const {colorScheme} = useColorScheme();
 	const validate = (input: string) => {
 		console.log(input.length);
 		input.length === 9 ? setIsValide(true) : setIsValide(false);
@@ -30,19 +32,23 @@ const PhoneInput: React.FC<PhoneInputProps> = ({phone, setPhone, country, setIsV
 
 	return (
 		<View className="p-4 gap-3">
-			<View className="mx-6 rounded-md border border-light-border-100 p-3 pl-3">
+			<View className="mx-6 rounded-md border border-light-border-100 dark:border-dark-border-100 p-3 pl-3">
 				<Pressable
 					className=" w-full flex-row justify-between items-cente"
 					onPress={() => handlePresentModalPress()}
 				>
-					<Text className="text-base text-black">
+					<Text className="text-base text-light-txtcolor-100 dark:text-dark-txtcolor-100">
 						{country ? `${country.flag} ${country.name}` : 'Select country'}
 					</Text>
-					<MaterialCommunityIcons size={20} name="chevron-right" color={Colors.light.txtcolor[100]} />
+					<MaterialCommunityIcons
+						size={20}
+						name="chevron-right"
+						color={colorScheme ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
+					/>
 				</Pressable>
 			</View>
 			<MaskInput
-				className="text-light-txtcolor-100 text-lg mx-6 rounded-md border border-light-border-100 p-2 pl-3"
+				className="text-light-txtcolor-100 dark:text-dark-txtcolor-100 text-lg mx-6 rounded-md border border-light-border-100 dark:border-dark-border-100 p-2 pl-3"
 				value={phone}
 				onChangeText={handleTextChange}
 				mask={country?.mask ?? [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}

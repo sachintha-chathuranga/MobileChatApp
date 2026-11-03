@@ -1,112 +1,77 @@
 import Loading from '@/src/components/Loading';
-import {Colors} from '@/src/constants/theme';
+import NameInput from '@/src/components/NameInput';
+import SubmitButton from '@/src/components/SubmitButton';
 import {UpdateUser} from '@/src/constants/types';
 import {useAuth} from '@/src/context/authContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
 import {useRouter} from 'expo-router';
-import {useColorScheme} from 'nativewind';
-import React, {useRef, useState} from 'react';
-import {KeyboardAvoidingView, Platform, Text, TextInput, TouchableHighlight, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Keyboard, KeyboardAvoidingView, Platform, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const NameForm = () => {
 	const router = useRouter();
 	const {user, setUser} = useAuth();
 	const [input, setInput] = useState(user?.fname + ' ' + user?.lname);
-	const inputRef = useRef<TextInput>(null);
-	const [error, setError] = useState('');
-	const {colorScheme} = useColorScheme();
 	const axiosPrivate = useAxiosPrivate();
 	const [updating, setUpdating] = useState(false);
+	const [isValid, setIsValid] = useState(false);
+	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
 	const handleSubmit = () => {
 		if (!user) return;
-		if (!input) {
-			setError('Please enter your name');
-			return;
-		}
 		const [fname, lname] = input.split(' ');
-		if (fname == user.fname && lname == user.lname) {
-			return;
-		}
+		if (fname == user.fname && lname == user.lname) return;
+		console.log(lname);
 		setUpdating(true);
 		const data: UpdateUser = {
-			fname,
-			lname,
+			fname: fname,
+			lname: lname ?? '',
 		};
 		userUpdateCall(axiosPrivate, data).then((res) => {
 			setUpdating(false);
 			if (res === 200) {
-				setUser({...user, fname, lname});
+				setUser({...user, fname: String(data.fname), lname: String(data.lname)});
 				router.back();
 			}
 		});
 	};
+	useEffect(() => {
+		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
 
-	const handleInputChange = (value: string) => {
-		const spaceCount = (value.match(/ /g) || []).length;
+		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
 
-		if (spaceCount > 1) {
-			// setInput(prev => prev);
-			setError('Please enter only your first name and last name.');
-		} else {
-			setInput((prev) => (prev = value));
-			setError('');
-		}
-	};
+		return () => {
+			showSubscription.remove();
+			hideSubscription.remove();
+		};
+	}, []);
 
 	return (
-		<SafeAreaView
-			edges={['left', 'right', 'bottom']}
-			className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100"
-		>
+		<SafeAreaView edges={['bottom']} className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 			<KeyboardAvoidingView
 				style={{flex: 1}}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 80}
+				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 60}
 			>
 				{updating && <Loading text="Updating..." />}
-				<View className="flex-1 justify-between">
-					<View className="pt-5 px-7">
-						<View
-							className={`flex-row items-center gap-2 pl-3 pr-3 py-1 rounded-md border-2 ${
-								error ? 'border-red-500' : 'border-light-border-primary dark:border-dark-border-primary'
-							}`}
-						>
-							<TextInput
-								ref={inputRef}
-								cursorColor={'#4ade80'}
-								onChangeText={handleInputChange}
-								className="flex-1 text-light-txtcolor-100 dark:text-dark-txtcolor-100"
-								value={input}
-								placeholder="Enter your name"
-								placeholderTextColor={colorScheme === 'dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
-								underlineColorAndroid="transparent"
-								autoFocus
-							/>
-						</View>
-						{error && <Text className="text-red-500 text-sm px-1">{error}</Text>}
-						<View className="px-1">
-							<Text
-								className={`${!error && 'mt-3'} text-light-txtcolor-100 text-justify dark:text-dark-txtcolor-100`}
-							>
-								Please Enter your first name and last name seperate by spacing.
-							</Text>
-							<Text className="text-light-txtcolor-100 text-justify dark:text-dark-txtcolor-100">
-								People will see this name if you interact with them and they don't have you saved as a contact.
-							</Text>
-						</View>
+				<View className={`px-6 flex-1 justify-between pt-3 ${isKeyboardVisible ? 'pb-10' : 'pb-3'}`}>
+					<View>
+						<Text className={`pb-3 px-3 text-light-txtcolor-100 text-justify dark:text-dark-txtcolor-200`}>
+							Please Enter your first name and last name seperate by spacing.
+						</Text>
+						<NameInput
+							onIputChange={setInput}
+							input={input}
+							placeholder="Enter your name"
+							setValidate={setIsValid}
+						/>
+						<Text className={`px-3 text-light-txtcolor-100  dark:text-dark-txtcolor-200 text-justify mt-3`}>
+							People will see this name if you interact with them and they don't have you saved as a contact.
+						</Text>
 					</View>
-				</View>
-				<View className=" my-4 mx-8">
-					<TouchableHighlight
-						disabled={updating}
-						onPress={handleSubmit}
-						className="p-3 rounded-full mx-3 bg-light-bgcolor-primary items-center dark:bg-dark-bgcolor-primary"
-					>
-						<Text className="text-white font-bold">Save</Text>
-					</TouchableHighlight>
+					<SubmitButton text="Update" disable={!isValid} onSubmit={handleSubmit} />
 				</View>
 			</KeyboardAvoidingView>
 		</SafeAreaView>

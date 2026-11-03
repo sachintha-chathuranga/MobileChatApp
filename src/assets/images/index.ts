@@ -1,5 +1,3 @@
-import { Image } from "react-native";
-
 export const images = {
 	profile: require('./pro.jpg'),
 	noperson: require('./default.png'),

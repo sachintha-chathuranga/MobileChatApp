@@ -19,7 +19,7 @@ const NameInput: React.FC<NameInputProps> = ({defaultValue, onIputChange, input,
 		const spaceCount = (value.match(/ /g) || []).length;
 
 		if (spaceCount > 1) return setError('Please enter only your first name and last name.');
-
+		if (value.length > 25) return setError('Name must be less than 26 character!');
 		onIputChange(value);
 		setError('');
 		console.log(value.length);
@@ -38,6 +38,7 @@ const NameInput: React.FC<NameInputProps> = ({defaultValue, onIputChange, input,
 					cursorColor={'#4ade80'}
 					onChangeText={handleInputChange}
 					className="text-light-txtcolor-100 dark:border-dark-txtcolor-100"
+					style={{color: colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}}
 					value={input}
 					keyboardAppearance={colorScheme}
 					keyboardType="name-phone-pad"

@@ -1,12 +1,11 @@
 import {images} from '@/src/assets/images';
 import IconCard from '@/src/components/IconCard';
-import ImagePickerComponent from '@/src/components/ImagePicker';
+import ImagePickDrawer from '@/src/components/ImagePickDrawer';
 import {Colors} from '@/src/constants/theme';
 import {useAuth} from '@/src/context/authContext';
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from '@gorhom/bottom-sheet';
-import {router, useFocusEffect} from 'expo-router';
+import BottomSheet from '@gorhom/bottom-sheet';
+import {router} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 
 import React, {useCallback, useRef} from 'react';
@@ -16,35 +15,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 
 const ProfileScreen = () => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
-	const snapPoints = ['35%'];
 	const {colorScheme} = useColorScheme();
 	const {user} = useAuth();
 
-	useFocusEffect(
-		useCallback(() => {
-			console.log('Profile Screen Focus');
-			console.log(user?.profil_pic);
-			return () => console.log('Profile Screen UnFocus');
-		}, [])
-	);
-
-	const renderBackdrop = useCallback(
-		(props: any) => (
-			<BottomSheetBackdrop
-				{...props}
-				disappearsOnIndex={-1}
-				appearsOnIndex={0}
-				pressBehavior="close" // 👈 THIS closes on outside press
-			/>
-		),
-		[]
-	);
 	const handlePresentModalPress = useCallback(() => {
 		bottomSheetRef.current?.expand();
-	}, []);
-
-	const handleClosePress = useCallback(() => {
-		bottomSheetRef.current?.close();
 	}, []);
 
 	return (
@@ -53,7 +28,7 @@ const ProfileScreen = () => {
 				<View className="items-center p-4 pt-6 gap-6">
 					<Pressable onPress={() => handlePresentModalPress()}>
 						<Image
-							source={{uri: user?.profil_pic ? user.profil_pic : images.noperson}}
+							source={user?.profil_pic ? {uri: user.profil_pic} : images.noperson}
 							style={{width: 160, height: 160, borderRadius: 100}}
 						/>
 					</Pressable>
@@ -91,41 +66,11 @@ const ProfileScreen = () => {
 						iconName="email-outline"
 						title="Email"
 						info={user ? user?.email : ''}
-						onPress={() => router.push('/profile/email_form/first_screen')}
+						onPress={() => router.push('/profile/email_form')}
 					/>
 				</View>
 
-				<BottomSheet
-					ref={bottomSheetRef}
-					snapPoints={snapPoints}
-					index={-1}
-					backdropComponent={renderBackdrop}
-					enablePanDownToClose={true}
-					backgroundStyle={{
-						backgroundColor: colorScheme === 'dark' ? Colors.dark.bgcolor[200] : Colors.light.bgcolor[200],
-					}}
-					handleIndicatorStyle={{
-						backgroundColor: colorScheme === 'dark' ? Colors.dark.txtcolor[200] : Colors.light.txtcolor[200],
-					}}
-				>
-					<BottomSheetView>
-						<View className="flex-row items-center mx-3 pb-3 pt-2">
-							<Pressable onPress={handleClosePress}>
-								<MaterialIcons
-									color={colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
-									size={25}
-									name="close"
-								/>
-							</Pressable>
-							<View className="flex-1 mr-6">
-								<Text className="text-light-txtcolor-100 self-center text-2xl dark:text-dark-txtcolor-100">
-									Profile picture
-								</Text>
-							</View>
-						</View>
-						<ImagePickerComponent closeDrawer={handleClosePress} />
-					</BottomSheetView>
-				</BottomSheet>
+				<ImagePickDrawer bottomSheetRef={bottomSheetRef} />
 			</SafeAreaView>
 		</GestureHandlerRootView>
 	);

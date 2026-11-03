@@ -1,7 +1,6 @@
 import {images} from '@/src/assets/images';
 import {Friend, Message} from '@/src/constants/types';
 import {useRouter} from 'expo-router';
-import {useColorScheme} from 'nativewind';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {formatDateTime} from '../services/formatter';
@@ -19,7 +18,7 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications}) =>
 		if (!notifications) return;
 		setNotification(notifications.filter((obj) => obj.sender_id === friend.user_id));
 	}, [notifications, friend]);
-	
+
 	const masgDate = useMemo(() => {
 		if (notification.length === 0) {
 			return formatDateTime(friend.lastMessageTime);
@@ -36,7 +35,7 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications}) =>
 			avatar: friend.profil_pic,
 		};
 	}, [friend]);
-	
+
 	const handlePress = useCallback(() => {
 		router.push({
 			pathname: '/chat/[id]',
@@ -48,7 +47,7 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications}) =>
 		<TouchableOpacity onPress={handlePress}>
 			<View className="flex-row items-center gap-2">
 				<Image
-					source={friend.profil_pic ? friend.profil_pic : images.noperson}
+					source={friend.profil_pic ? {uri: friend.profil_pic} : images.noperson}
 					style={{width: 50, height: 50, borderRadius: 50}}
 				/>
 				<View className="flex-1 flex-row justify-between">
