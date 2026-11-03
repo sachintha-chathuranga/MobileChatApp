@@ -11,7 +11,6 @@ type MenuProps = {
 };
 const Menu: React.FC<MenuProps> = ({list}) => {
 	const [visible, setVisible] = useState(false);
-	const router = useRouter();
 	const {theme} = useTheme();
 
 	return (
@@ -29,10 +28,10 @@ const Menu: React.FC<MenuProps> = ({list}) => {
 				></MaterialIcons>
 			</TouchableHighlight>
 
-			<Modal transparent visible={visible} animationType="fade">
-				<Pressable className="flex-1" onPress={() => setVisible(false)}>
+			<Modal navigationBarTranslucent={true} transparent visible={visible} animationType="fade">
+				<Pressable className="flex-1 relative" onPress={() => setVisible(false)}>
 					<View
-						className="absolute top-7 right-3 bg-light-bgcolor-200 py-3 rounded-md w-48 shadow dark:bg-dark-bgcolor-200"
+						className="absolute top-14 right-3 bg-light-bgcolor-menu rounded-md w-56 py-3 shadow-md shadow-black dark:bg-dark-bgcolor-menu"
 						style={{
 							elevation: 5,
 						}}
@@ -47,7 +46,7 @@ const Menu: React.FC<MenuProps> = ({list}) => {
 									item.function();
 								}}
 							>
-								<View className="p-2 flex-row items-center gap-1">
+								<View className="px-4 py-3 flex-row items-center gap-2">
 									<MaterialCommunityIcons
 										color={theme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
 										size={20}

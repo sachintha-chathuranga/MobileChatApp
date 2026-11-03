@@ -4,10 +4,10 @@ import {useRouter} from 'expo-router';
 import React, {useMemo} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 
-type FriendCardProps = {
+type GuestCardProps = {
 	friend: Friend;
 };
-const GuestCard: React.FC<FriendCardProps> = ({friend}) => {
+const GuestCard: React.FC<GuestCardProps> = ({friend}) => {
 	const router = useRouter();
 	const params = useMemo(() => {
 		return {

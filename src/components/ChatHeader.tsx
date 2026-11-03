@@ -45,12 +45,12 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 	);
 
 	return (
-		<View className="py-3 pl-3 flex-row items-center gap-1 ">
+		<View className="py-3 mx-3 flex-row items-center gap-1 ">
 			<MaterialIcons
 				size={23}
 				color={theme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
 				name="arrow-back"
-				className="pr-2"
+				className="px-2"
 				onPress={() => router.back()}
 			/>
 			<Image source={avatar ? {uri: avatar} : images.noperson} style={{width: 43, height: 43, borderRadius: 50}} />
