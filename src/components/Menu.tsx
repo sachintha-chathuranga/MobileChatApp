@@ -28,12 +28,13 @@ const Menu: React.FC<MenuProps> = ({list}) => {
 				></MaterialIcons>
 			</TouchableHighlight>
 
-			<Modal navigationBarTranslucent={true} transparent visible={visible} animationType="fade">
-				<Pressable className="flex-1 relative" onPress={() => setVisible(false)}>
+			<Modal navigationBarTranslucent={true} statusBarTranslucent={true} transparent visible={visible} animationType="fade">
+				<Pressable className="flex-1" onPress={() => setVisible(false)}>
 					<View
-						className="absolute top-14 right-3 bg-light-bgcolor-menu rounded-md w-56 py-3 shadow-md shadow-black dark:bg-dark-bgcolor-menu"
+						className="absolute top-24 right-4 bg-light-bgcolor-menu rounded-md w-56 py-3 shadow-md shadow-black dark:bg-dark-bgcolor-menu"
 						style={{
 							elevation: 5,
+							top: 80
 						}}
 					>
 						{list.map((item) => (

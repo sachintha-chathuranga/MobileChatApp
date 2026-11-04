@@ -33,6 +33,10 @@ const SearchBar: React.FC<SearchBarProps> = ({value, onChangeText}) => {
 					onChangeText={onChangeText}
 					value={value}
 					cursorColor={colorScheme === 'dark' ? Colors.dark.cursor : Colors.light.cursor}
+					caretHidden={true}
+					keyboardType="name-phone-pad"
+					inputMode="text"
+					returnKeyType="search"
 					placeholder="Search Friends for chat"
 					placeholderTextColor={colorScheme === 'dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
 					autoFocus

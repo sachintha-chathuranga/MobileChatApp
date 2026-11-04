@@ -1,18 +1,8 @@
 import {Axios} from 'axios';
 import {Alert} from 'react-native';
-import {NewMessage, UpdateUser} from '../constants/types';
+import {NewMessage, UpdateUser, User} from '../constants/types';
 import {axiosPublic} from './requestConfig';
-
-function handleError(error: any) {
-	if (!error?.response) {
-		Alert.alert('Server Error', 'Server does not respond!');
-	} else if (error.response?.data) {
-		console.log(error.response.data)
-		Alert.alert('Server Error', error.response.data);
-	} else {
-		Alert.alert('Network Error', 'Check your Internet Connection');
-	}
-}
+import handleError from './errorHandler';
 
 export const getNewToken = async (refreshToken: string | null) => {
 	try {
@@ -182,6 +172,17 @@ export const clearMessages = (axiosPrivate: Axios, friend_id: number) => {
 		.catch((err) => {
 			handleError(err);
 		});
+};
+export const deleteSelectedUserMessages = async  (axiosPrivate: Axios, selectedUsers: Set<number>) => {
+	
+	return axiosPrivate
+			.delete(`messages/messages/clear-selected`, {
+				data: {
+					friendIds: Array.from(selectedUsers),
+				},
+			})
+			.then((res) => res.data)
+			.catch((err) => {throw err});
 };
 export const readAllMessages = async (axiosPrivate: Axios, friend_id: number) => {
 	try {

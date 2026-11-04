@@ -7,7 +7,8 @@ import {Friend, Message} from '@/src/constants/types';
 import {useSocket} from '@/src/context/socketContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import useRecentChats from '@/src/hooks/useRecentChats';
-import {fetchAllNotification, fetchFriend, fetchRecentChats} from '@/src/services/apiCalls';
+import {deleteSelectedUserMessages, fetchAllNotification, fetchFriend, fetchRecentChats} from '@/src/services/apiCalls';
+import handleError from '@/src/services/errorHandler';
 import {useFocusEffect} from 'expo-router';
 
 import {useCallback, useEffect, useRef, useState} from 'react';
@@ -24,14 +25,19 @@ export default function HomeScreen() {
 	const {friends, setFriends, isFetching, hasMore} = useRecentChats(index);
 	const {socket} = useSocket();
 	const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set());
+	const [isSelecionMode, setIsSelecionMode] = useState(false);
+
 	const handleSelectAll = () => {
-		if (selectedUsers.size === friends.length) {
-			setSelectedUsers(new Set());
-		} else {
-			setSelectedUsers(new Set(friends.map((user) => user.user_id)));
-		}
+		setSelectedUsers(new Set(friends.map((user) => user.user_id)));
 	};
-	const handleSelectUser = (userId: number) => {
+
+	const clearSelection = (onlyClear: boolean) => {
+		if (onlyClear) return setSelectedUsers(new Set());
+		setIsSelecionMode(false);
+		setSelectedUsers(new Set());
+	};
+
+	const handleSelectUser = useCallback((userId: number) => {
 		setSelectedUsers((prev) => {
 			const updated = new Set(prev);
 
@@ -41,9 +47,23 @@ export default function HomeScreen() {
 				updated.add(userId);
 			}
 
+			if (updated.size > 0) {
+				setIsSelecionMode(true);
+			} else {
+				setIsSelecionMode(false);
+			}
 			return updated;
 		});
+	}, []);
+
+	const handleDeleteMessages = () => {
+		deleteSelectedUserMessages(axiosPrivate, selectedUsers).then(data =>{
+			const remaining = friends.filter((friend) => !selectedUsers.has(friend.user_id));
+			setFriends(remaining);
+			clearSelection(false);
+		}).catch(handleError);
 	};
+
 	useEffect(() => {
 		console.log('Home mounted');
 
@@ -102,8 +122,13 @@ export default function HomeScreen() {
 	}, [socket]);
 
 	return (
-		<SafeAreaView className=" bg-light-bgcolor-100 flex-1 dark:bg-dark-bgcolor-100">
-			<HomeHeader />
+		<SafeAreaView className="bg-light-bgcolor-100 flex-1 dark:bg-dark-bgcolor-100">
+			<HomeHeader
+				isSelctionMod={isSelecionMode}
+				clearSelection={(val) => clearSelection(val)}
+				selectAll={handleSelectAll}
+				onDeletPress={handleDeleteMessages}
+			/>
 			<SearchButton />
 			<View className="flex-1">
 				{isFetching && <Loading text="Loading" />}
@@ -115,14 +140,15 @@ export default function HomeScreen() {
 					contentInsetAdjustmentBehavior="automatic"
 					contentContainerStyle={{
 						flexGrow: 1,
-						paddingVertical: 10,
-						paddingHorizontal: 15,
-						gap: 20,
 					}}
 					ListEmptyComponent={
-						!isFetching ? <View className="flex-1 justify-center">
-							<GuestList />
-						</View> : <></>
+						!isFetching ? (
+							<View className="flex-1 justify-center">
+								<GuestList />
+							</View>
+						) : (
+							<></>
+						)
 					}
 					keyExtractor={(item) => item.user_id.toString()}
 					renderItem={({item}) => {
@@ -132,11 +158,11 @@ export default function HomeScreen() {
 								friend={{...item}}
 								notifications={notification}
 								isSelect={isSelected}
-								handleLongPress={() => handleSelectUser(item.user_id)}
+								isSelecionMode={isSelecionMode}
+								handleLongPress={handleSelectUser}
 							/>
 						);
 					}}
-					extraData={selectedUsers}
 					onEndReached={() => {
 						if (!isFetching && hasMore) {
 							console.log('Bottom touch');

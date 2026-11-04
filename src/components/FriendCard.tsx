@@ -1,21 +1,25 @@
 import {images} from '@/src/assets/images';
 import {Friend, Message} from '@/src/constants/types';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {formatDateTime} from '../services/formatter';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useColorScheme } from 'nativewind';
+import { Colors } from '../constants/theme';
 
 type FriendCardProps = {
 	friend: Friend;
 	type?: string;
 	notifications?: Message[];
 	isSelect?: boolean;
-	handleLongPress?: () => void
+	isSelecionMode?: boolean;
+	handleLongPress?: (id:number) => void;
 };
-const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isSelect, handleLongPress}) => {
+const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isSelect,isSelecionMode, handleLongPress}) => {
 	const [notification, setNotification] = useState<Message[]>([]);
 	const router = useRouter();
+	const {colorScheme} = useColorScheme();
 
 	useEffect(() => {
 		if (!notifications) return;
@@ -37,20 +41,25 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isS
 			status: friend.status ? 'Online' : 'Offline',
 			avatar: friend.profil_pic,
 		};
-	}, [friend]);
+	}, [friend.user_id]);
 
 	const handlePress = useCallback(() => {
-		router.push({
-			pathname: '/chat/[id]',
-			params: params,
-		});
-	}, [params]);
+		if (isSelecionMode && handleLongPress) {
+			handleLongPress(friend?.user_id);
+		}else{
+			router.push({
+				pathname: '/chat/[id]',
+				params: params,
+			});
+		}
+	}, [params, isSelecionMode, friend?.user_id]);
 
 	return (
 		<TouchableOpacity
-			className={`${isSelect ? 'bg-green-100 dark:bg-green-900' : ''}`}
-			onLongPress={handleLongPress}
-			onPress={handlePress}
+			className={`${isSelect ? 'bg-light-highlight dark:bg-dark-highlight' : ''} p-3`}
+			onLongPress={() => handleLongPress && handleLongPress(friend.user_id)}
+			// onPressIn={() => isSelecionMode && handlePress()}
+			onPress={() => handlePress()}
 		>
 			<View className="flex-row items-center gap-2">
 				<Image
@@ -72,7 +81,7 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isS
 							</Text>
 						)}
 					</View>
-					{!type && (
+					{(!type && !isSelect) && (
 						<View className="gap-1">
 							<Text className="text-light-txtcolor-200 text-sm dark:text-dark-txtcolor-200 self-start mt-2">
 								{masgDate}
@@ -84,10 +93,16 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isS
 								</View>
 							)}
 						</View>
-					)}
+					) 
+				}
+				{isSelect && (
+				<View className='justify-center'> 
+
+					<MaterialIcons name="check-circle" size={22} color={colorScheme === 'dark' ? Colors.dark.bgcolor.primary : Colors.light.bgcolor.primary} />
+				</View>
+				)}
 				</View>
 			</View>
-			{isSelect && <MaterialIcons name="check" size={22} color="green" />}
 		</TouchableOpacity>
 	);
 };
