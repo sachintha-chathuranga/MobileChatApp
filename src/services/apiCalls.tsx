@@ -1,8 +1,7 @@
 import {Axios} from 'axios';
-import {Alert} from 'react-native';
-import {NewMessage, UpdateUser, User} from '../constants/types';
-import {axiosPublic} from './requestConfig';
+import {NewMessage, UpdateUser} from '../constants/types';
 import handleError from './errorHandler';
+import {axiosPublic} from './requestConfig';
 
 export const getNewToken = async (refreshToken: string | null) => {
 	try {
@@ -23,17 +22,17 @@ export const sendOTP = async (phone: string) => {
 	}
 };
 
-export const checkPhoneNumber = async (axiosPrivate: Axios,phone: string) => {
+export const checkPhoneNumber = async (axiosPrivate: Axios, phone: string) => {
 	try {
 		const res = await axiosPrivate.get(`users/phone/${phone}`);
-		console.log(res.data)
+		console.log(res.data);
 		return res.data;
 	} catch (error: any) {
 		handleError(error);
 		return null;
 	}
 };
-export const checkEmail = async (axiosPrivate: Axios,email: string) => {
+export const checkEmail = async (axiosPrivate: Axios, email: string) => {
 	try {
 		const res = await axiosPrivate.get(`users/email/${email}`);
 		return res.data;
@@ -61,13 +60,13 @@ export const signInCall = async (phone: string) => {
 	}
 };
 
-export const signUp = async (userId: string, userName: string) => {
+export const signUp = async (userId: number, userName: string, userImage: string | undefined) => {
 	try {
-		const res = await axiosPublic.post(`auth/mobile-sign-up`, {userId, userName});
+		const res = await axiosPublic.post(`auth/mobile-sign-up`, {userId, userName, userImage});
 		return res.data;
 	} catch (error) {
 		handleError(error);
-		return null
+		return null;
 	}
 };
 
@@ -81,13 +80,12 @@ export const postMessage = async (axiosPrivate: Axios, msg: NewMessage) => {
 	}
 };
 
-export const logOutCall = async (axiosPrivate:Axios) => {
+export const logOutCall = async (axiosPrivate: Axios) => {
 	try {
 		const res = await axiosPrivate.put(`auth/mobile-sign-out`);
 		return res.status;
 	} catch (err) {
-		
-		handleError(err)
+		handleError(err);
 		return null;
 	}
 };
@@ -154,7 +152,7 @@ export const searchFriends = async (axiosPrivate: Axios, index: number | null, s
 	}
 };
 
-export const fetchMessages = async (axiosPrivate: Axios, friend_id: number,index: number) => {
+export const fetchMessages = async (axiosPrivate: Axios, friend_id: number, index: number) => {
 	try {
 		const res = await axiosPrivate.get(`messages/message?friend_id=${friend_id}&order_by=DESC&index=${index}`);
 		return res.data;
@@ -166,29 +164,28 @@ export const fetchMessages = async (axiosPrivate: Axios, friend_id: number,index
 export const clearMessages = (axiosPrivate: Axios, friend_id: number) => {
 	axiosPrivate
 		.delete(`messages/messages/clear?friend_id=${friend_id}`)
-		.then((res) => {
-			
-		})
+		.then((res) => {})
 		.catch((err) => {
 			handleError(err);
 		});
 };
-export const deleteSelectedUserMessages = async  (axiosPrivate: Axios, selectedUsers: Set<number>) => {
-	
+export const deleteSelectedUserMessages = async (axiosPrivate: Axios, selectedUsers: Set<number>) => {
 	return axiosPrivate
-			.delete(`messages/messages/clear-selected`, {
-				data: {
-					friendIds: Array.from(selectedUsers),
-				},
-			})
-			.then((res) => res.data)
-			.catch((err) => {throw err});
+		.delete(`messages/messages/clear-selected`, {
+			data: {
+				friendIds: Array.from(selectedUsers),
+			},
+		})
+		.then((res) => res.data)
+		.catch((err) => {
+			throw err;
+		});
 };
 export const readAllMessages = async (axiosPrivate: Axios, friend_id: number) => {
 	try {
 		await axiosPrivate.put(`messages/messages/update?friend_id=${friend_id}`);
 	} catch (err) {
-		handleError(err)
+		handleError(err);
 	}
 };
 export const fetchAllNotification = async (axiosPrivate: Axios) => {
@@ -196,7 +193,7 @@ export const fetchAllNotification = async (axiosPrivate: Axios) => {
 		const res = await axiosPrivate.get(`messages/messages/notifications`);
 		return res.data;
 	} catch (err) {
-		handleError(err)
+		handleError(err);
 		return null;
 	}
 };

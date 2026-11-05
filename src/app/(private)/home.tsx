@@ -17,6 +17,7 @@ import {FlatList, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
+	console.log("Home Screen Rendered!")
 	const [index, setindex] = useState(1);
 	const [notification, setNotification] = useState<Message[]>([]);
 	const friendList = useRef<Friend[]>(null);
@@ -63,14 +64,6 @@ export default function HomeScreen() {
 			clearSelection(false);
 		}).catch(handleError);
 	};
-
-	useEffect(() => {
-		console.log('Home mounted');
-
-		return () => {
-			console.log('Home unmounted');
-		};
-	}, []);
 
 	// useFocuseEffect use to update notifications every time home screen focus.
 	useFocusEffect(

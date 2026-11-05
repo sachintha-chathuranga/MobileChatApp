@@ -58,4 +58,3 @@ export const Colors = {
 		cursor: '#4ade80',
 	},
 };
-// module.exports.Colors = Colors;

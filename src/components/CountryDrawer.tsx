@@ -3,7 +3,7 @@ import {Country} from '@/src/constants/types';
 import {COUNTRIES} from '@/src/constants/values';
 import BottomSheet, {BottomSheetBackdrop, BottomSheetScrollView} from '@gorhom/bottom-sheet';
 import {useColorScheme} from 'nativewind';
-import React, {useCallback, useMemo} from 'react';
+import React, {memo, useCallback, useMemo} from 'react';
 import {Pressable, Text} from 'react-native';
 
 type CountryDrawerProps = {
@@ -11,6 +11,7 @@ type CountryDrawerProps = {
 	setCountry: (country: Country) => void;
 };
 const CountryDrawer: React.FC<CountryDrawerProps> = ({bottomSheetRef, setCountry}) => {
+	console.log('Country Drawer Rendered');
 	const snapPoints = useMemo(() => ['30%', '50%'], []);
 	const {colorScheme} = useColorScheme();
 	const renderBackdrop = useCallback(
@@ -66,4 +67,4 @@ const CountryDrawer: React.FC<CountryDrawerProps> = ({bottomSheetRef, setCountry
 	);
 };
 
-export default CountryDrawer;
+export default memo(CountryDrawer);

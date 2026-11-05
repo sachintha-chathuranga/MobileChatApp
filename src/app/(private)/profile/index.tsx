@@ -69,8 +69,11 @@ const ProfileScreen = () => {
 						onPress={() => router.push('/profile/email_form')}
 					/>
 				</View>
-
-				<ImagePickDrawer bottomSheetRef={bottomSheetRef} />
+				<ImagePickDrawer
+					redirectPath={'./profile/crop_image'}
+					snapPoints={['33%']}
+					bottomSheetRef={bottomSheetRef}
+				/>
 			</SafeAreaView>
 		</GestureHandlerRootView>
 	);

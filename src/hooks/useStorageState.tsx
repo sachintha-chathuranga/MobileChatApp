@@ -38,7 +38,7 @@ export function useStorageState<T>(key: string): StorageState<T> {
 			} else {
 				value = await SecureStore.getItemAsync(key);
 			}
-			console.log(`Onload ${key}: ${value}`);
+			// console.log(`Onload ${key}: ${value}`);
 			setState(value ? JSON.parse(value) : null);
 		} finally {
 			setLoadingStorage(false);

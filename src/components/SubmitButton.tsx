@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {Pressable, Text} from 'react-native';
 type SubmitButtonProps = {
 	text: string;
@@ -22,4 +22,4 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({text, disable, onSubmit}) =>
 	);
 };
 
-export default SubmitButton;
+export default memo(SubmitButton);

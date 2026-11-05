@@ -3,7 +3,7 @@ import {Country} from '@/src/constants/types';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {useColorScheme} from 'nativewind';
-import React, {useCallback} from 'react';
+import React, {memo, useCallback} from 'react';
 import {Keyboard, Pressable, Text, View} from 'react-native';
 import MaskInput from 'react-native-mask-input';
 
@@ -15,10 +15,11 @@ type PhoneInputProps = {
 	bottomSheetRef: React.RefObject<BottomSheet | null>;
 };
 const PhoneInput: React.FC<PhoneInputProps> = ({phone, setPhone, country, setIsValide, bottomSheetRef}) => {
+	console.log('Phone Input Rendered!');
 	const {colorScheme} = useColorScheme();
 	const validate = (input: string) => {
 		console.log(input.length);
-		input.length === 9 ? setIsValide(true) : setIsValide(false);
+		input.length === country?.length ? setIsValide(true) : setIsValide(false);
 	};
 	const handlePresentModalPress = useCallback(() => {
 		Keyboard.dismiss();
@@ -59,4 +60,4 @@ const PhoneInput: React.FC<PhoneInputProps> = ({phone, setPhone, country, setIsV
 	);
 };
 
-export default PhoneInput;
+export default memo(PhoneInput);

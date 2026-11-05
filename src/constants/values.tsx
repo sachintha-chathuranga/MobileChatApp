@@ -11,6 +11,7 @@ export const COUNTRIES: Country[] = [
 		code: '+94',
 		flag: '🇱🇰',
 		mask: ['+', '9', '4', ' ', /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+		length: 9,
 	},
 	{
 		id: 'in',
@@ -18,6 +19,7 @@ export const COUNTRIES: Country[] = [
 		code: '+91',
 		flag: '🇮🇳',
 		mask: ['+', '9', '1', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, /\d/],
+		length: 10,
 	},
 	{
 		id: 'us',
@@ -25,6 +27,7 @@ export const COUNTRIES: Country[] = [
 		code: '+1',
 		flag: '🇺🇸',
 		mask: ['+', '1', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
+		length: 10,
 	},
 	{
 		id: 'gb',
@@ -32,6 +35,7 @@ export const COUNTRIES: Country[] = [
 		code: '+44',
 		flag: '🇬🇧',
 		mask: ['+', '4', '4', ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+		length: 10,
 	},
 	{
 		id: 'au',
@@ -39,6 +43,7 @@ export const COUNTRIES: Country[] = [
 		code: '+61',
 		flag: '🇦🇺',
 		mask: ['+', '6', '1', ' ', /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/],
+		length: 8,
 	},
 	{
 		id: 'ca',
@@ -46,6 +51,7 @@ export const COUNTRIES: Country[] = [
 		code: '+1',
 		flag: '🇨🇦',
 		mask: ['+', '1', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
+		length: 10,
 	},
 	{
 		id: 'de',
@@ -53,6 +59,7 @@ export const COUNTRIES: Country[] = [
 		code: '+49',
 		flag: '🇩🇪',
 		mask: ['+', '4', '9', ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+		length: 10,
 	},
 	{
 		id: 'fr',
@@ -60,6 +67,7 @@ export const COUNTRIES: Country[] = [
 		code: '+33',
 		flag: '🇫🇷',
 		mask: ['+', '3', '3', ' ', /\d/, ' ', /\d/, /\d/, ' ', /\d/, /\d/, ' ', /\d/, /\d/],
+		length: 7,
 	},
 	{
 		id: 'sg',
@@ -67,6 +75,7 @@ export const COUNTRIES: Country[] = [
 		code: '+65',
 		flag: '🇸🇬',
 		mask: ['+', '6', '5', ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/],
+		length: 8,
 	},
 	{
 		id: 'ae',
@@ -74,5 +83,6 @@ export const COUNTRIES: Country[] = [
 		code: '+971',
 		flag: '🇦🇪',
 		mask: ['+', '9', '7', '1', ' ', /\d/, ' ', /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/],
+		length: 8,
 	},
 ];

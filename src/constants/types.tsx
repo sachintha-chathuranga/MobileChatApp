@@ -67,8 +67,9 @@ export type Country = {
 	code: string;
 	flag: string;
 	mask: Mask;
+	length: number;
 };
 
 export type ThemeType = 'light' | 'dark';
 
-export type VerifyType = 'update-phone' | 'sign-in' | 'update-mail'
+export type VerifyType = 'update-phone' | 'sign-in' | 'update-mail';

@@ -1,5 +1,6 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from '@gorhom/bottom-sheet';
+import {RelativePathString} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 import React, {useCallback} from 'react';
 import {Pressable, Text, View} from 'react-native';
@@ -7,10 +8,11 @@ import {Colors} from '../constants/theme';
 import ImagePickerComponent from './ImagePicker';
 
 type ImagePickerDrawerProps = {
+	redirectPath: RelativePathString;
+	snapPoints: (string | number)[];
 	bottomSheetRef: React.RefObject<BottomSheet | null>;
 };
-const ImagePickDrawer: React.FC<ImagePickerDrawerProps> = ({bottomSheetRef}) => {
-	const snapPoints = ['35%'];
+const ImagePickDrawer: React.FC<ImagePickerDrawerProps> = ({redirectPath, snapPoints, bottomSheetRef}) => {
 	const {colorScheme} = useColorScheme();
 
 	const renderBackdrop = useCallback(
@@ -44,7 +46,7 @@ const ImagePickDrawer: React.FC<ImagePickerDrawerProps> = ({bottomSheetRef}) => 
 			}}
 		>
 			<BottomSheetView>
-				<View className="flex-row items-center mx-3 pb-3 pt-2">
+				<View className="flex-row items-center px-5 pb-3 pt-2">
 					<Pressable onPress={handleClosePress}>
 						<MaterialIcons
 							color={colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
@@ -58,7 +60,7 @@ const ImagePickDrawer: React.FC<ImagePickerDrawerProps> = ({bottomSheetRef}) => 
 						</Text>
 					</View>
 				</View>
-				<ImagePickerComponent closeDrawer={handleClosePress} />
+				<ImagePickerComponent redirectPath={redirectPath} closeDrawer={handleClosePress} />
 			</BottomSheetView>
 		</BottomSheet>
 	);

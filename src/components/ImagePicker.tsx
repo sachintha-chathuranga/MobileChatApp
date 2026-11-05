@@ -1,17 +1,16 @@
 import * as ImagePicker from 'expo-image-picker';
-import {router} from 'expo-router';
-import {useColorScheme} from 'nativewind';
+import {RelativePathString, router} from 'expo-router';
 import {useCallback, useState} from 'react';
 import {Alert, View} from 'react-native';
 import IconCard from './IconCard';
 import Loading from './Loading';
 
 type ImagePickerProps = {
+	redirectPath: RelativePathString;
 	closeDrawer: () => void;
 };
-const ImagePickerComponent: React.FC<ImagePickerProps> = ({closeDrawer}) => {
+const ImagePickerComponent: React.FC<ImagePickerProps> = ({redirectPath, closeDrawer}) => {
 	const [loading, setLoading] = useState(false);
-	const {colorScheme} = useColorScheme();
 
 	const pickImage = useCallback(async () => {
 		setLoading(true);
@@ -40,7 +39,7 @@ const ImagePickerComponent: React.FC<ImagePickerProps> = ({closeDrawer}) => {
 				const assets = result.assets[0];
 				const aspectRatio = assets.width / assets.height;
 				router.push({
-					pathname: '/profile/crop_image',
+					pathname: redirectPath,
 					params: {
 						uri: assets.uri,
 						imageWidth: String(assets.width),
@@ -78,7 +77,7 @@ const ImagePickerComponent: React.FC<ImagePickerProps> = ({closeDrawer}) => {
 				const assets = result.assets[0];
 				const aspectRatio = assets.width / assets.height;
 				router.push({
-					pathname: '/profile/crop_image',
+					pathname: redirectPath,
 					params: {
 						uri: assets.uri,
 						imageWidth: String(assets.width),

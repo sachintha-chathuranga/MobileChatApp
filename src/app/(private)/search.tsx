@@ -17,24 +17,25 @@ const SearchScreen = () => {
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
 			>
-			<SearchBar value={searchInput} onChangeText={setSearchInput} />
-			<FlatList
-				data={friends}
-				showsVerticalScrollIndicator={false}
-				contentInsetAdjustmentBehavior="automatic"
-				contentContainerStyle={{
-					paddingTop: 10,
-				}}
-				keyExtractor={(item) => item.user_id.toString()}
-				renderItem={({item}) => <FriendCard friend={item} type="normal" />}
-				onEndReached={() => {
-					if (!isFetching && hasMore) {
-						console.log('Bottom touch');
-						setindex((prev) => prev + 1);
-					}
-				}}
-				onEndReachedThreshold={0.5}
-			/>
+				<SearchBar value={searchInput} onChangeText={setSearchInput} />
+				<FlatList
+					data={friends}
+					showsVerticalScrollIndicator={false}
+					contentInsetAdjustmentBehavior="automatic"
+					keyboardShouldPersistTaps="always"
+					contentContainerStyle={{
+						paddingTop: 10,
+					}}
+					keyExtractor={(item) => item.user_id.toString()}
+					renderItem={({item}) => <FriendCard friend={item} type="normal" />}
+					onEndReached={() => {
+						if (!isFetching && hasMore) {
+							console.log('Bottom touch');
+							setindex((prev) => prev + 1);
+						}
+					}}
+					onEndReachedThreshold={0.5}
+				/>
 			</KeyboardAvoidingView>
 		</SafeAreaView>
 	);

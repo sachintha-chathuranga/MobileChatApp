@@ -13,6 +13,7 @@ import PhoneInput from '../components/PhoneInput';
 import SubmitButton from '../components/SubmitButton';
 
 const SignInScreen = () => {
+	console.log('SignIn Screen Rendered!');
 	const [country, setCountry] = useState<Country | null>(COUNTRIES[0]);
 	const [sending, setSending] = useState(false);
 	const [phone, setPhone] = useState('');
@@ -21,23 +22,12 @@ const SignInScreen = () => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
-	useEffect(() => {
-		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
-
-		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
-
-		return () => {
-			showSubscription.remove();
-			hideSubscription.remove();
-		};
-	}, []);
-
 	const handleSubmit = () => {
 		setSending(true);
 		sendOTP(phone)
 			.then((data) => {
 				if (!data) return;
-				router.replace({
+				router.push({
 					pathname: '/verify',
 					params: {
 						param: phone,
@@ -46,6 +36,10 @@ const SignInScreen = () => {
 			})
 			.finally(() => setSending(false));
 	};
+	useEffect(() => {
+		if (isValide) Keyboard.dismiss();
+	}, [isValide]);
+
 	useEffect(() => {
 		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
 

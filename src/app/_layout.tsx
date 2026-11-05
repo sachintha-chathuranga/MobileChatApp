@@ -17,8 +17,8 @@ export default function RootLayout() {
 			<SocketProvider>
 				<CustomThemeProvider>
 					<SafeAreaProvider>
-						<SplashScreenController />
 						<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+							<SplashScreenController />
 							<RootNavigator />
 						</ThemeProvider>
 					</SafeAreaProvider>
@@ -30,6 +30,7 @@ export default function RootLayout() {
 
 // Create a new component that can access the SessionProvider context later.
 function RootNavigator() {
+	console.log('Root Navigator Rendered!');
 	const {user, loadingUser} = useAuth();
 
 	if (loadingUser) {
@@ -38,13 +39,13 @@ function RootNavigator() {
 
 	return (
 		<Stack>
-			<Stack.Protected guard={!user}>
+			<Stack.Protected guard={!Boolean(user)}>
 				<Stack.Screen name="index" options={{headerShown: false, animation: 'none'}} />
-				<Stack.Screen name="sign" options={{headerShown: false, animation: 'fade'}} />
-				<Stack.Screen name="verify" options={{headerShown: false, animation: 'fade'}} />
-				<Stack.Screen name="signup" options={{headerShown: false, animation: 'fade'}} />
+				<Stack.Screen name="sign" options={{headerShown: false, animation: 'none'}} />
+				<Stack.Screen name="verify" options={{headerShown: false, animation: 'none'}} />
+				<Stack.Screen name="signup" options={{headerShown: false, animation: 'none'}} />
 			</Stack.Protected>
-			<Stack.Protected guard={!!user}>
+			<Stack.Protected guard={Boolean(user)}>
 				<Stack.Screen name="(private)" options={{headerShown: false, animation: 'none'}} />
 			</Stack.Protected>
 		</Stack>

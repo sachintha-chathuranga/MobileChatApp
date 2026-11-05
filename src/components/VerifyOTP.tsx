@@ -47,8 +47,14 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 						signInCall(verifyRes)
 							.then((res) => {
 								if (!res) return;
+								console.log(res.user.fname);
 								if (res.user.fname) return signIn(res.user, res.accessToken, res.refreshToken);
-								router.replace(`/signup/${res.user.user_id}`);
+								router.replace({
+									pathname: `/signup`,
+									params: {
+										user_id: res.user.user_id,
+									},
+								});
 							})
 							.finally(() => setVerifying(false));
 						break;
@@ -121,17 +127,23 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 				{(sending || verifying) && <Loading text={`${sending ? 'Sending' : 'Verifying'}`} />}
 				<View className={`px-8 flex-1 justify-between mt-10 ${isKeyboardVisible ? 'pb-3' : 'pb-0'}`}>
 					<View className="items-center">
-						<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">Verifying your {textToShow}</Text>
+						<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">
+							Verifying your {textToShow}
+						</Text>
 						<Text className="text-justify text-light-txtcolor-200 dark:text-dark-txtcolor-200">
 							To complete your {textToShow} verification, please enter the 6-digit otp code. We have sent to your{' '}
 							{textToShow}
-							<Text className="font-semibold text-light-txtcolor-100 dark:text-dark-txtcolor-100"> {param}</Text>.
+							<Text className="font-semibold text-light-txtcolor-100 dark:text-dark-txtcolor-100"> {param}</Text>
+							.
 							<Link
 								href={`${type === 'sign-in' ? '/sign' : type === 'update-phone' ? '/profile/phone_form/form' : '/profile/email_form'}`}
 								className="mt-20"
-								replace
+								dismissTo
 							>
-								<Text className="font-semibold text-light-txtcolor-secondary dark:text-dark-txtcolor-secondary"> Wrong {textToShow}? </Text>
+								<Text className="font-semibold text-light-txtcolor-secondary dark:text-dark-txtcolor-secondary">
+									{' '}
+									Wrong {textToShow}?{' '}
+								</Text>
 							</Link>
 						</Text>
 
@@ -150,7 +162,9 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 									key={index}
 									onLayout={getCellOnLayoutHandler(index)}
 									className={`border-b-2 w-8 h-8 mx-1 justify-center items-center ${
-										isFocused ? 'border-light-border-primary dark:border-dark-border-primary' : 'border-light-border-100 dark:border-dark-border-100'
+										isFocused
+											? 'border-light-border-primary dark:border-dark-border-primary'
+											: 'border-light-border-100 dark:border-dark-border-100'
 									}`}
 								>
 									<Text className="text-lg text-light-txtcolor-100 dark:text-dark-txtcolor-100">
@@ -160,10 +174,12 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 							)}
 						/>
 						<Pressable disabled={verifying || sending} onPress={resendOTP}>
-							<Text className="font-semibold text-light-txtcolor-primary dark:text-dark-txtcolor-primary">Didn't receive code?</Text>
+							<Text className="font-semibold text-light-txtcolor-primary dark:text-dark-txtcolor-primary">
+								Didn't receive code?
+							</Text>
 						</Pressable>
 					</View>
-					<SubmitButton text='Verify' disable={!isValide} onSubmit={handleSubmit} />
+					<SubmitButton text="Verify" disable={!isValide} onSubmit={handleSubmit} />
 				</View>
 			</KeyboardAvoidingView>
 		</SafeAreaView>

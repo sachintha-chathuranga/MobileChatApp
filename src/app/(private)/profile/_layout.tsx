@@ -55,7 +55,9 @@ const ProfileLayout = () => {
 					headerShadowVisible: false,
 				}}
 			/>
+			
 			<Stack.Screen name="crop_image" options={{headerShown: false}} />
+
 			<Stack.Screen
 				name="about_form"
 				options={{
