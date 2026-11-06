@@ -41,53 +41,46 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 	const handleSubmit = () => {
 		setVerifying(true);
 		verifyOTP(param, otp)
-			.then((verifyRes) => {
+			.then(async (verifyRes) => {
 				switch (type) {
 					case 'sign-in':
-						signInCall(verifyRes)
-							.then((res) => {
-								if (!res) return;
-								console.log(res.user.fname);
-								if (res.user.fname) return signIn(res.user, res.accessToken, res.refreshToken);
-								router.replace({
-									pathname: `/signup`,
-									params: {
-										user_id: res.user.user_id,
-									},
-								});
-							})
-							.finally(() => setVerifying(false));
+						await signInCall(verifyRes).then((res) => {
+							if (!res) return;
+							if (res.user.fname) return signIn(res.user, res.accessToken, res.refreshToken);
+							router.replace({
+								pathname: `/signup`,
+								params: {
+									user_id: res.user.user_id,
+								},
+							});
+						});
 						break;
 					case 'update-phone':
 						if (!user) return;
-						userUpdateCall(axiosPrivate, {phone: verifyRes})
-							.then((res) => {
-								if (res !== 200) return;
-								setUser({...user, phone: verifyRes});
-								Alert.alert('Success', 'Your phone number changed succesfully.', [
-									{
-										text: 'OK',
-										onPress: () => router.dismissTo('/(private)/profile'),
-									},
-								]);
-							})
-							.finally(() => setVerifying(false));
+						await userUpdateCall(axiosPrivate, {phone: verifyRes}).then((res) => {
+							if (res !== 200) return;
+							setUser({...user, phone: verifyRes});
+							Alert.alert('Success', 'Your phone number changed succesfully.', [
+								{
+									text: 'OK',
+									onPress: () => router.dismissTo('/(private)/profile'),
+								},
+							]);
+						});
 						break;
 					case 'update-mail':
-						console.log('On update-mail');
 						if (!user) return;
-						userUpdateCall(axiosPrivate, {email: param})
-							.then((res) => {
-								if (res !== 200) return;
-								setUser({...user, email: param});
-								Alert.alert('Success', 'Your email changed succesfully.', [
-									{
-										text: 'OK',
-										onPress: () => router.dismissTo('/(private)/profile'),
-									},
-								]);
-							})
-							.finally(() => setVerifying(false));
+						await userUpdateCall(axiosPrivate, {email: param}).then((res) => {
+							if (res !== 200) return;
+							setUser({...user, email: param});
+							Alert.alert('Success', 'Your email changed succesfully.', [
+								{
+									text: 'OK',
+									onPress: () => router.dismissTo('/(private)/profile'),
+								},
+							]);
+						});
+
 						break;
 					default:
 						break;

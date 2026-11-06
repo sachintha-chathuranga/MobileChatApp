@@ -92,7 +92,6 @@ export const logOutCall = async (axiosPrivate: Axios) => {
 export const userUpdateCall = async (axiosPrivate: Axios, userDetails: UpdateUser) => {
 	try {
 		const res = await axiosPrivate.put(`users/`, userDetails);
-		console.log(res.data);
 		return res.status;
 	} catch (err) {
 		handleError(err);

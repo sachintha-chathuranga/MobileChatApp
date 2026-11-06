@@ -21,9 +21,13 @@ const GuestList = () => {
 				Chat with your 297 {CONSTANT.appName} contacts, or invite a friend to {CONSTANT.appName}.
 			</Text>
 
-			<ScrollView showsHorizontalScrollIndicator={false} horizontal contentContainerClassName="pt-2 gap-2">
+			<ScrollView  showsHorizontalScrollIndicator={false} horizontal contentContainerClassName="pt-2 gap-2">
 				{friends.map((item, index) => {
-					return <GuestCard key={item.user_id} friend={{...item}} />;
+					return (
+						<View key={item.user_id} className={`${index === 0 && 'pl-5'}`}>
+							<GuestCard friend={{...item}} />
+						</View>
+					);
 				})}
 				<Pressable onPress={() => router.push('/search')} className="justify-center items-center p-2 mr-4">
 					<View className="rounded-full bg-light-bgcolor-300 dark:bg-dark-bgcolor-300 p-7">

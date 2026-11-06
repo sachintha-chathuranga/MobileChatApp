@@ -10,7 +10,7 @@ import useMessages from '@/src/hooks/useMessages';
 import {postMessage, readAllMessages} from '@/src/services/apiCalls';
 import {useLocalSearchParams} from 'expo-router';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FlatList, KeyboardAvoidingView, Platform, TextInput, View} from 'react-native';
+import {FlatList, Keyboard, KeyboardAvoidingView, Platform, TextInput, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const ChatScreen = () => {
@@ -22,7 +22,7 @@ const ChatScreen = () => {
 	const [input, setInput] = useState('');
 	const inputRef = useRef<TextInput | null>(null);
 	const axiosPrivate = useAxiosPrivate();
-	// const [isInvert, setIsInvert] = useState(false);
+	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
 	useEffect(() => {
 		readAllMessages(axiosPrivate, Number(id));
@@ -47,7 +47,7 @@ const ChatScreen = () => {
 		};
 	}, [socket, setMessages, id]);
 
-	const sendMessage = async () => {
+	const sendMessage = useCallback(async () => {
 		const msg: NewMessage = {
 			sender_id: user!.user_id,
 			receiver_id: Number(id),
@@ -60,17 +60,28 @@ const ChatScreen = () => {
 		setMessages((prev) => [newMsg, ...prev]);
 		inputRef.current?.clear();
 		inputRef?.current?.focus();
-	};
+	}, [user?.user_id,id,input,axiosPrivate,socket]);
 
 	const onClearMessages = useCallback(() => {
 		setMessages([]);
 	}, []);
 
+	useEffect(() => {
+		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
+
+		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
+
+		return () => {
+			showSubscription.remove();
+			hideSubscription.remove();
+		};
+	}, []);
+
 	return (
 		<SafeAreaView className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
-			<ChatHeader clear={() => onClearMessages()} />
+			<ChatHeader clear={onClearMessages} />
 			<KeyboardAvoidingView
-				style={{flex: 1}}
+				style={isKeyboardVisible ? {flex: 1} : {flexGrow: 1}}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
 			>
@@ -88,9 +99,9 @@ const ChatScreen = () => {
 						}}
 						renderItem={({item}) =>
 							item.sender_id === user?.user_id ? (
-								<OutgoingMsg isLoading={false} msg={item.message} />
+								<OutgoingMsg msg={item.message} />
 							) : (
-								<IncomeMsg isLoading={false} msg={item.message} />
+								<IncomeMsg msg={item.message} />
 							)
 						}
 						onEndReached={() => {
@@ -102,7 +113,7 @@ const ChatScreen = () => {
 						onEndReachedThreshold={0.5}
 					/>
 				</View>
-				<InputField inputRef={inputRef} onInputChange={setInput} onSubmit={() => sendMessage()} />
+				<InputField inputRef={inputRef} onInputChange={setInput} onSubmit={sendMessage} />
 			</KeyboardAvoidingView>
 		</SafeAreaView>
 	);

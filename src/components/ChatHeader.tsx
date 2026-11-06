@@ -1,7 +1,7 @@
 import {images} from '@/src/assets/images';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {router, useLocalSearchParams} from 'expo-router';
-import React, {useMemo} from 'react';
+import React, {memo, useEffect, useMemo} from 'react';
 import {Image, Text, View} from 'react-native';
 import {Colors} from '../constants/theme';
 import {MenuItem} from '../constants/types';
@@ -13,9 +13,11 @@ type ChatHeaderProps = {
 	clear: () => void;
 };
 const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
+	console.log("Chat Header Rendered!")
 	const {id, name, status, avatar} = useLocalSearchParams();
 	const {theme, toggleTheme} = useTheme();
 	const axiosPrivate = useAxiosPrivate();
+	
 	const menuItems: MenuItem[] = useMemo(
 		() => [
 			{
@@ -65,4 +67,4 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 	);
 };
 
-export default ChatHeader;
+export default memo(ChatHeader);

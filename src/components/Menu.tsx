@@ -3,7 +3,7 @@ import {useTheme} from '@/src/context/themeContext';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
-import React, {useState} from 'react';
+import React, {memo, useState} from 'react';
 import {Modal, Pressable, Text, TouchableHighlight, View} from 'react-native';
 import {MenuItem} from '../constants/types';
 type MenuProps = {
@@ -64,4 +64,4 @@ const Menu: React.FC<MenuProps> = ({list}) => {
 	);
 };
 
-export default Menu;
+export default memo(Menu);

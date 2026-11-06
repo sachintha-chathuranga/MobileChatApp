@@ -59,12 +59,12 @@ const SignUpScreen = () => {
 		<GestureHandlerRootView style={{flex: 1}}>
 			<SafeAreaView className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 				<KeyboardAvoidingView
-					style={isKeyboardVisible ? {flex: 1} : {flexGrow: 1}}
+					style={isKeyboardVisible ? {flex: 1, paddingBottom: 12} : {flexGrow: 1, paddingBottom: 24}}
 					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 					keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
 				>
 					{sending && <Loading text="Sending" />}
-					<View className={`px-7 flex-1 justify-between mt-10 pb-4`}>
+					<View className={`px-7 flex-1 justify-between mt-10`}>
 						<View className="items-center">
 							<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">
 								Profile info
