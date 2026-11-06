@@ -58,6 +58,7 @@ export default function HomeScreen() {
 	}, []);
 
 	const handleDeleteMessages = useCallback(() => {
+		if (selectedUsers.size === 0) return;
 		deleteSelectedUserMessages(axiosPrivate, selectedUsers)
 			.then((data) => {
 				const remaining = friends.filter((friend) => !selectedUsers.has(friend.user_id));

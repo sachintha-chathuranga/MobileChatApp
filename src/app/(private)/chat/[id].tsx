@@ -26,11 +26,8 @@ const ChatScreen = () => {
 
 	useEffect(() => {
 		readAllMessages(axiosPrivate, Number(id));
-		// return () => {
-		// 	readAllMessages(axiosPrivate, Number(id));
-		// };
 	}, []);
-	
+
 	useEffect(() => {
 		if (!socket) return;
 		console.log('ChatScreen getMessage listening...');
@@ -49,6 +46,7 @@ const ChatScreen = () => {
 	}, [socket, setMessages, id]);
 
 	const sendMessage = useCallback(async () => {
+		if (!input) return;
 		const msg: NewMessage = {
 			sender_id: user!.user_id,
 			receiver_id: Number(id),
@@ -61,7 +59,7 @@ const ChatScreen = () => {
 		setMessages((prev) => [newMsg, ...prev]);
 		inputRef.current?.clear();
 		inputRef?.current?.focus();
-	}, [user?.user_id,id,input,axiosPrivate,socket]);
+	}, [user?.user_id, id, input, axiosPrivate, socket]);
 
 	const onClearMessages = useCallback(() => {
 		setMessages([]);
@@ -69,9 +67,7 @@ const ChatScreen = () => {
 
 	useEffect(() => {
 		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
-
 		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
-
 		return () => {
 			showSubscription.remove();
 			hideSubscription.remove();
