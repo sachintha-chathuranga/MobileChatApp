@@ -94,22 +94,20 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 	const resendOTP = () => {
 		setSending(true);
 		sendOTP(param).then((data) => {
+			if (!data) return;
 			setSending(false);
-			if (data) {
-				console.log(data);
-			}
 		});
 	};
+
 	useEffect(() => {
 		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
-
 		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
-
 		return () => {
 			showSubscription.remove();
 			hideSubscription.remove();
 		};
 	}, []);
+
 	return (
 		<SafeAreaView className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 			<KeyboardAvoidingView

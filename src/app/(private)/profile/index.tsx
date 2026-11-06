@@ -3,17 +3,16 @@ import IconCard from '@/src/components/IconCard';
 import ImagePickDrawer from '@/src/components/ImagePickDrawer';
 import {Colors} from '@/src/constants/theme';
 import {useAuth} from '@/src/context/authContext';
-
 import BottomSheet from '@gorhom/bottom-sheet';
 import {router} from 'expo-router';
 import {useColorScheme} from 'nativewind';
-
 import React, {useCallback, useRef} from 'react';
 import {Image, Pressable, Text, TouchableHighlight, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const ProfileScreen = () => {
+	console.log("Profile Screen Rendered!")
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const {colorScheme} = useColorScheme();
 	const {user} = useAuth();

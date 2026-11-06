@@ -44,7 +44,6 @@ const hostnames = [
 ];
 
 const ChangeEmailScreen = () => {
-	const [emailInput, setInput] = useState('');
 	const router = useRouter();
 	const {colorScheme} = useColorScheme();
 	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -53,9 +52,10 @@ const ChangeEmailScreen = () => {
 	const [isValid, setIsValid] = useState(false);
 	const [error, setError] = useState('');
 	const {user} = useAuth();
+	const [emailInput, setInput] = useState(user?.email ?? '');
 	const axiosPrivate = useAxiosPrivate();
 
-	console.log('\n Email Screen rendered \n');
+	console.log('Email Screen rendered');
 
 	const validateEmail = (email: string): boolean => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -103,11 +103,10 @@ const ChangeEmailScreen = () => {
 			.finally(() => setChecking(false));
 		// router.push('/profile/email_form/verify_screen');
 	};
+
 	useEffect(() => {
 		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
-
 		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
-
 		return () => {
 			showSubscription.remove();
 			hideSubscription.remove();
@@ -135,7 +134,6 @@ const ChangeEmailScreen = () => {
 								}`}
 							>
 								<TextInput
-									defaultValue={user?.email}
 									cursorColor={'#4ade80'}
 									onChangeText={handleInputChange}
 									className={`text-light-txtcolor-100 dark:text-dark-txtcolor-100 text-base`}
@@ -173,7 +171,7 @@ const ChangeEmailScreen = () => {
 						</View>
 					</View>
 
-					<SubmitButton text='Submit' disable={!isValid} onSubmit={handleSubmit} />
+					<SubmitButton text="Submit" disable={!isValid} onSubmit={handleSubmit} />
 				</View>
 			</KeyboardAvoidingView>
 		</SafeAreaView>

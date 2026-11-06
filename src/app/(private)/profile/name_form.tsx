@@ -39,9 +39,7 @@ const NameForm = () => {
 	};
 	useEffect(() => {
 		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
-
 		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
-
 		return () => {
 			showSubscription.remove();
 			hideSubscription.remove();

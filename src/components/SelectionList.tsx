@@ -3,7 +3,7 @@ import {AboutItem} from '@/src/constants/types';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import {useColorScheme} from 'nativewind';
 
-import React, {useState} from 'react';
+import React, {memo, useState} from 'react';
 import {Pressable, Text, View} from 'react-native';
 
 interface SelectionListProps {
@@ -14,6 +14,7 @@ interface SelectionListProps {
 const SelectionList: React.FC<SelectionListProps> = ({options, onSelect}) => {
 	const [selected, setSelected] = useState<number | null>(null);
 	const {colorScheme} = useColorScheme();
+	
 	const handleSelected = (item: AboutItem) => {
 		setSelected(item.id);
 		onSelect(item);
@@ -45,4 +46,4 @@ const SelectionList: React.FC<SelectionListProps> = ({options, onSelect}) => {
 	);
 };
 
-export default SelectionList;
+export default memo(SelectionList);

@@ -2,7 +2,7 @@ import EmojiKeyboard from '@/src/components/EmojiKeyboard';
 import Loading from '@/src/components/Loading';
 import SelectionList from '@/src/components/SelectionList';
 import {Colors} from '@/src/constants/theme';
-import {AboutItem, UpdateUser} from '@/src/constants/types';
+import {AboutItem} from '@/src/constants/types';
 import {useAuth} from '@/src/context/authContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
@@ -10,10 +10,11 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Keyboard, KeyboardAvoidingView, Platform, Pressable, Text, TextInput, View} from 'react-native';
 import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
+
 const options = [
 	{id: 1, emoji: '🟢', label: 'Free to chat'},
 	{id: 2, emoji: '⏰', label: 'Slow to respond'},
@@ -34,17 +35,17 @@ const AboutForm = () => {
 	const [updating, setUpdating] = useState(false);
 
 	useEffect(() => {
-		console.log('About Form Screen render for updating user');
 		const [emoji, ...parts] = (user?.about ?? '').split('|');
 		console.log(parts);
 		setInput(parts[0]);
 		setEmoji(emoji);
 	}, [user?.about]);
 
-	const setAbout = (item: AboutItem) => {
+	const setAbout = useCallback((item: AboutItem) => {
 		setEmoji(item.emoji);
 		setInput(item.label);
-	};
+	}, []);
+
 	const toggleEmojiKeyboard = () => {
 		if (showEmojiKeyboard) {
 			setShowEmojiKeyboard(false);
@@ -60,16 +61,11 @@ const AboutForm = () => {
 		if (!user) return;
 		setUpdating(true);
 		const about = `${emoji}|${input}`;
-		const data: UpdateUser = {
-			user_id: user.user_id,
-			about,
-		};
-		userUpdateCall(axiosPrivate, data).then((res) => {
+		userUpdateCall(axiosPrivate, {about}).then((res) => {
 			setUpdating(false);
-			if (res === 200) {
-				setUser({...user, about});
-				router.back();
-			}
+			if (res !== 200) return;
+			setUser({...user, about});
+			router.back();
 		});
 	};
 	return (
@@ -86,7 +82,7 @@ const AboutForm = () => {
 						<View className="flex-row items-start gap-4 p-5">
 							<Pressable
 								className="rounded-lg justify-center p-1 items-center border text-center border-light-border-100 dark:border-dark-border-100"
-								onPress={() => toggleEmojiKeyboard()}
+								onPress={toggleEmojiKeyboard}
 							>
 								{emoji === '' ? (
 									<MaterialIcons
@@ -125,7 +121,7 @@ const AboutForm = () => {
 							<Text className="font-semibold text-light-txtcolor-200 dark:text-dark-txtcolor-200 pl-4 pt-2">
 								Select
 							</Text>
-							<SelectionList options={options} onSelect={(item) => setAbout(item)} />
+							<SelectionList options={options} onSelect={setAbout} />
 						</View>
 					</ScrollView>
 
@@ -137,7 +133,7 @@ const AboutForm = () => {
 						>
 							<MaterialCommunityIcons color={'white'} size={23} name="check" />
 						</Pressable>
-						{showEmojiKeyboard && <EmojiKeyboard editable={false} onEmojiSelect={(emoji) => setEmoji(emoji)} />}
+						{showEmojiKeyboard && <EmojiKeyboard editable={false} onEmojiSelect={setEmoji} />}
 					</View>
 				</KeyboardAvoidingView>
 			</SafeAreaView>

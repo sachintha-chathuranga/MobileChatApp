@@ -4,13 +4,12 @@ import {Text, TextInput, View} from 'react-native';
 import {Colors} from '../constants/theme';
 
 type NameInputProps = {
-	defaultValue?: string;
 	onIputChange: (input: string) => void;
 	input: string;
 	placeholder: string;
 	setValidate: (val: boolean) => void;
 };
-const NameInput: React.FC<NameInputProps> = ({defaultValue, onIputChange, input, placeholder, setValidate}) => {
+const NameInput: React.FC<NameInputProps> = ({onIputChange, input, placeholder, setValidate}) => {
 	const inputRef = useRef<TextInput>(null);
 	const [error, setError] = useState('');
 	const {colorScheme} = useColorScheme();
@@ -33,7 +32,6 @@ const NameInput: React.FC<NameInputProps> = ({defaultValue, onIputChange, input,
 				}`}
 			>
 				<TextInput
-					defaultValue={defaultValue}
 					ref={inputRef}
 					cursorColor={'#4ade80'}
 					onChangeText={handleInputChange}
