@@ -2,13 +2,14 @@ import {Colors} from '@/src/constants/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
-import React from 'react';
+import React, {memo} from 'react';
 import {TextInput, View} from 'react-native';
 type SearchBarProps = {
 	value: string;
 	onChangeText: (text: string) => void;
 };
-const SearchBar: React.FC<SearchBarProps> = ({value, onChangeText}) => {
+const SearchInputBar: React.FC<SearchBarProps> = ({value, onChangeText}) => {
+	console.log('SearchInputBar Rendered');
 	const router = useRouter();
 	const {colorScheme} = useColorScheme();
 
@@ -33,13 +34,12 @@ const SearchBar: React.FC<SearchBarProps> = ({value, onChangeText}) => {
 					onChangeText={onChangeText}
 					value={value}
 					cursorColor={colorScheme === 'dark' ? Colors.dark.cursor : Colors.light.cursor}
-					caretHidden={true}
 					keyboardType="name-phone-pad"
 					inputMode="text"
 					returnKeyType="search"
 					placeholder="Search Friends for chat"
 					placeholderTextColor={colorScheme === 'dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
-					autoFocus
+					autoFocus={true}
 					underlineColorAndroid="transparent"
 				/>
 			</View>
@@ -47,4 +47,4 @@ const SearchBar: React.FC<SearchBarProps> = ({value, onChangeText}) => {
 	);
 };
 
-export default SearchBar;
+export default memo(SearchInputBar);

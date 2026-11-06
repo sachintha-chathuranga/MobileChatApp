@@ -1,8 +1,8 @@
 import FriendCard from '@/src/components/FriendCard';
-import SearchBar from '@/src/components/SearchBar';
+import SearchInputBar from '@/src/components/SearchInputBar';
 import useFriends from '@/src/hooks/useFriends';
-import React, {useState} from 'react';
-import {FlatList, KeyboardAvoidingView, Platform} from 'react-native';
+import React, {memo, useEffect, useState} from 'react';
+import {FlatList, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SearchScreen = () => {
@@ -10,14 +10,25 @@ const SearchScreen = () => {
 	const [index, setindex] = useState(1);
 	const [searchInput, setSearchInput] = useState('');
 	const {friends, isFetching, hasMore} = useFriends(index, searchInput);
+	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+	useEffect(() => {
+		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
+		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
+		return () => {
+			showSubscription.remove();
+			hideSubscription.remove();
+		};
+	}, []);
+
 	return (
-		<SafeAreaView edges={['top']} className="flex-1 bg-light-bgcolor-100 px-3 pt-5 dark:bg-dark-bgcolor-100">
+		<SafeAreaView className="flex-1 bg-light-bgcolor-100 px-3 pt-5 dark:bg-dark-bgcolor-100">
 			<KeyboardAvoidingView
-				style={{flex: 1}}
+				style={isKeyboardVisible ? {flex: 1} : {flexGrow: 1}}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
 			>
-				<SearchBar value={searchInput} onChangeText={setSearchInput} />
+				<SearchInputBar value={searchInput} onChangeText={setSearchInput} />
 				<FlatList
 					data={friends}
 					showsVerticalScrollIndicator={false}
@@ -41,4 +52,4 @@ const SearchScreen = () => {
 	);
 };
 
-export default SearchScreen;
+export default memo(SearchScreen);
