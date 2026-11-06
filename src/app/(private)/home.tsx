@@ -17,7 +17,7 @@ import {FlatList, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
-	console.log("Home Screen Rendered!")
+	console.log('Home Screen Rendered!');
 	const [index, setindex] = useState(1);
 	const [notification, setNotification] = useState<Message[]>([]);
 	const friendList = useRef<Friend[]>(null);
@@ -28,15 +28,15 @@ export default function HomeScreen() {
 	const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set());
 	const [isSelecionMode, setIsSelecionMode] = useState(false);
 
-	const handleSelectAll = () => {
+	const handleSelectAll = useCallback(() => {
 		setSelectedUsers(new Set(friends.map((user) => user.user_id)));
-	};
+	}, [friends]);
 
-	const clearSelection = (onlyClear: boolean) => {
+	const clearSelection = useCallback((onlyClear: boolean) => {
 		if (onlyClear) return setSelectedUsers(new Set());
 		setIsSelecionMode(false);
 		setSelectedUsers(new Set());
-	};
+	}, []);
 
 	const handleSelectUser = useCallback((userId: number) => {
 		setSelectedUsers((prev) => {
@@ -57,13 +57,15 @@ export default function HomeScreen() {
 		});
 	}, []);
 
-	const handleDeleteMessages = () => {
-		deleteSelectedUserMessages(axiosPrivate, selectedUsers).then(data =>{
-			const remaining = friends.filter((friend) => !selectedUsers.has(friend.user_id));
-			setFriends(remaining);
-			clearSelection(false);
-		}).catch(handleError);
-	};
+	const handleDeleteMessages = useCallback(() => {
+		deleteSelectedUserMessages(axiosPrivate, selectedUsers)
+			.then((data) => {
+				const remaining = friends.filter((friend) => !selectedUsers.has(friend.user_id));
+				setFriends(remaining);
+				clearSelection(false);
+			})
+			.catch(handleError);
+	}, [selectedUsers, friends]);
 
 	// useFocuseEffect use to update notifications every time home screen focus.
 	useFocusEffect(
@@ -73,8 +75,10 @@ export default function HomeScreen() {
 			fetchAllNotification(axiosPrivate).then((data) => {
 				setNotification(data);
 			});
-			return () => console.log('Home Screen UnFocus');
-		}, [axiosPrivate])
+			return () => {
+				console.log('Home Screen UnFocus');
+			};
+		}, [])
 	);
 
 	const onRefresh = useCallback(() => {
@@ -118,7 +122,7 @@ export default function HomeScreen() {
 		<SafeAreaView className="bg-light-bgcolor-100 flex-1 dark:bg-dark-bgcolor-100">
 			<HomeHeader
 				isSelctionMod={isSelecionMode}
-				clearSelection={(val) => clearSelection(val)}
+				clearSelection={clearSelection}
 				selectAll={handleSelectAll}
 				onDeletPress={handleDeleteMessages}
 			/>
@@ -165,7 +169,6 @@ export default function HomeScreen() {
 					onEndReachedThreshold={0.5}
 				/>
 			</View>
-			{/* )} */}
 		</SafeAreaView>
 	);
 }

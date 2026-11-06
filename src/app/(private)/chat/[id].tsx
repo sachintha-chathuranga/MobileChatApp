@@ -26,16 +26,17 @@ const ChatScreen = () => {
 
 	useEffect(() => {
 		readAllMessages(axiosPrivate, Number(id));
-		return () => {
-			readAllMessages(axiosPrivate, Number(id));
-		};
+		// return () => {
+		// 	readAllMessages(axiosPrivate, Number(id));
+		// };
 	}, []);
-
+	
 	useEffect(() => {
 		if (!socket) return;
 		console.log('ChatScreen getMessage listening...');
-		const handler = (data: any) => {
+		const handler = async (data: any) => {
 			if (data.sender_id === Number(id)) {
+				await readAllMessages(axiosPrivate, Number(id));
 				setMessages((prev) => [data, ...prev]);
 			}
 		};

@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
-import React, {useMemo, useState} from 'react';
+import React, {memo, useMemo, useState} from 'react';
 import {Pressable, Text, View} from 'react-native';
 import {Colors} from '../constants/theme';
 import {MenuItem} from '../constants/types';
@@ -57,11 +57,13 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({isSelctionMod, clearSelection, s
 		setIsChecked(false);
 		clearSelection(onlyClear);
 	};
+
 	const handleCheckBoxPress = () => {
 		if (isChecked) return handleBackPress(true);
 		selectAll();
 		setIsChecked(true);
 	};
+
 	return (
 		<View className="flex-row items-center justify-between pt-3 pb-2 pl-6 pr-3">
 			<Text className="text-3xl font-semibold text-light-txtcolor-primary dark:text-dark-txtcolor-100">
@@ -73,7 +75,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({isSelctionMod, clearSelection, s
 						size={23}
 						className="pl-3"
 						name="arrow-back"
-						onPress={() =>handleBackPress(false)}
+						onPress={() => handleBackPress(false)}
 					/>
 				)}
 			</Text>
@@ -111,4 +113,4 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({isSelctionMod, clearSelection, s
 	);
 };
 
-export default HomeHeader;
+export default memo(HomeHeader);

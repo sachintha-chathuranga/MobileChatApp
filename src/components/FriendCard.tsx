@@ -2,11 +2,11 @@ import {images} from '@/src/assets/images';
 import {Friend, Message} from '@/src/constants/types';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
+import {useColorScheme} from 'nativewind';
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Colors} from '../constants/theme';
 import {formatDateTime} from '../services/formatter';
-import { useColorScheme } from 'nativewind';
-import { Colors } from '../constants/theme';
 
 type FriendCardProps = {
 	friend: Friend;
@@ -14,9 +14,16 @@ type FriendCardProps = {
 	notifications?: Message[];
 	isSelect?: boolean;
 	isSelecionMode?: boolean;
-	handleLongPress?: (id:number) => void;
+	handleLongPress?: (id: number) => void;
 };
-const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isSelect,isSelecionMode, handleLongPress}) => {
+const FriendCard: React.FC<FriendCardProps> = ({
+	friend,
+	type,
+	notifications,
+	isSelect,
+	isSelecionMode,
+	handleLongPress,
+}) => {
 	const [notification, setNotification] = useState<Message[]>([]);
 	const router = useRouter();
 	const {colorScheme} = useColorScheme();
@@ -46,7 +53,7 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isS
 	const handlePress = useCallback(() => {
 		if (isSelecionMode && handleLongPress) {
 			handleLongPress(friend?.user_id);
-		}else{
+		} else {
 			router.push({
 				pathname: '/chat/[id]',
 				params: params,
@@ -81,7 +88,7 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isS
 							</Text>
 						)}
 					</View>
-					{(!type && !isSelect) && (
+					{!type && !isSelect && (
 						<View className="gap-1">
 							<Text className="text-light-txtcolor-200 text-sm dark:text-dark-txtcolor-200 self-start mt-2">
 								{masgDate}
@@ -93,14 +100,16 @@ const FriendCard: React.FC<FriendCardProps> = ({friend, type, notifications, isS
 								</View>
 							)}
 						</View>
-					) 
-				}
-				{isSelect && (
-				<View className='justify-center'> 
-
-					<MaterialIcons name="check-circle" size={22} color={colorScheme === 'dark' ? Colors.dark.bgcolor.primary : Colors.light.bgcolor.primary} />
-				</View>
-				)}
+					)}
+					{isSelect && (
+						<View className="justify-center">
+							<MaterialIcons
+								name="check-circle"
+								size={22}
+								color={colorScheme === 'dark' ? Colors.dark.bgcolor.primary : Colors.light.bgcolor.primary}
+							/>
+						</View>
+					)}
 				</View>
 			</View>
 		</TouchableOpacity>

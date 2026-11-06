@@ -9,6 +9,7 @@ import GuestCard from './GuestCard';
 import Loading from './Loading';
 
 const GuestList = () => {
+	console.log('GuestList Rendered!');
 	const [index, setindex] = useState(1);
 	const {friends, isFetching, hasMore} = useFriends(index);
 	const router = useRouter();
@@ -21,7 +22,7 @@ const GuestList = () => {
 				Chat with your 297 {CONSTANT.appName} contacts, or invite a friend to {CONSTANT.appName}.
 			</Text>
 
-			<ScrollView  showsHorizontalScrollIndicator={false} horizontal contentContainerClassName="pt-2 gap-2">
+			<ScrollView showsHorizontalScrollIndicator={false} horizontal contentContainerClassName="pt-2 gap-2">
 				{friends.map((item, index) => {
 					return (
 						<View key={item.user_id} className={`${index === 0 && 'pl-5'}`}>

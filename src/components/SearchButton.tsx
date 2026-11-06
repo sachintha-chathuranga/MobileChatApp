@@ -2,15 +2,18 @@ import {Colors} from '@/src/constants/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
-import React from 'react';
+import React, {memo} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 const SearchButton = () => {
+	console.log('Search Btn Rendered!');
 	const {colorScheme} = useColorScheme();
 	const router = useRouter();
+
 	const onPress = () => {
 		router.push('/search');
 	};
+
 	return (
 		<View className="pb-2 px-4">
 			<TouchableOpacity
@@ -30,4 +33,4 @@ const SearchButton = () => {
 	);
 };
 
-export default SearchButton;
+export default memo(SearchButton);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 
 import {useColorScheme} from 'nativewind';
@@ -26,4 +26,4 @@ const Loading: React.FC<LoadingProps> = ({text, theme}) => {
 	);
 };
 
-export default Loading;
+export default memo(Loading);
