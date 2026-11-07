@@ -1,8 +1,8 @@
 import {images} from '@/src/assets/images';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {router, useLocalSearchParams} from 'expo-router';
-import React, {memo, useEffect, useMemo} from 'react';
-import {Image, Text, View} from 'react-native';
+import React, {memo, useCallback, useMemo} from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../constants/theme';
 import {MenuItem} from '../constants/types';
 import {useTheme} from '../context/themeContext';
@@ -13,18 +13,23 @@ type ChatHeaderProps = {
 	clear: () => void;
 };
 const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
-	console.log("Chat Header Rendered!")
-	const {id, name, status, avatar} = useLocalSearchParams();
+	console.log('Chat Header Rendered!');
+	const {id, name, status, avatar} = useLocalSearchParams<{
+		id: string;
+		name: string;
+		status: string;
+		avatar: string;
+	}>();
 	const {theme, toggleTheme} = useTheme();
 	const axiosPrivate = useAxiosPrivate();
-	
+
 	const menuItems: MenuItem[] = useMemo(
 		() => [
 			{
 				id: 1,
-				icon: 'cog-outline',
-				name: 'Profile',
-				function: () => router.push('/profile'),
+				icon: 'account-circle-outline',
+				name: 'View profile',
+				function: () => handlePress(),
 			},
 			{
 				id: 2,
@@ -46,8 +51,17 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 		[theme, axiosPrivate, id]
 	);
 
+	const handlePress = useCallback(() => {
+		router.push({
+			pathname: '/chat/profile',
+			params: {
+				id: id,
+			},
+		});
+	}, [id]);
+
 	return (
-		<View className="py-3 mx-3 flex-row items-center gap-1 ">
+		<View className="py-3 mx-3 flex-row items-center">
 			<MaterialIcons
 				size={23}
 				color={theme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
@@ -55,13 +69,20 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 				className="px-2"
 				onPress={() => router.back()}
 			/>
-			<Image source={avatar ? {uri: avatar} : images.noperson} style={{width: 43, height: 43, borderRadius: 50}} />
-			<View className="px-2 flex-1">
-				<Text className="text-light-txtcolor-100 text-lg font-semibold line-clamp-1 dark:text-dark-txtcolor-100">
-					{name}
-				</Text>
-				<Text className="text-light-txtcolor-200 line-clamp-1  dark:text-dark-txtcolor-200">{status}</Text>
-			</View>
+			<TouchableOpacity className="flex-1" onPress={handlePress}>
+				<View className="flex-row gap-1">
+					<Image
+						source={avatar ? {uri: avatar} : images.noperson}
+						style={{width: 43, height: 43, borderRadius: 50}}
+					/>
+					<View className="px-2 flex-1">
+						<Text className="text-light-txtcolor-100 text-lg font-semibold line-clamp-1 dark:text-dark-txtcolor-100">
+							{name}
+						</Text>
+						<Text className="text-light-txtcolor-200 line-clamp-1  dark:text-dark-txtcolor-200">{status}</Text>
+					</View>
+				</View>
+			</TouchableOpacity>
 			<Menu list={menuItems} />
 		</View>
 	);

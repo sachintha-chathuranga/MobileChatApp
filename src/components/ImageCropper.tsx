@@ -1,28 +1,25 @@
 import Loading from '@/src/components/Loading';
-import {UpdateUser} from '@/src/constants/types';
+import {CropBackPath, UpdateUser} from '@/src/constants/types';
 import {useAuth} from '@/src/context/authContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
 import {TouchableOpacity} from '@gorhom/bottom-sheet';
 import {SaveFormat, useImageManipulator} from 'expo-image-manipulator';
 import {createAssetAsync, requestPermissionsAsync} from 'expo-media-library';
-import {RelativePathString, router, useLocalSearchParams} from 'expo-router';
+import {router, useLocalSearchParams} from 'expo-router';
 import React, {useCallback, useMemo, useState} from 'react';
 import {Alert, Image, Text, View, useWindowDimensions} from 'react-native';
 import {Gesture, GestureDetector, GestureHandlerRootView} from 'react-native-gesture-handler';
 import Animated, {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-type ImageCropperProps = {
-	redirectPath: RelativePathString;
-};
-
-const ImageCropper: React.FC<ImageCropperProps> = ({redirectPath}) => {
-	const {uri, imageWidth, imageHeight, ratio} = useLocalSearchParams<{
+const ImageCropper = () => {
+	const {uri, imageWidth, imageHeight, ratio, dissmissPath} = useLocalSearchParams<{
 		uri: string;
 		imageWidth: string;
 		imageHeight: string;
 		ratio: string;
+		dissmissPath: CropBackPath;
 	}>();
 
 	const {user, setUser} = useAuth();
@@ -147,9 +144,11 @@ const ImageCropper: React.FC<ImageCropperProps> = ({redirectPath}) => {
 					text: 'OK',
 					onPress: () =>
 						router.dismissTo({
-							pathname: redirectPath,
+							pathname: dissmissPath,
 							params: {
 								img_uri: asset.uri,
+								name: user?.fname + ' ' + user?.lname,
+								editable: 'true',
 							},
 						}),
 				},

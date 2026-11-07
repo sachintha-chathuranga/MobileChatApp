@@ -1,18 +1,21 @@
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from '@gorhom/bottom-sheet';
-import {RelativePathString} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 import React, {useCallback} from 'react';
 import {Pressable, Text, View} from 'react-native';
 import {Colors} from '../constants/theme';
+import {CropBackPath, CropPath} from '../constants/types';
 import ImagePickerComponent from './ImagePicker';
 
 type ImagePickerDrawerProps = {
-	redirectPath: RelativePathString;
+	imageExist: boolean;
+	redirectPath: CropPath;
+	dissmissPath: CropBackPath;
 	snapPoints: (string | number)[];
 	bottomSheetRef: React.RefObject<BottomSheet | null>;
 };
-const ImagePickDrawer: React.FC<ImagePickerDrawerProps> = ({redirectPath, snapPoints, bottomSheetRef}) => {
+const ImagePickDrawer: React.FC<ImagePickerDrawerProps> = ({imageExist, redirectPath, dissmissPath, snapPoints, bottomSheetRef}) => {
 	const {colorScheme} = useColorScheme();
 
 	const renderBackdrop = useCallback(
@@ -59,8 +62,22 @@ const ImagePickDrawer: React.FC<ImagePickerDrawerProps> = ({redirectPath, snapPo
 							Profile picture
 						</Text>
 					</View>
+
+					{imageExist && (
+						<Pressable>
+							<MaterialCommunityIcons
+								name="trash-can-outline"
+								size={24}
+								color={colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
+							/>
+						</Pressable>
+					)}
 				</View>
-				<ImagePickerComponent redirectPath={redirectPath} closeDrawer={handleClosePress} />
+				<ImagePickerComponent
+					redirectPath={redirectPath}
+					dissmissPath={dissmissPath}
+					closeDrawer={handleClosePress}
+				/>
 			</BottomSheetView>
 		</BottomSheet>
 	);

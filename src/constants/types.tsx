@@ -73,3 +73,6 @@ export type Country = {
 export type ThemeType = 'light' | 'dark';
 
 export type VerifyType = 'update-phone' | 'sign-in' | 'update-mail';
+
+export type CropPath = '/profile/crop_image' | '/signup/crop_image';
+export type CropBackPath = '/signup' | '/profile' | '/[img_uri]';

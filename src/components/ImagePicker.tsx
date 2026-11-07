@@ -1,15 +1,17 @@
 import * as ImagePicker from 'expo-image-picker';
-import {RelativePathString, router} from 'expo-router';
+import {Href, RelativePathString, router} from 'expo-router';
 import {useCallback, useState} from 'react';
 import {Alert, View} from 'react-native';
 import IconCard from './IconCard';
 import Loading from './Loading';
+import { CropBackPath, CropPath } from '../constants/types';
 
 type ImagePickerProps = {
-	redirectPath: RelativePathString;
+	redirectPath: CropPath;
+	dissmissPath: CropBackPath;
 	closeDrawer: () => void;
 };
-const ImagePickerComponent: React.FC<ImagePickerProps> = ({redirectPath, closeDrawer}) => {
+const ImagePickerComponent: React.FC<ImagePickerProps> = ({redirectPath, dissmissPath, closeDrawer}) => {
 	const [loading, setLoading] = useState(false);
 
 	const pickImage = useCallback(async () => {
@@ -45,6 +47,7 @@ const ImagePickerComponent: React.FC<ImagePickerProps> = ({redirectPath, closeDr
 						imageWidth: String(assets.width),
 						imageHeight: String(assets.height),
 						ratio: String(aspectRatio),
+						dissmissPath
 					},
 				});
 			}
@@ -83,6 +86,7 @@ const ImagePickerComponent: React.FC<ImagePickerProps> = ({redirectPath, closeDr
 						imageWidth: String(assets.width),
 						imageHeight: String(assets.height),
 						ratio: String(aspectRatio),
+						dissmissPath,
 					},
 				});
 			}

@@ -30,7 +30,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({isSelctionMod, clearSelection, s
 		() => [
 			{
 				id: 1,
-				icon: 'cog-outline',
+				icon: 'account-circle-outline',
 				name: 'Profile',
 				function: () => router.push('/profile'),
 			},

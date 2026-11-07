@@ -89,7 +89,9 @@ const SignUpScreen = () => {
 						<SubmitButton text="Next" disable={!isValid} onSubmit={handleSubmit} />
 					</View>
 					<ImagePickDrawer
-						redirectPath={'./signup/crop_image'}
+						imageExist={Boolean(img_uri)}
+						redirectPath={'/signup/crop_image'}
+						dissmissPath={'/signup'}
 						snapPoints={['28%']}
 						bottomSheetRef={bottomSheetRef}
 					/>

@@ -1,7 +1,8 @@
-import {Stack} from 'expo-router';
+import {Stack, useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 
 export default function HomeLayout() {
+	const router = useRouter();
 	const {colorScheme} = useColorScheme();
 	return (
 		<Stack>
@@ -28,6 +29,13 @@ export default function HomeLayout() {
 			/>
 			<Stack.Screen
 				name="chat"
+				options={{
+					headerShown: false,
+					animation: 'simple_push',
+				}}
+			/>
+			<Stack.Screen
+				name="[img_uri]"
 				options={{
 					headerShown: false,
 					animation: 'simple_push',
