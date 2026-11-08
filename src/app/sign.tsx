@@ -1,6 +1,6 @@
 import {Country} from '@/src/constants/types';
 import {CONSTANT, COUNTRIES} from '@/src/constants/values';
-import {sendOTP} from '@/src/services/apiCalls';
+import {sendPhoneOTP} from '@/src/services/apiCalls';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {useRouter} from 'expo-router';
 import React, {useEffect, useRef, useState} from 'react';
@@ -24,7 +24,7 @@ const SignInScreen = () => {
 
 	const handleSubmit = () => {
 		setSending(true);
-		sendOTP(phone)
+		sendPhoneOTP(phone)
 			.then((data) => {
 				if (!data) return;
 				router.push({
@@ -42,9 +42,7 @@ const SignInScreen = () => {
 
 	useEffect(() => {
 		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
-
 		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
-
 		return () => {
 			showSubscription.remove();
 			hideSubscription.remove();
@@ -55,12 +53,12 @@ const SignInScreen = () => {
 		<GestureHandlerRootView style={{flex: 1}}>
 			<SafeAreaView className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 				<KeyboardAvoidingView
-					style={{flex: 1}}
+					style={isKeyboardVisible ? {flex: 1, paddingBottom: 10} : {flexGrow: 1, paddingBottom: 20}}
 					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 					keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
 				>
 					{sending && <Loading text={'Sending'} />}
-					<View className={`px-5 flex-1 justify-between mt-10 ${isKeyboardVisible ? 'pb-3' : 'pb-0'}`}>
+					<View className={`px-6 flex-1 justify-between mt-10`}>
 						<View className="items-center">
 							<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">
 								Enter your phone number

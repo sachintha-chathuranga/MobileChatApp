@@ -15,7 +15,7 @@ export type User = {
 	lname: string;
 	phone: string;
 	email: string;
-	about: string;
+	about: string | null;
 	profil_pic: string | null;
 	status: boolean;
 };
@@ -25,7 +25,7 @@ export type UpdateUser = {
 	lname?: string;
 	phone?: string;
 	email?: string;
-	about?: string;
+	about?: string | null;
 	profil_pic?: string | null;
 	status?: boolean;
 };

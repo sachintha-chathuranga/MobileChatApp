@@ -6,11 +6,11 @@ import {Country} from '@/src/constants/types';
 import {CONSTANT, COUNTRIES} from '@/src/constants/values';
 import {useAuth} from '@/src/context/authContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
-import {checkPhoneNumber, sendOTP} from '@/src/services/apiCalls';
+import {checkPhoneNumber, sendPhoneOTP} from '@/src/services/apiCalls';
 import BottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet';
 import {useRouter} from 'expo-router';
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, Keyboard, KeyboardAvoidingView, Platform, Pressable, Text, View} from 'react-native';
+import {Alert, Keyboard, KeyboardAvoidingView, Platform, Text, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -36,7 +36,7 @@ const PhoneUpdateScreen = () => {
 			if (!checkRes) return;
 			if (checkRes.isPhoneExist) return Alert.alert('Message', 'This phone number alredy use by another account.');
 			setSending((prev) => (prev = true));
-			sendOTP(phone).then((res) => {
+			sendPhoneOTP(phone).then((res) => {
 				setSending((prev) => (prev = false));
 				if (!res) return;
 				router.replace({
@@ -85,7 +85,7 @@ const PhoneUpdateScreen = () => {
 								system.
 							</Text>
 						</View>
-						<SubmitButton text='Submit' disable={!isValide} onSubmit={handleSubmit} />
+						<SubmitButton text="Submit" disable={!isValide} onSubmit={handleSubmit} />
 					</View>
 					<CountryDrawer bottomSheetRef={bottomSheetRef} setCountry={setCountry} />
 				</KeyboardAvoidingView>

@@ -12,9 +12,19 @@ export const getNewToken = async (refreshToken: string | null) => {
 		return null;
 	}
 };
-export const sendOTP = async (phone: string) => {
+
+export const sendPhoneOTP = async (phone: string) => {
 	try {
-		const res = await axiosPublic.post(`auth/send-otp`, {phone});
+		const res = await axiosPublic.post(`auth/send-phone-otp`, {phone});
+		return res.data;
+	} catch (error: any) {
+		handleError(error);
+		return null;
+	}
+};
+export const sendEmailOTP = async (email: string) => {
+	try {
+		const res = await axiosPublic.post(`auth/send-mail-otp`, {email});
 		return res.data;
 	} catch (error: any) {
 		handleError(error);
@@ -25,7 +35,6 @@ export const sendOTP = async (phone: string) => {
 export const checkPhoneNumber = async (axiosPrivate: Axios, phone: string) => {
 	try {
 		const res = await axiosPrivate.get(`users/phone/${phone}`);
-		console.log(res.data);
 		return res.data;
 	} catch (error: any) {
 		handleError(error);
@@ -80,9 +89,9 @@ export const postMessage = async (axiosPrivate: Axios, msg: NewMessage) => {
 	}
 };
 
-export const logOutCall = async (axiosPrivate: Axios) => {
+export const logOutCall = async (userId: number) => {
 	try {
-		const res = await axiosPrivate.put(`auth/mobile-sign-out`);
+		const res = await axiosPublic.put(`auth/mobile-sign-out`, {userId});
 		return res.status;
 	} catch (err) {
 		handleError(err);
@@ -91,7 +100,7 @@ export const logOutCall = async (axiosPrivate: Axios) => {
 };
 export const userUpdateCall = async (axiosPrivate: Axios, userDetails: UpdateUser) => {
 	try {
-		const res = await axiosPrivate.put(`users/`, userDetails);
+		const res = await axiosPrivate.put(`users/mobile/`, userDetails);
 		return res.status;
 	} catch (err) {
 		handleError(err);

@@ -78,24 +78,28 @@ const ProfileComponent: React.FC<ProfileComponentProps> = ({isUser, user, isLoad
 						iconName="account-outline"
 						title="Name"
 						info={user ? user?.fname + ' ' + (user?.lname ? user.lname : '') : ''}
+						disabled={!isUser}
 						onPress={() => handleCardPress('/profile/name_form')}
 					/>
 					<IconCard
 						iconName="information-variant-circle-outline"
 						title="About"
 						info={user ? user?.about?.replace('|', ' ') : ''}
+						disabled={!isUser}
 						onPress={() => handleCardPress('/profile/about_form')}
 					/>
 					<IconCard
 						iconName="phone-outline"
 						title="Phone"
 						info={user ? user?.phone : ''}
+						disabled={!isUser}
 						onPress={() => handleCardPress('/profile/phone_form')}
 					/>
 					<IconCard
 						iconName="email-outline"
 						title="Email"
 						info={user ? user?.email : ''}
+						disabled={!isUser}
 						onPress={() => handleCardPress('/profile/email_form')}
 					/>
 				</View>

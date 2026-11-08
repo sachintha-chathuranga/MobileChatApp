@@ -1,4 +1,4 @@
-import {sendOTP, signInCall, userUpdateCall, verifyOTP} from '@/src/services/apiCalls';
+import {sendEmailOTP, sendPhoneOTP, signInCall, userUpdateCall, verifyOTP} from '@/src/services/apiCalls';
 import {Link, useLocalSearchParams, useRouter} from 'expo-router';
 import React, {useEffect, useState} from 'react';
 import {Alert, Keyboard, KeyboardAvoidingView, Platform, Pressable, Text, TextInputProps, View} from 'react-native';
@@ -93,10 +93,9 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 	};
 	const resendOTP = () => {
 		setSending(true);
-		sendOTP(param).then((data) => {
-			if (!data) return;
-			setSending(false);
-		});
+		type === 'update-phone'
+			? sendPhoneOTP(param).then(() => setSending(false))
+			: sendEmailOTP(param).then(() => setSending(false));
 	};
 
 	useEffect(() => {
@@ -111,12 +110,12 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 	return (
 		<SafeAreaView className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 			<KeyboardAvoidingView
-				style={{flex: 1}}
+				style={isKeyboardVisible ? {flex: 1} : {flexGrow: 1, paddingBottom: 20}}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+				keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 10}
 			>
 				{(sending || verifying) && <Loading text={`${sending ? 'Sending' : 'Verifying'}`} />}
-				<View className={`px-8 flex-1 justify-between mt-10 ${isKeyboardVisible ? 'pb-3' : 'pb-0'}`}>
+				<View className={`px-6 flex-1 justify-between mt-10`}>
 					<View className="items-center">
 						<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">
 							Verifying your {textToShow}

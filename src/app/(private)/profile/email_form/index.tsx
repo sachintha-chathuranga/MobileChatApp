@@ -3,7 +3,7 @@ import SubmitButton from '@/src/components/SubmitButton';
 import {Colors} from '@/src/constants/theme';
 import {useAuth} from '@/src/context/authContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
-import {checkEmail, sendOTP} from '@/src/services/apiCalls';
+import {checkEmail, sendEmailOTP} from '@/src/services/apiCalls';
 import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 import React, {memo, useEffect, useState} from 'react';
@@ -88,7 +88,7 @@ const ChangeEmailScreen = () => {
 				if (!checkRes) return;
 				if (checkRes.isEmailExist) return Alert.alert('Message', 'This email alredy use by another account.');
 				setSending(true);
-				sendOTP(emailInput)
+				sendEmailOTP(emailInput)
 					.then((res) => {
 						if (!res) return;
 						router.replace({

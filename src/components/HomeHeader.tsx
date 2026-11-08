@@ -10,6 +10,7 @@ import {useAuth} from '../context/authContext';
 import {useSocket} from '../context/socketContext';
 import {useTheme} from '../context/themeContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import {logOutCall} from '../services/apiCalls';
 import Menu from './Menu';
 type HomeHeaderProps = {
 	isSelctionMod: boolean;
@@ -25,6 +26,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({isSelctionMod, clearSelection, s
 	const axiosPrivate = useAxiosPrivate();
 	const {disconnectSocket} = useSocket();
 	const [isChecked, setIsChecked] = useState(false);
+	const {user} = useAuth();
 
 	const menuItems: MenuItem[] = useMemo(
 		() => [
@@ -45,8 +47,12 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({isSelctionMod, clearSelection, s
 				icon: 'logout',
 				name: 'Logout',
 				function: () => {
-					disconnectSocket();
-					signOut(axiosPrivate);
+					user &&
+						logOutCall(user?.user_id).then((data) => {
+							if (!data) return;
+							disconnectSocket();
+							signOut();
+						});
 				},
 			},
 		],

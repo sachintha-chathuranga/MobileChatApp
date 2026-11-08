@@ -1,14 +1,15 @@
 import {useAuth} from '@/src/context/authContext';
-import {getNewToken} from '@/src/services/apiCalls';
+import {getNewToken, logOutCall} from '@/src/services/apiCalls';
 import {axiosPublic} from '@/src/services/requestConfig';
 import {AxiosResponse} from 'axios';
+import {router} from 'expo-router';
 import {useEffect} from 'react';
-import { useSocket } from '../context/socketContext';
-import { router } from 'expo-router';
+import {useSocket} from '../context/socketContext';
 
 const useAxiosPrivate = () => {
 	const {accessToken, refreshToken, signOut, setAccessToken} = useAuth();
 	const {disconnectSocket} = useSocket();
+	const {user} = useAuth();
 
 	useEffect(() => {
 		const requestIntercept = axiosPublic.interceptors.request.use(
@@ -33,9 +34,12 @@ const useAxiosPrivate = () => {
 						prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 						return axiosPublic(prevRequest);
 					}
-					disconnectSocket();
-					router.dismissAll();
-					signOut();
+					user &&
+						logOutCall(user?.user_id).then(() => {
+							disconnectSocket();
+							signOut();
+							router.dismissAll();
+						});
 				}
 				return Promise.reject(err);
 			}

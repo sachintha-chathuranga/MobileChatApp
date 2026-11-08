@@ -2,7 +2,6 @@ import {User} from '@/src/constants/types';
 import {useStorageState} from '@/src/hooks/useStorageState';
 import {Axios} from 'axios';
 import {createContext, useCallback, useContext, useState, type PropsWithChildren} from 'react';
-import {logOutCall} from '../services/apiCalls';
 
 const AuthContext = createContext<{
 	signIn: (user: User, accToken: string, refToken: string) => void;
@@ -44,20 +43,10 @@ export function AuthProvider({children}: PropsWithChildren) {
 		setUser(logedUser);
 	}, []);
 
-	const signOut = useCallback((axiosPrivate?: Axios) => {
-		if (axiosPrivate) {
-			logOutCall(axiosPrivate).then((data) => {
-				if (data) {
-					removeUser();
-					removeRefToken();
-					setAccessToken(null);
-				}
-			});
-		} else {
-			setUser(null);
-			setAccessToken(null);
-			setRefreshToken(null);
-		}
+	const signOut = useCallback(() => {
+		removeUser();
+		removeRefToken();
+		setAccessToken(null);
 	}, []);
 
 	return (

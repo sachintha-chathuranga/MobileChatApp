@@ -31,7 +31,7 @@ const SignUpScreen = () => {
 	const handleSubmit = () => {
 		if (!userId) return;
 		setSending(true);
-		signUp(userId, input, img_uri)
+		signUp(userId, input.trim(), img_uri)
 			.then((data) => {
 				if (!data) return;
 				signIn(data.user, data.accessToken, data.refreshToken);
@@ -46,9 +46,7 @@ const SignUpScreen = () => {
 
 	useEffect(() => {
 		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));
-
 		const hideSubscription = Keyboard.addListener('keyboardDidHide', () => setIsKeyboardVisible(false));
-
 		return () => {
 			showSubscription.remove();
 			hideSubscription.remove();
@@ -59,12 +57,12 @@ const SignUpScreen = () => {
 		<GestureHandlerRootView style={{flex: 1}}>
 			<SafeAreaView className="flex-1 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">
 				<KeyboardAvoidingView
-					style={isKeyboardVisible ? {flex: 1, paddingBottom: 12} : {flexGrow: 1, paddingBottom: 24}}
+					style={isKeyboardVisible ? {flex: 1, paddingBottom: 10} : {flexGrow: 1, paddingBottom: 20}}
 					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 					keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
 				>
 					{sending && <Loading text="Sending" />}
-					<View className={`px-7 flex-1 justify-between mt-10`}>
+					<View className={`px-6 flex-1 justify-between mt-10`}>
 						<View className="items-center">
 							<Text className="text-2xl mb-5 text-light-txtcolor-title dark:text-dark-txtcolor-title">
 								Profile info

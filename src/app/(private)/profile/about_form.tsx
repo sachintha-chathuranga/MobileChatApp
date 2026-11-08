@@ -36,7 +36,6 @@ const AboutForm = () => {
 
 	useEffect(() => {
 		const [emoji, ...parts] = (user?.about ?? '').split('|');
-		console.log(parts);
 		setInput(parts[0]);
 		setEmoji(emoji);
 	}, [user?.about]);
@@ -60,7 +59,11 @@ const AboutForm = () => {
 	const handleSubmit = () => {
 		if (!user) return;
 		setUpdating(true);
-		const about = `${emoji}|${input}`;
+		let about = null;
+		if (emoji && input) {
+			about = `${emoji}|${input}`;
+		}
+		console.log(about);
 		userUpdateCall(axiosPrivate, {about}).then((res) => {
 			setUpdating(false);
 			if (res !== 200) return;

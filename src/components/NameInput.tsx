@@ -17,11 +17,10 @@ const NameInput: React.FC<NameInputProps> = ({onIputChange, input, placeholder, 
 	const handleInputChange = (value: string) => {
 		const spaceCount = (value.match(/ /g) || []).length;
 
-		if (spaceCount > 1) return setError('Please enter only your first name and last name.');
+		if (spaceCount > 2) return setError('Please enter only your first name and last name.');
 		if (value.length > 25) return setError('Name must be less than 26 character!');
 		onIputChange(value);
 		setError('');
-		console.log(value.length);
 		setValidate(6 <= value.length && value.length <= 25);
 	};
 	return (

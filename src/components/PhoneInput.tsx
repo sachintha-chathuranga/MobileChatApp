@@ -44,7 +44,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({phone, setPhone, country, setIsV
 					<MaterialCommunityIcons
 						size={20}
 						name="chevron-right"
-						color={colorScheme ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
+						color={colorScheme === 'dark' ? Colors.dark.txtcolor[100] : Colors.light.txtcolor[100]}
 					/>
 				</Pressable>
 			</View>
