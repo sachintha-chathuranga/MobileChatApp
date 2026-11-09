@@ -18,7 +18,7 @@ const ChatScreen = () => {
 	const [index, setindex] = useState(1);
 	const {messages, setMessages, isMessageFetching, hasMore} = useMessages(Number(id), index);
 	const {user} = useAuth();
-	const {socket} = useSocket();
+	const {socket, isConnected} = useSocket();
 	const [input, setInput] = useState('');
 	const inputRef = useRef<TextInput | null>(null);
 	const axiosPrivate = useAxiosPrivate();
@@ -29,23 +29,24 @@ const ChatScreen = () => {
 	}, []);
 
 	useEffect(() => {
-		if (!socket) return;
+		if (!socket || !isConnected) return;
 		console.log('ChatScreen getMessage listening...');
-		const handler = async (data: any) => {
+		const handleMessage = async (data: any) => {
 			if (data.sender_id === Number(id)) {
 				await readAllMessages(axiosPrivate, Number(id));
 				setMessages((prev) => [data, ...prev]);
 			}
 		};
-		socket.on('getMessage', handler);
+		socket.on('getMessage', handleMessage);
 
 		return () => {
 			console.log('ChatScreen listener Off');
-			socket.off('getMessage', handler);
+			socket.off('getMessage', handleMessage);
 		};
-	}, [socket, setMessages, id]);
+		// eslint-disable-next-line
+	}, [socket, id, isConnected]);
 
-	const sendMessage = useCallback(async () => {
+	const sendMessage = useCallback(() => {
 		if (!input) return;
 		const msg: NewMessage = {
 			sender_id: user!.user_id,
@@ -53,13 +54,15 @@ const ChatScreen = () => {
 			message: input,
 			createdAt: Date.now(),
 		};
-		const newMsg = await postMessage(axiosPrivate, msg);
-
-		socket?.emit('sendMessage', newMsg);
-		setMessages((prev) => [newMsg, ...prev]);
-		inputRef.current?.clear();
-		inputRef?.current?.focus();
-	}, [user?.user_id, id, input, axiosPrivate, socket]);
+		postMessage(axiosPrivate, msg).then((newMsg) => {
+			if (!newMsg) return;
+			socket?.emit('sendMessage', newMsg);
+			setMessages((prev) => [newMsg, ...prev]);
+			inputRef.current?.clear();
+			inputRef?.current?.focus();
+		});
+		// eslint-disable-next-line
+	}, [user?.user_id, id, input, socket]);
 
 	const onClearMessages = useCallback(() => {
 		setMessages([]);

@@ -4,6 +4,7 @@ import HomeHeader from '@/src/components/HomeHeader';
 import Loading from '@/src/components/Loading';
 import SearchButton from '@/src/components/SearchButton';
 import {Friend, Message} from '@/src/constants/types';
+import {useAuth} from '@/src/context/authContext';
 import {useSocket} from '@/src/context/socketContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import useRecentChats from '@/src/hooks/useRecentChats';
@@ -24,7 +25,8 @@ export default function HomeScreen() {
 	const axiosPrivate = useAxiosPrivate();
 	const [refreshing, setRefreshing] = useState(false);
 	const {friends, setFriends, isFetching, hasMore} = useRecentChats(index);
-	const {socket} = useSocket();
+	const {socket, isConnected} = useSocket();
+	const {isLogouting} = useAuth();
 	const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set());
 	const [isSelecionMode, setIsSelecionMode] = useState(false);
 
@@ -96,9 +98,9 @@ export default function HomeScreen() {
 
 	useEffect(() => {
 		console.log('Socket At Home: ' + socket);
-		if (!socket) return;
+		if (!socket || !isConnected) return;
 		console.log('HomeScreen getMessage listening...');
-		const handler = (data: any) => {
+		const handleMessage = (data: any) => {
 			console.log('Message Comming Background');
 			const sender = friendList?.current?.find((f: Friend) => f.user_id === data.sender_id);
 			console.log(data);
@@ -111,16 +113,17 @@ export default function HomeScreen() {
 				return;
 			}
 		};
-		socket.on('getMessage', handler);
+		socket.on('getMessage', handleMessage);
 		return () => {
 			console.log('Home getMessage listner Off');
-			socket.off('getMessage', handler);
+			socket.off('getMessage', handleMessage);
 		};
 		// eslint-disable-next-line
-	}, [socket]);
+	}, [socket, isConnected]);
 
 	return (
 		<SafeAreaView className="bg-light-bgcolor-100 flex-1 dark:bg-dark-bgcolor-100">
+			{isLogouting && <Loading />}
 			<HomeHeader
 				isSelctionMod={isSelecionMode}
 				clearSelection={clearSelection}
