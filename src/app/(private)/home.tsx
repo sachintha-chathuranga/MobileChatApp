@@ -103,7 +103,6 @@ export default function HomeScreen() {
 		const handleMessage = (data: any) => {
 			console.log('Message Comming Background');
 			const sender = friendList?.current?.find((f: Friend) => f.user_id === data.sender_id);
-			console.log(data);
 			setNotification((prev) => [...prev, data]);
 			if (!sender) {
 				console.log('RealTime Fetch Freind');

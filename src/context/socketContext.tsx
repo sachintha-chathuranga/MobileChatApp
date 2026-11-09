@@ -33,14 +33,11 @@ const SocketContextProvider: React.FC<PropsWithChildren> = ({children}) => {
 	}, [accessToken]);
 
 	const connectSocket = useCallback(() => {
-		if (!accessToken || !user) return;
-
+		if (!accessToken) return;
+		console.log("connect Socket call")
+		console.log(socket?.connected)
 		// Prevent duplicate connections
 		if (socket?.connected) return;
-
-		// Disconnect an old socket if necessary
-		socket?.disconnect();
-		socket?.removeAllListeners();
 
 		const newSocket = io(SOCKET_URL, {
 			autoConnect: false,
@@ -51,7 +48,6 @@ const SocketContextProvider: React.FC<PropsWithChildren> = ({children}) => {
 				});
 			},
 
-			// transports: ['websocket'],
 			reconnection: true,
 			reconnectionAttempts: Infinity,
 			reconnectionDelay: 1000,
@@ -75,7 +71,7 @@ const SocketContextProvider: React.FC<PropsWithChildren> = ({children}) => {
 
 		setSocket(newSocket);
 		newSocket.connect();
-	}, [accessToken, user, socket]);
+	}, [accessToken]);
 
 	const disconnectSocket = useCallback(() => {
 		if (!socket) return;
@@ -84,22 +80,16 @@ const SocketContextProvider: React.FC<PropsWithChildren> = ({children}) => {
 		socket.removeAllListeners();
 		setSocket(null);
 		setIsConnected(false);
-
-		console.log('socket Disconnected');
 	}, [socket]);
 
 	// Connect when authenticated
 	useEffect(() => {
-		if (user && accessToken) {
+		if (accessToken) {
 			connectSocket();
 		} else {
 			disconnectSocket();
 		}
-
-		return () => {
-			disconnectSocket();
-		};
-	}, [user?.user_id, accessToken]);
+	}, [accessToken]);
 
 	return (
 		<SocketContext.Provider value={{socket, isConnected, connectSocket, disconnectSocket}}>
