@@ -1,11 +1,11 @@
 import {Axios} from 'axios';
 import {NewMessage, UpdateUser} from '../constants/types';
 import handleError from './errorHandler';
-import {axiosPublic} from './requestConfig';
+import {axiosPublic, axiosRefresh} from './requestConfig';
 
 export const getNewToken = async (refreshToken: string | null) => {
 	try {
-		const res = await axiosPublic.put(`auth/update-mobile-token`, {refreshToken});
+		const res = await axiosRefresh.put(`auth/update-mobile-token`, {refreshToken});
 		return res.data.access_token;
 	} catch (err: any) {
 		handleError(err);

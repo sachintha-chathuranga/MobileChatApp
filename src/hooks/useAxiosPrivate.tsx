@@ -6,6 +6,8 @@ import {router} from 'expo-router';
 import {useEffect} from 'react';
 import {useSocket} from '../context/socketContext';
 
+let promissRequest:Promise<string | null> | null = null
+
 const useAxiosPrivate = () => {
 	const {accessToken, refreshToken, signOut, setAccessToken} = useAuth();
 	const {disconnectSocket} = useSocket();
@@ -27,7 +29,12 @@ const useAxiosPrivate = () => {
 				const prevRequest = err?.config;
 				if (err?.response?.status === 403 && !prevRequest?.sent) {
 					prevRequest.sent = true;
-					const newAccessToken = await getNewToken(refreshToken);
+					if (!promissRequest) {
+						promissRequest = getNewToken(refreshToken).finally(()=> {
+							promissRequest = null;
+						});
+					}
+					const newAccessToken = await promissRequest;
 					if (newAccessToken) {
 						setAccessToken(newAccessToken);
 						prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
