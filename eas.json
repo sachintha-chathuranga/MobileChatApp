@@ -5,7 +5,9 @@
 	"build": {
 		"development": {
 			"distribution": "internal",
+			"developmentClient": true,
 			"android": {
+				"gradleCommand": ":app:assembleRelease",
 				"buildType": "apk"
 			},
 			"env": {
@@ -14,7 +16,14 @@
 			}
 		},
 		"preview": {
-			"distribution": "internal"
+			"distribution": "internal",
+			"android": {
+				"buildType": "apk"
+			},
+			"env": {
+				"EXPO_PUBLIC_API_URL": "http://192.168.42.209:5000/api/",
+				"EXPO_PUBLIC_SOCKET_URL": " http://192.168.42.209:5000/"
+			}
 		},
 		"production": {}
 	},
