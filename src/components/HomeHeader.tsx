@@ -50,7 +50,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({isSelctionMod, clearSelection, s
 				},
 			},
 		],
-		[theme, disconnectSocket]
+		[theme, disconnectSocket, toggleTheme]
 	);
 
 	const handleBackPress = (onlyClear: boolean) => {

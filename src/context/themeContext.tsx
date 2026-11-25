@@ -32,6 +32,10 @@ export const CustomThemeProvider = ({children}: PropsWithChildren) => {
 	}, [theme]);
 
 	const toggleTheme = useCallback(async () => {
+		if (!theme) {
+			setTheme('dark');
+			return;
+		}
 		const newTheme = theme === 'light' ? 'dark' : 'light';
 		setTheme(newTheme);
 	}, [theme]);

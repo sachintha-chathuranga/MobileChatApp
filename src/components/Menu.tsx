@@ -1,11 +1,11 @@
 import {Colors} from '@/src/constants/theme';
-import {useTheme} from '@/src/context/themeContext';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
 import React, {memo, useState} from 'react';
 import {Modal, Pressable, Text, TouchableHighlight, View} from 'react-native';
 import {MenuItem} from '../constants/types';
+import { useTheme } from '../context/themeContext';
 type MenuProps = {
 	list: MenuItem[];
 };
