@@ -9,7 +9,6 @@ type SearchBarProps = {
 	onChangeText: (text: string) => void;
 };
 const SearchInputBar: React.FC<SearchBarProps> = ({value, onChangeText}) => {
-	console.log('SearchInputBar Rendered');
 	const router = useRouter();
 	const {colorScheme} = useColorScheme();
 

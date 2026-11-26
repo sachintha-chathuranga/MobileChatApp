@@ -2,7 +2,7 @@ import {images} from '@/src/assets/images';
 import SubmitButton from '@/src/components/SubmitButton';
 import {useRouter} from 'expo-router';
 import React from 'react';
-import {Image, Pressable, Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const PhoneUpdateFirstScreen = () => {

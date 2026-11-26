@@ -11,7 +11,6 @@ const useRecentChats = (index: number) => {
 	const axiosPrivate = useAxiosPrivate();
 	// Initial load & Focus load, // useFocus use to update friend last msg every time when Home screen focus 
 	useFocusEffect(
-
 		useCallback(() => {
 			if (!axiosPrivate) return;
 			setIsFetching(true);

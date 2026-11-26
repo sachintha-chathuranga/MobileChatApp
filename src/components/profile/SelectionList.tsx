@@ -14,7 +14,7 @@ interface SelectionListProps {
 const SelectionList: React.FC<SelectionListProps> = ({options, onSelect}) => {
 	const [selected, setSelected] = useState<number | null>(null);
 	const {colorScheme} = useColorScheme();
-	
+
 	const handleSelected = (item: AboutItem) => {
 		setSelected(item.id);
 		onSelect(item);

@@ -1,4 +1,4 @@
-import ImagePickDrawer from '@/src/components/ImagePickDrawer';
+import ImagePickDrawer from '@/src/components/drawer/ImagePickDrawer';
 import {Colors} from '@/src/constants/theme';
 import {useTheme} from '@/src/context/themeContext';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';

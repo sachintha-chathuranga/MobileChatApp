@@ -11,9 +11,10 @@ import CountryDrawer from '../components/CountryDrawer';
 import Loading from '../components/Loading';
 import PhoneInput from '../components/PhoneInput';
 import SubmitButton from '../components/SubmitButton';
+import {useTheme} from '../context/themeContext';
+import handleError from '../services/errorHandler';
 
 const SignInScreen = () => {
-	console.log('SignIn Screen Rendered!');
 	const [country, setCountry] = useState<Country | null>(COUNTRIES[0]);
 	const [sending, setSending] = useState(false);
 	const [phone, setPhone] = useState('');
@@ -21,12 +22,12 @@ const SignInScreen = () => {
 	const [isValide, setIsValide] = useState(false);
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+	const {theme} = useTheme();
 
 	const handleSubmit = () => {
 		setSending(true);
 		sendPhoneOTP(phone)
-			.then((data) => {
-				if (!data) return;
+			.then((response) => {
 				router.push({
 					pathname: '/verify',
 					params: {
@@ -34,6 +35,7 @@ const SignInScreen = () => {
 					},
 				});
 			})
+			.catch((error) => handleError(error, theme))
 			.finally(() => setSending(false));
 	};
 	useEffect(() => {

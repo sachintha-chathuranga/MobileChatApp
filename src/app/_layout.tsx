@@ -30,7 +30,6 @@ export default function RootLayout() {
 
 // Create a new component that can access the SessionProvider context later.
 function RootNavigator() {
-	console.log('Root Navigator Rendered!');
 	const {user, loadingUser} = useAuth();
 
 	if (loadingUser) {

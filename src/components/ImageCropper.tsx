@@ -1,5 +1,5 @@
 import Loading from '@/src/components/Loading';
-import {CropBackPath, UpdateUser} from '@/src/constants/types';
+import {CropBackPath, ThemeType, UpdateUser} from '@/src/constants/types';
 import {useAuth} from '@/src/context/authContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
@@ -12,6 +12,8 @@ import {Alert, Image, Text, View, useWindowDimensions} from 'react-native';
 import {Gesture, GestureDetector, GestureHandlerRootView} from 'react-native-gesture-handler';
 import Animated, {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTheme} from '../context/themeContext';
+import handleError from '../services/errorHandler';
 
 const ImageCropper = () => {
 	const {uri, imageWidth, imageHeight, ratio, dissmissPath} = useLocalSearchParams<{
@@ -27,6 +29,7 @@ const ImageCropper = () => {
 	const {width, height} = useWindowDimensions();
 	const context = useImageManipulator(uri);
 	const axiosPrivate = useAxiosPrivate();
+	const {theme} = useTheme();
 
 	const IMAGE_CONTAINER_WIDTH = useMemo(() => width - 40, [width]);
 	const IMAGE_CONTAINER_HEIGHT = useMemo(() => height - 100, [height]);
@@ -132,31 +135,32 @@ const ImageCropper = () => {
 				const data: UpdateUser = {
 					profil_pic: asset.uri,
 				};
-				const statusCode = await userUpdateCall(axiosPrivate, data);
-				if (statusCode === 200) {
-					console.log('Save User Profile picture succsufully');
-					setUser({...user, profil_pic: asset.uri});
-				}
+				await userUpdateCall(axiosPrivate, data);
+				setUser({...user, profil_pic: asset.uri});
 			}
 			setSaving(false);
-			Alert.alert('Success', 'Image saved to your gallery!', [
-				{
-					text: 'OK',
-					onPress: () =>
-						router.dismissTo({
-							pathname: dissmissPath,
-							params: {
-								img_uri: asset.uri,
-								name: user?.fname + ' ' + user?.lname,
-								editable: 'true',
-							},
-						}),
-				},
-			]);
+			Alert.alert(
+				'Success',
+				'Image saved to your gallery!',
+				[
+					{
+						text: 'OK',
+						onPress: () =>
+							router.dismissTo({
+								pathname: dissmissPath,
+								params: {
+									img_uri: asset.uri,
+									name: user?.fname + ' ' + user?.lname,
+									editable: 'true',
+								},
+							}),
+					},
+				],
+				{userInterfaceStyle: theme as ThemeType}
+			);
 		} catch (error) {
 			setSaving(false);
-			console.error('Image crop error:', error);
-			Alert.alert('Error', 'Could not crop and save the image.');
+			handleError(error, theme);
 		}
 	}, [imageWidth, imageHeight, IMAGE_WIDTH, IMAGE_HEIGHT]);
 

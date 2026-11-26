@@ -1,13 +1,15 @@
-import InputField from '@/src/components/ChatFooter';
-import ChatHeader from '@/src/components/ChatHeader';
-import IncomeMsg from '@/src/components/IncomeMsg';
-import OutgoingMsg from '@/src/components/OutgoingMsg';
+import InputField from '@/src/components/chat/ChatFooter';
+import ChatHeader from '@/src/components/chat/ChatHeader';
+import IncomeMsg from '@/src/components/chat/IncomeMsg';
+import OutgoingMsg from '@/src/components/chat/OutgoingMsg';
 import {NewMessage} from '@/src/constants/types';
 import {useAuth} from '@/src/context/authContext';
 import {useSocket} from '@/src/context/socketContext';
+import {useTheme} from '@/src/context/themeContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import useMessages from '@/src/hooks/useMessages';
 import {postMessage, readAllMessages} from '@/src/services/apiCalls';
+import handleError from '@/src/services/errorHandler';
 import {useLocalSearchParams} from 'expo-router';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, Keyboard, KeyboardAvoidingView, Platform, TextInput, View} from 'react-native';
@@ -23,6 +25,7 @@ const ChatScreen = () => {
 	const inputRef = useRef<TextInput | null>(null);
 	const axiosPrivate = useAxiosPrivate();
 	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+	const {theme} = useTheme();
 
 	useEffect(() => {
 		readAllMessages(axiosPrivate, Number(id));
@@ -54,13 +57,14 @@ const ChatScreen = () => {
 			message: input,
 			createdAt: Date.now(),
 		};
-		postMessage(axiosPrivate, msg).then((newMsg) => {
-			if (!newMsg) return;
-			socket?.emit('sendMessage', newMsg);
-			setMessages((prev) => [newMsg, ...prev]);
-			inputRef.current?.clear();
-			inputRef?.current?.focus();
-		});
+		postMessage(axiosPrivate, msg)
+			.then((res) => {
+				socket?.emit('sendMessage', res.data);
+				setMessages((prev) => [res.data, ...prev]);
+				inputRef.current?.clear();
+				inputRef?.current?.focus();
+			})
+			.catch((error) => handleError(error, theme));
 		// eslint-disable-next-line
 	}, [user?.user_id, id, input, socket]);
 

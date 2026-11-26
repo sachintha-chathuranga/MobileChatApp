@@ -4,8 +4,8 @@ import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from '@gorhom/bottom-
 import {useColorScheme} from 'nativewind';
 import React, {useCallback} from 'react';
 import {Pressable, Text, View} from 'react-native';
-import {Colors} from '../constants/theme';
-import {CropBackPath, CropPath} from '../constants/types';
+import {Colors} from '../../constants/theme';
+import {CropBackPath, CropPath} from '../../constants/types';
 import ImagePickerComponent from './ImagePicker';
 
 type ImagePickerDrawerProps = {
@@ -15,7 +15,13 @@ type ImagePickerDrawerProps = {
 	snapPoints: (string | number)[];
 	bottomSheetRef: React.RefObject<BottomSheet | null>;
 };
-const ImagePickDrawer: React.FC<ImagePickerDrawerProps> = ({imageExist, redirectPath, dissmissPath, snapPoints, bottomSheetRef}) => {
+const ImagePickDrawer: React.FC<ImagePickerDrawerProps> = ({
+	imageExist,
+	redirectPath,
+	dissmissPath,
+	snapPoints,
+	bottomSheetRef,
+}) => {
 	const {colorScheme} = useColorScheme();
 
 	const renderBackdrop = useCallback(

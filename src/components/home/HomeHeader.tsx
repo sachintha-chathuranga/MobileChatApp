@@ -3,13 +3,13 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
 import React, {memo, useMemo, useState} from 'react';
 import {Pressable, Text, View} from 'react-native';
-import {Colors} from '../constants/theme';
-import {MenuItem} from '../constants/types';
-import {CONSTANT} from '../constants/values';
-import {useAuth} from '../context/authContext';
-import {useSocket} from '../context/socketContext';
-import {useTheme} from '../context/themeContext';
-import Menu from './Menu';
+import {Colors} from '../../constants/theme';
+import {MenuItem} from '../../constants/types';
+import {CONSTANT} from '../../constants/values';
+import {useAuth} from '../../context/authContext';
+import {useSocket} from '../../context/socketContext';
+import {useTheme} from '../../context/themeContext';
+import Menu from '../Menu';
 type HomeHeaderProps = {
 	isSelctionMod: boolean;
 	clearSelection: (onlyClear: boolean) => void;
@@ -17,7 +17,6 @@ type HomeHeaderProps = {
 	onDeletPress: () => void;
 };
 const HomeHeader: React.FC<HomeHeaderProps> = ({isSelctionMod, clearSelection, selectAll, onDeletPress}) => {
-	console.log('Home Header rendered!');
 	const router = useRouter();
 	const {toggleTheme, theme} = useTheme();
 	const {signOut} = useAuth();

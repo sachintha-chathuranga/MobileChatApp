@@ -11,7 +11,6 @@ type CountryDrawerProps = {
 	setCountry: (country: Country) => void;
 };
 const CountryDrawer: React.FC<CountryDrawerProps> = ({bottomSheetRef, setCountry}) => {
-	console.log('Country Drawer Rendered');
 	const snapPoints = useMemo(() => ['30%', '50%'], []);
 	const {colorScheme} = useColorScheme();
 	const renderBackdrop = useCallback(

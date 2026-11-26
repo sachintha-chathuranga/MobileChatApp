@@ -15,7 +15,6 @@ type PhoneInputProps = {
 	bottomSheetRef: React.RefObject<BottomSheet | null>;
 };
 const PhoneInput: React.FC<PhoneInputProps> = ({phone, setPhone, country, setIsValide, bottomSheetRef}) => {
-	console.log('Phone Input Rendered!');
 	const {colorScheme} = useColorScheme();
 	const validate = (input: string) => {
 		console.log(input.length);

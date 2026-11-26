@@ -10,12 +10,12 @@ const FriendProfileScreen = () => {
 		id: string;
 	}>();
 	const [friend, setFriend] = useState(null);
-	const [loading, setLoading] = useState(true)
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		if (!Boolean(id)) return;
 		fetchFriend(axiosPrivate, Number(id)).then((data) => {
-			if(!data) return;
+			if (!data) return;
 			setFriend(data);
 			setLoading(false);
 		});

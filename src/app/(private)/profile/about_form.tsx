@@ -1,15 +1,16 @@
-import EmojiKeyboard from '@/src/components/EmojiKeyboard';
 import Loading from '@/src/components/Loading';
-import SelectionList from '@/src/components/SelectionList';
+import EmojiKeyboard from '@/src/components/profile/EmojiKeyboard';
+import SelectionList from '@/src/components/profile/SelectionList';
 import {Colors} from '@/src/constants/theme';
 import {AboutItem} from '@/src/constants/types';
 import {useAuth} from '@/src/context/authContext';
+import {useTheme} from '@/src/context/themeContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
+import handleError from '@/src/services/errorHandler';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
-import {useColorScheme} from 'nativewind';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Keyboard, KeyboardAvoidingView, Platform, Pressable, Text, TextInput, View} from 'react-native';
 import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
@@ -29,7 +30,7 @@ const AboutForm = () => {
 	const [showEmojiKeyboard, setShowEmojiKeyboard] = useState(false);
 	const [emoji, setEmoji] = useState('');
 	const inputRef = useRef<TextInput>(null);
-	const {colorScheme} = useColorScheme();
+	const {theme} = useTheme();
 	const {user, setUser} = useAuth();
 	const axiosPrivate = useAxiosPrivate();
 	const [updating, setUpdating] = useState(false);
@@ -64,12 +65,13 @@ const AboutForm = () => {
 			about = `${emoji}|${input}`;
 		}
 		console.log(about);
-		userUpdateCall(axiosPrivate, {about}).then((res) => {
-			setUpdating(false);
-			if (res !== 200) return;
-			setUser({...user, about});
-			router.back();
-		});
+		userUpdateCall(axiosPrivate, {about})
+			.then((res) => {
+				setUser({...user, about});
+				router.back();
+			})
+			.catch((error) => handleError(error, theme))
+			.finally(() => setUpdating(false));
 	};
 	return (
 		<GestureHandlerRootView style={{flex: 1}}>
@@ -89,7 +91,7 @@ const AboutForm = () => {
 							>
 								{emoji === '' ? (
 									<MaterialIcons
-										color={colorScheme === 'dark' ? Colors.dark.txtcolor[200] : Colors.light.txtcolor[200]}
+										color={theme === 'dark' ? Colors.dark.txtcolor[200] : Colors.light.txtcolor[200]}
 										size={24}
 										name="tag-faces"
 									/>
@@ -105,7 +107,7 @@ const AboutForm = () => {
 									className="text-light-txtcolor-100 border-b-2 border-light-border-primary py-2 dark:border-dark-border-primary dark:text-dark-txtcolor-100"
 									value={input}
 									placeholder="What's happening?"
-									placeholderTextColor={colorScheme === 'dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
+									placeholderTextColor={theme === 'dark' ? Colors.dark.inputtxt : Colors.light.inputtxt}
 									underlineColorAndroid="transparent"
 									autoFocus
 									onFocus={() => setShowEmojiKeyboard(false)}

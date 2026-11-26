@@ -2,8 +2,10 @@ import Loading from '@/src/components/Loading';
 import SubmitButton from '@/src/components/SubmitButton';
 import {Colors} from '@/src/constants/theme';
 import {useAuth} from '@/src/context/authContext';
+import {useTheme} from '@/src/context/themeContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {checkEmail, sendEmailOTP} from '@/src/services/apiCalls';
+import handleError from '@/src/services/errorHandler';
 import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 import React, {memo, useEffect, useState} from 'react';
@@ -54,8 +56,7 @@ const ChangeEmailScreen = () => {
 	const {user} = useAuth();
 	const [emailInput, setInput] = useState(user?.email ?? '');
 	const axiosPrivate = useAxiosPrivate();
-
-	console.log('Email Screen rendered');
+	const {theme} = useTheme();
 
 	const validateEmail = (email: string): boolean => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -85,12 +86,9 @@ const ChangeEmailScreen = () => {
 		setChecking(true);
 		checkEmail(axiosPrivate, emailInput)
 			.then((checkRes) => {
-				if (!checkRes) return;
-				if (checkRes.isEmailExist) return Alert.alert('Message', 'This email alredy use by another account.');
 				setSending(true);
 				sendEmailOTP(emailInput)
 					.then((res) => {
-						if (!res) return;
 						router.replace({
 							pathname: '/profile/email_form/verify_screen',
 							params: {
@@ -98,8 +96,10 @@ const ChangeEmailScreen = () => {
 							},
 						});
 					})
+					.catch((error) => handleError(error, theme))
 					.finally(() => setSending(false));
 			})
+			.catch((error) => handleError(error, theme))
 			.finally(() => setChecking(false));
 		// router.push('/profile/email_form/verify_screen');
 	};

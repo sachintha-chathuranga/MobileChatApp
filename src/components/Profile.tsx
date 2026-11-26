@@ -1,6 +1,6 @@
 import {images} from '@/src/assets/images';
 import IconCard from '@/src/components/IconCard';
-import ImagePickDrawer from '@/src/components/ImagePickDrawer';
+import ImagePickDrawer from '@/src/components/drawer/ImagePickDrawer';
 import {Colors} from '@/src/constants/theme';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {Href, router} from 'expo-router';

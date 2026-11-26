@@ -54,3 +54,16 @@ Join our community of developers creating universal apps.
 1.Run the command `npx expo prebuild -p android` to build android bundels.
 
 2.Run the command inside of android folder `./gradlew assembleRelease` to build apk file.
+
+## Run installed app on connected device using terminal
+
+1.Make sure connect device using usb cable and enable usb debuggin.
+
+2.Run the command `npx expo start --no-dev --minify` on terminal and press 'a' to run application.
+ or Run the command `npx expo start --dev-client` launch the app with dev tools.
+
+## Build, Install, and lauch the app on connected device
+
+1.Connect and enable usb debugging mode on your device.
+
+2.Run the command `npx expo run:android --device`

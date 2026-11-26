@@ -3,8 +3,10 @@ import NameInput from '@/src/components/NameInput';
 import SubmitButton from '@/src/components/SubmitButton';
 import {UpdateUser} from '@/src/constants/types';
 import {useAuth} from '@/src/context/authContext';
+import {useTheme} from '@/src/context/themeContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
+import handleError from '@/src/services/errorHandler';
 import {useRouter} from 'expo-router';
 import React, {useEffect, useState} from 'react';
 import {Keyboard, KeyboardAvoidingView, Platform, Text, View} from 'react-native';
@@ -18,6 +20,7 @@ const NameForm = () => {
 	const [updating, setUpdating] = useState(false);
 	const [isValid, setIsValid] = useState(false);
 	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+	const {theme} = useTheme();
 
 	const handleSubmit = () => {
 		if (!user) return;
@@ -29,13 +32,13 @@ const NameForm = () => {
 			fname: fname,
 			lname: lname ?? '',
 		};
-		userUpdateCall(axiosPrivate, data).then((res) => {
-			setUpdating(false);
-			if (res === 200) {
+		userUpdateCall(axiosPrivate, data)
+			.then((res) => {
 				setUser({...user, fname: String(data.fname), lname: String(data.lname)});
 				router.back();
-			}
-		});
+			})
+			.catch((error) => handleError(error, theme))
+			.finally(() => setUpdating(false));
 	};
 	useEffect(() => {
 		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));

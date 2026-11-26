@@ -4,9 +4,11 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Keyboard, KeyboardAvoidingView, Platform, Pressable, Text, TextInputProps, View} from 'react-native';
 import {CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell} from 'react-native-confirmation-code-field';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {VerifyType} from '../constants/types';
+import {ThemeType, VerifyType} from '../constants/types';
 import {useAuth} from '../context/authContext';
+import {useTheme} from '../context/themeContext';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import handleError from '../services/errorHandler';
 import Loading from './Loading';
 import SubmitButton from './SubmitButton';
 const CELL_COUNT = 6;
@@ -31,9 +33,12 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 	const axiosPrivate = useAxiosPrivate();
 	const textToShow = type === 'update-mail' ? 'email' : 'phone number';
+	const {theme} = useTheme();
+
 	const validateInput = (text: string) => {
 		text.length === CELL_COUNT ? setIsValide(true) : setIsValide(false);
 	};
+
 	const handleInputChange = (text: string) => {
 		setOtp(text);
 		validateInput(text);
@@ -44,58 +49,77 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 			.then(async (verifyRes) => {
 				switch (type) {
 					case 'sign-in':
-						await signInCall(verifyRes).then((res) => {
-							if (!res) return;
-							if (res.user.fname) return signIn(res.user, res.accessToken, res.refreshToken);
-							router.replace({
-								pathname: `/signup`,
-								params: {
-									user_id: res.user.user_id,
-								},
-							});
-						});
+						await signInCall(verifyRes.data)
+							.then((res) => {
+								if (res.data.user.fname)
+									return signIn(res.data.user, res.data.accessToken, res.data.refreshToken);
+								router.replace({
+									pathname: `/signup`,
+									params: {
+										user_id: res.data.user.user_id,
+									},
+								});
+							})
+							.catch((error) => handleError(error, theme));
 						break;
 					case 'update-phone':
 						if (!user) return;
-						await userUpdateCall(axiosPrivate, {phone: verifyRes}).then((res) => {
-							if (res !== 200) return;
-							setUser({...user, phone: verifyRes});
-							Alert.alert('Success', 'Your phone number changed succesfully.', [
-								{
-									text: 'OK',
-									onPress: () => router.dismissTo('/(private)/profile'),
-								},
-							]);
-						});
+						await userUpdateCall(axiosPrivate, {phone: verifyRes.data})
+							.then((res) => {
+								setUser({...user, phone: verifyRes.data});
+								Alert.alert(
+									'Success',
+									'Your phone number changed succesfully.',
+									[
+										{
+											text: 'OK',
+											onPress: () => router.dismissTo('/(private)/profile'),
+										},
+									],
+									{userInterfaceStyle: theme as ThemeType}
+								);
+							})
+							.catch((error) => handleError(error, theme));
 						break;
 					case 'update-mail':
 						if (!user) return;
-						await userUpdateCall(axiosPrivate, {email: param}).then((res) => {
-							if (res !== 200) return;
-							setUser({...user, email: param});
-							Alert.alert('Success', 'Your email changed succesfully.', [
-								{
-									text: 'OK',
-									onPress: () => router.dismissTo('/(private)/profile'),
-								},
-							]);
-						});
-
+						await userUpdateCall(axiosPrivate, {email: param})
+							.then((res) => {
+								setUser({...user, email: param});
+								Alert.alert(
+									'Success',
+									'Your email changed succesfully.',
+									[
+										{
+											text: 'OK',
+											onPress: () => router.dismissTo('/(private)/profile'),
+										},
+									],
+									{userInterfaceStyle: theme as ThemeType}
+								);
+							})
+							.catch((error) => handleError(error, theme));
 						break;
 					default:
 						break;
 				}
 			})
 			.catch((error) => {
+				handleError(error, theme);
 				setOtp('');
 			})
 			.finally(() => setVerifying(false));
 	};
+
 	const resendOTP = () => {
 		setSending(true);
-		type === 'update-phone'
-			? sendPhoneOTP(param).then(() => setSending(false))
-			: sendEmailOTP(param).then(() => setSending(false));
+		type === 'update-mail'
+			? sendEmailOTP(param)
+					.catch((error) => handleError(error, theme))
+					.finally(() => setSending(false))
+			: sendPhoneOTP(param)
+					.catch((error) => handleError(error, theme))
+					.finally(() => setSending(false));
 	};
 
 	useEffect(() => {

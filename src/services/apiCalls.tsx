@@ -1,94 +1,46 @@
 import {Axios} from 'axios';
 import {NewMessage, UpdateUser} from '../constants/types';
-import handleError from './errorHandler';
 import {axiosPublic, axiosRefresh} from './requestConfig';
-import { API_URL } from '../constants/config';
 
 export const getNewToken = async (refreshToken: string | null) => {
 	try {
 		const res = await axiosRefresh.put(`auth/update-mobile-token`, {refreshToken});
 		return res.data.access_token;
 	} catch (err: any) {
-		handleError(err);
 		return null;
 	}
 };
 
 export const sendPhoneOTP = async (phone: string) => {
-	try {
-		console.log(API_URL)
-		const res = await axiosPublic.post(`auth/send-phone-otp`, {phone});
-		return res.data;
-	} catch (error: any) {
-		handleError(error);
-		return null;
-	}
+	return await axiosPublic.post(`auth/send-phone-otp`, {phone});
 };
+
 export const sendEmailOTP = async (email: string) => {
-	try {
-		const res = await axiosPublic.post(`auth/send-mail-otp`, {email});
-		return res.data;
-	} catch (error: any) {
-		handleError(error);
-		return null;
-	}
+	return await axiosPublic.post(`auth/send-mail-otp`, {email});
 };
 
 export const checkPhoneNumber = async (axiosPrivate: Axios, phone: string) => {
-	try {
-		const res = await axiosPrivate.get(`users/phone/${phone}`);
-		return res.data;
-	} catch (error: any) {
-		handleError(error);
-		return null;
-	}
+	return await axiosPrivate.get(`users/phone/${phone}`);
 };
+
 export const checkEmail = async (axiosPrivate: Axios, email: string) => {
-	try {
-		const res = await axiosPrivate.get(`users/email/${email}`);
-		return res.data;
-	} catch (error: any) {
-		handleError(error);
-		return null;
-	}
+	return await axiosPrivate.get(`users/email/${email}`);
 };
+
 export const verifyOTP = async (phone: string, otp: string) => {
-	try {
-		const res = await axiosPublic.post(`auth/verify-otp`, {phone, otp});
-		return res.data;
-	} catch (error: any) {
-		handleError(error);
-		throw error;
-	}
+	return await axiosPublic.post(`auth/verify-otp`, {phone, otp});
 };
+
 export const signInCall = async (phone: string) => {
-	try {
-		const res = await axiosPublic.post(`auth/mobile-sign-in`, {phone});
-		return res.data;
-	} catch (error: any) {
-		handleError(error);
-		return null;
-	}
+	return await axiosPublic.post(`auth/mobile-sign-in`, {phone});
 };
 
 export const signUp = async (userId: number, userName: string, userImage: string | undefined) => {
-	try {
-		const res = await axiosPublic.post(`auth/mobile-sign-up`, {userId, userName, userImage});
-		return res.data;
-	} catch (error) {
-		handleError(error);
-		return null;
-	}
+	return await axiosPublic.post(`auth/mobile-sign-up`, {userId, userName, userImage});
 };
 
 export const postMessage = async (axiosPrivate: Axios, msg: NewMessage) => {
-	try {
-		const res = await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
-		return res.data;
-	} catch (error) {
-		handleError(error);
-		return null;
-	}
+	return await axiosPrivate.post(`messages/message`, JSON.stringify(msg));
 };
 
 export const logOutCall = async (userId: number) => {
@@ -96,18 +48,12 @@ export const logOutCall = async (userId: number) => {
 		const res = await axiosPublic.put(`auth/mobile-sign-out`, {userId});
 		return res.status;
 	} catch (err) {
-		handleError(err);
 		return null;
 	}
 };
+
 export const userUpdateCall = async (axiosPrivate: Axios, userDetails: UpdateUser) => {
-	try {
-		const res = await axiosPrivate.put(`users/mobile/`, userDetails);
-		return res.status;
-	} catch (err) {
-		handleError(err);
-		return 500;
-	}
+	return await axiosPrivate.put(`users/mobile/`, userDetails);
 };
 // export const userDeleteCall = async (axiosPrivate, userCredintial) => {
 // 	try {
@@ -129,7 +75,6 @@ export const fetchRecentChats = async (axiosPrivate: Axios, index: number) => {
 		const res = await axiosPrivate.get(`users/recentFriends?index=${index}`);
 		return res.data;
 	} catch (error) {
-		handleError(error);
 		return [];
 	}
 };
@@ -138,7 +83,6 @@ export const fetchFriendList = async (axiosPrivate: Axios, index: number | null)
 		const res = await axiosPrivate.get(index ? `users/friends?index=${index}` : `users/friends`);
 		return res.data;
 	} catch (error) {
-		handleError(error);
 		return [];
 	}
 };
@@ -147,7 +91,6 @@ export const fetchFriend = async (axiosPrivate: Axios, friendId: number) => {
 		const res = await axiosPrivate.get(`users/${friendId}`);
 		return res.data;
 	} catch (error) {
-		handleError(error);
 		return null;
 	}
 };
@@ -157,7 +100,6 @@ export const searchFriends = async (axiosPrivate: Axios, index: number | null, s
 		const res = await axiosPrivate.post(index ? `users/search?index=${index}` : `users/search`, {name: searchInput});
 		return res.data;
 	} catch (error) {
-		handleError(error);
 		return [];
 	}
 };
@@ -167,18 +109,14 @@ export const fetchMessages = async (axiosPrivate: Axios, friend_id: number, inde
 		const res = await axiosPrivate.get(`messages/message?friend_id=${friend_id}&order_by=DESC&index=${index}`);
 		return res.data;
 	} catch (error) {
-		handleError(error);
 		return [];
 	}
 };
+
 export const clearMessages = (axiosPrivate: Axios, friend_id: number) => {
-	axiosPrivate
-		.delete(`messages/messages/clear?friend_id=${friend_id}`)
-		.then((res) => {})
-		.catch((err) => {
-			handleError(err);
-		});
+	axiosPrivate.delete(`messages/messages/clear?friend_id=${friend_id}`).catch((error) => console.error(error));
 };
+
 export const deleteSelectedUserMessages = async (axiosPrivate: Axios, selectedUsers: Set<number>) => {
 	return axiosPrivate
 		.delete(`messages/messages/clear-selected`, {
@@ -195,7 +133,7 @@ export const readAllMessages = async (axiosPrivate: Axios, friend_id: number) =>
 	try {
 		await axiosPrivate.put(`messages/messages/update?friend_id=${friend_id}`);
 	} catch (err) {
-		handleError(err);
+		console.error(err);
 	}
 };
 export const fetchAllNotification = async (axiosPrivate: Axios) => {
@@ -203,7 +141,6 @@ export const fetchAllNotification = async (axiosPrivate: Axios) => {
 		const res = await axiosPrivate.get(`messages/messages/notifications`);
 		return res.data;
 	} catch (err) {
-		handleError(err);
 		return null;
 	}
 };

@@ -6,7 +6,6 @@ type SubmitButtonProps = {
 	onSubmit: () => void;
 };
 const SubmitButton: React.FC<SubmitButtonProps> = ({text, disable, onSubmit}) => {
-	console.log('SubmitButton rendered');
 	return (
 		<Pressable
 			className={`w-full p-3  rounded-full items-center ${!disable ? 'bg-light-bgcolor-primary dark:bg-dark-bgcolor-primary' : 'bg-light-bgcolor-inactive dark:bg-dark-bgcolor-inactive'}`}

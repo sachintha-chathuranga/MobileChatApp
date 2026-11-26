@@ -1,15 +1,14 @@
 import FriendCard from '@/src/components/FriendCard';
-import GuestList from '@/src/components/GuestList';
-import HomeHeader from '@/src/components/HomeHeader';
+import GuestList from '@/src/components/home/GuestList';
+import HomeHeader from '@/src/components/home/HomeHeader';
+import SearchButton from '@/src/components/home/SearchButton';
 import Loading from '@/src/components/Loading';
-import SearchButton from '@/src/components/SearchButton';
 import {Friend, Message} from '@/src/constants/types';
 import {useAuth} from '@/src/context/authContext';
 import {useSocket} from '@/src/context/socketContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import useRecentChats from '@/src/hooks/useRecentChats';
 import {deleteSelectedUserMessages, fetchAllNotification, fetchFriend, fetchRecentChats} from '@/src/services/apiCalls';
-import handleError from '@/src/services/errorHandler';
 import {useFocusEffect} from 'expo-router';
 
 import {useCallback, useEffect, useRef, useState} from 'react';
@@ -18,7 +17,6 @@ import {FlatList, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
-	console.log('Home Screen Rendered!');
 	const [index, setindex] = useState(1);
 	const [notification, setNotification] = useState<Message[]>([]);
 	const friendList = useRef<Friend[]>(null);
@@ -67,20 +65,17 @@ export default function HomeScreen() {
 				setFriends(remaining);
 				clearSelection(false);
 			})
-			.catch(handleError);
+			.catch((error) => console.error(error));
 	}, [selectedUsers, friends]);
 
 	// useFocuseEffect use to update notifications every time home screen focus.
 	useFocusEffect(
 		useCallback(() => {
-			console.log('Home Screen Focus');
 			if (!axiosPrivate) return;
 			fetchAllNotification(axiosPrivate).then((data) => {
 				setNotification(data);
 			});
-			return () => {
-				console.log('Home Screen UnFocus');
-			};
+			return () => {};
 		}, [])
 	);
 
@@ -97,15 +92,11 @@ export default function HomeScreen() {
 	}, [friends]);
 
 	useEffect(() => {
-		console.log('Socket At Home: ' + socket);
 		if (!socket || !isConnected) return;
-		console.log('HomeScreen getMessage listening...');
 		const handleMessage = (data: any) => {
-			console.log('Message Comming Background');
 			const sender = friendList?.current?.find((f: Friend) => f.user_id === data.sender_id);
 			setNotification((prev) => [...prev, data]);
 			if (!sender) {
-				console.log('RealTime Fetch Freind');
 				fetchFriend(axiosPrivate, data.sender_id).then((friend) => {
 					friend && setFriends((list) => [friend, ...list]);
 				});
@@ -114,7 +105,6 @@ export default function HomeScreen() {
 		};
 		socket.on('getMessage', handleMessage);
 		return () => {
-			console.log('Home getMessage listner Off');
 			socket.off('getMessage', handleMessage);
 		};
 		// eslint-disable-next-line

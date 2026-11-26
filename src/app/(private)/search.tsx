@@ -1,12 +1,11 @@
 import FriendCard from '@/src/components/FriendCard';
-import SearchInputBar from '@/src/components/SearchInputBar';
+import SearchInputBar from '@/src/components/search/SearchInputBar';
 import useFriends from '@/src/hooks/useFriends';
 import React, {memo, useEffect, useState} from 'react';
 import {FlatList, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SearchScreen = () => {
-	console.log('search Screen render');
 	const [index, setindex] = useState(1);
 	const [searchInput, setSearchInput] = useState('');
 	const {friends, isFetching, hasMore} = useFriends(index, searchInput);

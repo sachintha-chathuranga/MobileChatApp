@@ -5,11 +5,10 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import {useRouter} from 'expo-router';
 import React, {useState} from 'react';
 import {Pressable, ScrollView, Text, View} from 'react-native';
+import Loading from '../Loading';
 import GuestCard from './GuestCard';
-import Loading from './Loading';
 
 const GuestList = () => {
-	console.log('GuestList Rendered!');
 	const [index, setindex] = useState(1);
 	const {friends, isFetching, hasMore} = useFriends(index);
 	const router = useRouter();

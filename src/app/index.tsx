@@ -7,7 +7,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import SubmitButton from '../components/SubmitButton';
 
 export default function WelcomeScreen() {
-	console.log("Welcome Screen Rendered!")
 	const openLink = () => {
 		Linking.openURL('https://galaxies.dev');
 	};

@@ -1,7 +1,7 @@
 import {Colors} from '@/src/constants/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useColorScheme} from 'nativewind';
-import React, {Ref, memo, useEffect} from 'react';
+import React, {Ref, memo} from 'react';
 import {TextInput, TouchableWithoutFeedback, View} from 'react-native';
 
 type InputFieldProps = {
@@ -11,11 +11,7 @@ type InputFieldProps = {
 };
 
 const InputField: React.FC<InputFieldProps> = ({inputRef, onInputChange, onSubmit}) => {
-	console.log('Input Field Rendered');
 	const {colorScheme} = useColorScheme();
-	useEffect(() => {
-		console.log('inputRef Changed on Imput');
-	}, [inputRef]);
 
 	return (
 		<View className=" py-2 px-4 flex-row items-center gap-3 bg-light-bgcolor-100 dark:bg-dark-bgcolor-100">

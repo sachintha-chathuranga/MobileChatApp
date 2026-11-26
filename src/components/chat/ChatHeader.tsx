@@ -3,17 +3,16 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {router, useLocalSearchParams} from 'expo-router';
 import React, {memo, useCallback, useMemo} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import {Colors} from '../constants/theme';
-import {MenuItem} from '../constants/types';
-import {useTheme} from '../context/themeContext';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
-import {clearMessages} from '../services/apiCalls';
-import Menu from './Menu';
+import {Colors} from '../../constants/theme';
+import {MenuItem} from '../../constants/types';
+import {useTheme} from '../../context/themeContext';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import {clearMessages} from '../../services/apiCalls';
+import Menu from '../Menu';
 type ChatHeaderProps = {
 	clear: () => void;
 };
 const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
-	console.log('Chat Header Rendered!');
 	const {id, name, status, avatar} = useLocalSearchParams<{
 		id: string;
 		name: string;

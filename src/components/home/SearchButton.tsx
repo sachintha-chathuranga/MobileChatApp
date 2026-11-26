@@ -6,7 +6,6 @@ import React, {memo} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 const SearchButton = () => {
-	console.log('Search Btn Rendered!');
 	const {colorScheme} = useColorScheme();
 	const router = useRouter();
 

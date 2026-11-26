@@ -5,8 +5,10 @@ import SubmitButton from '@/src/components/SubmitButton';
 import {Country} from '@/src/constants/types';
 import {CONSTANT, COUNTRIES} from '@/src/constants/values';
 import {useAuth} from '@/src/context/authContext';
+import {useTheme} from '@/src/context/themeContext';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {checkPhoneNumber, sendPhoneOTP} from '@/src/services/apiCalls';
+import handleError from '@/src/services/errorHandler';
 import BottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet';
 import {useRouter} from 'expo-router';
 import React, {useEffect, useRef, useState} from 'react';
@@ -25,28 +27,30 @@ const PhoneUpdateScreen = () => {
 	const axiosPrivate = useAxiosPrivate();
 	const {user} = useAuth();
 	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+	const {theme} = useTheme();
 
 	const handleSubmit = () => {
 		if (phone === user?.phone) {
 			return Alert.alert('Message', 'Please Enter your new phone number.');
 		}
 		setChecking((prev) => (prev = true));
-		checkPhoneNumber(axiosPrivate, phone).then((checkRes) => {
-			setChecking((prev) => (prev = false));
-			if (!checkRes) return;
-			if (checkRes.isPhoneExist) return Alert.alert('Message', 'This phone number alredy use by another account.');
-			setSending((prev) => (prev = true));
-			sendPhoneOTP(phone).then((res) => {
-				setSending((prev) => (prev = false));
-				if (!res) return;
-				router.replace({
-					pathname: '/(private)/profile/phone_form/verify_otp',
-					params: {
-						param: phone,
-					},
-				});
-			});
-		});
+		checkPhoneNumber(axiosPrivate, phone)
+			.then((checkRes) => {
+				setSending((prev) => (prev = true));
+				sendPhoneOTP(phone)
+					.then((res) => {
+						router.replace({
+							pathname: '/(private)/profile/phone_form/verify_otp',
+							params: {
+								param: phone,
+							},
+						});
+					})
+					.catch((error) => handleError(error, theme))
+					.finally(() => setSending((prev) => (prev = false)));
+			})
+			.catch((error) => handleError(error, theme))
+			.finally(() => setChecking(false));
 	};
 	useEffect(() => {
 		const showSubscription = Keyboard.addListener('keyboardDidShow', () => setIsKeyboardVisible(true));

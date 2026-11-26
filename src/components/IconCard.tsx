@@ -1,6 +1,5 @@
 import {Colors} from '@/src/constants/theme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 
 import React from 'react';
@@ -22,7 +21,6 @@ type IconCardProps = {
 	onPress: () => void;
 };
 const IconCard: React.FC<IconCardProps> = ({iconName, title, info, disabled, onPress}) => {
-	const router = useRouter();
 	const {colorScheme} = useColorScheme();
 	return (
 		<TouchableHighlight

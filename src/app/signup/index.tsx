@@ -1,10 +1,12 @@
 import {images} from '@/src/assets/images';
-import ImagePickDrawer from '@/src/components/ImagePickDrawer';
+import ImagePickDrawer from '@/src/components/drawer/ImagePickDrawer';
 import Loading from '@/src/components/Loading';
 import NameInput from '@/src/components/NameInput';
 import SubmitButton from '@/src/components/SubmitButton';
 import {useAuth} from '@/src/context/authContext';
+import {useTheme} from '@/src/context/themeContext';
 import {signUp} from '@/src/services/apiCalls';
+import handleError from '@/src/services/errorHandler';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {useLocalSearchParams} from 'expo-router';
 import React, {useEffect, useRef, useState} from 'react';
@@ -13,7 +15,6 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SignUpScreen = () => {
-	console.log('SignUp Screen Rendered!');
 	const [sending, setSending] = useState(false);
 	const [input, setInput] = useState('');
 	const bottomSheetRef = useRef<BottomSheet>(null);
@@ -22,6 +23,8 @@ const SignUpScreen = () => {
 	const [isValid, setIsValid] = useState(false);
 	const {signIn} = useAuth();
 	const [userId, setuserId] = useState(0);
+	const {theme} = useTheme();
+
 	useEffect(() => {
 		if (user_id) {
 			setuserId(Number(user_id));
@@ -32,10 +35,10 @@ const SignUpScreen = () => {
 		if (!userId) return;
 		setSending(true);
 		signUp(userId, input.trim(), img_uri)
-			.then((data) => {
-				if (!data) return;
-				signIn(data.user, data.accessToken, data.refreshToken);
+			.then((res) => {
+				signIn(res.data.user, res.data.accessToken, res.data.refreshToken);
 			})
+			.catch((error) => handleError(error, theme))
 			.finally(() => setSending(false));
 	};
 
