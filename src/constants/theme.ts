@@ -16,6 +16,7 @@ export const Colors = {
 			primary: '#22c55e',
 			inactive: '#d1d5db',
 			transparent: '#f9fafbb3',
+			overlay: '#00000085',
 			menu: '#F9FAFB',
 		},
 		inputbg: '#e7e7e7c4',

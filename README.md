@@ -59,8 +59,8 @@ Join our community of developers creating universal apps.
 
 1.Make sure connect device using usb cable and enable usb debuggin.
 
-2.Run the command `npx expo start --no-dev --minify` on terminal and press 'a' to run application.
- or Run the command `npx expo start --dev-client` launch the app with dev tools.
+2.Run the command `npx expo start --no-dev --minify` to Bundle in production mode & Minify javascript on terminal and press 'a' to run application.
+ or Run the command `npx expo start --dev-client` to Launch in a custom native app.
 
 ## Build, Install, and lauch the app on connected device
 

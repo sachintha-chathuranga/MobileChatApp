@@ -6,6 +6,7 @@ import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
 import {Stack} from 'expo-router';
 import {useColorScheme} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import AlertHost from '../components/Alert';
 import Loading from '../components/Loading';
 import {SocketProvider} from '../context/socketContext';
 import SplashScreenController from './splash';
@@ -19,6 +20,7 @@ export default function RootLayout() {
 					<SafeAreaProvider>
 						<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
 							<SplashScreenController />
+							<AlertHost />
 							<RootNavigator />
 						</ThemeProvider>
 					</SafeAreaProvider>
