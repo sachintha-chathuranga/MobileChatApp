@@ -1,6 +1,7 @@
 import {Axios} from 'axios';
 import {NewMessage, UpdateUser} from '../constants/types';
 import {axiosPublic, axiosRefresh} from './requestConfig';
+import { API_URL } from '../constants/config';
 
 export const getNewToken = async (refreshToken: string | null) => {
 	try {
@@ -12,6 +13,7 @@ export const getNewToken = async (refreshToken: string | null) => {
 };
 
 export const sendPhoneOTP = async (phone: string) => {
+	console.log(API_URL)
 	return await axiosPublic.post(`auth/send-phone-otp`, {phone});
 };
 
