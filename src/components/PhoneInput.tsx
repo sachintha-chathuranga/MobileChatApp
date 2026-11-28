@@ -17,7 +17,6 @@ type PhoneInputProps = {
 const PhoneInput: React.FC<PhoneInputProps> = ({phone, setPhone, country, setIsValide, bottomSheetRef}) => {
 	const {colorScheme} = useColorScheme();
 	const validate = (input: string) => {
-		console.log(input.length);
 		input.length === country?.length ? setIsValide(true) : setIsValide(false);
 	};
 	const handlePresentModalPress = useCallback(() => {
