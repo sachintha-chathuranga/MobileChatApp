@@ -10,10 +10,7 @@ const handleError = (error: any, theme: ThemeType | null) => {
 	if (theme) {
 		ErrorTheme = theme;
 	}
-	const options = {
-		userInterfaceStyle: ErrorTheme as ThemeType,
-	};
-
+	console.log(error)
 	if (!error?.response) {
 		AppAlert.alert('Server Error', 'Server does not respond!', errorButton);
 	} else if (error.response?.data) {

@@ -1,4 +1,4 @@
-import {images} from '@/src/assets/images';
+import {images} from '@/assets/images';
 import {Friend} from '@/src/constants/types';
 import {useRouter} from 'expo-router';
 import React, {useMemo} from 'react';

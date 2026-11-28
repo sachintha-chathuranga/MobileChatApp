@@ -8,26 +8,27 @@ import {SaveFormat, useImageManipulator} from 'expo-image-manipulator';
 import {Asset, requestPermissionsAsync} from 'expo-media-library';
 import {router, useLocalSearchParams} from 'expo-router';
 import {useCallback, useMemo, useState} from 'react';
-import {Alert, Image, Text, View, useWindowDimensions} from 'react-native';
+import {Alert, Image, ImageSource, Text, View, useWindowDimensions} from 'react-native';
 import {GestureDetector, GestureHandlerRootView, usePanGesture} from 'react-native-gesture-handler';
 import Animated, {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTheme} from '../context/themeContext';
 import handleError from '../services/errorHandler';
+import {getImageUri} from '../services/store';
 
 const ImageCropper = () => {
-	const {uri, imageWidth, imageHeight, ratio, dissmissPath} = useLocalSearchParams<{
+	const {imageWidth, imageHeight, ratio, dissmissPath} = useLocalSearchParams<{
 		uri: string;
 		imageWidth: string;
 		imageHeight: string;
 		ratio: string;
 		dissmissPath: CropBackPath;
 	}>();
-
 	const {user, setUser} = useAuth();
 	const [saving, setSaving] = useState(false);
 	const {width, height} = useWindowDimensions();
-	const context = useImageManipulator(uri);
+	const imageUri = getImageUri();
+	const context = useImageManipulator(imageUri);
 	const axiosPrivate = useAxiosPrivate();
 	const {theme} = useTheme();
 
@@ -131,8 +132,8 @@ const ImageCropper = () => {
 
 			// Create an image asset in the gallery
 			const asset = await Asset.create(result.uri);
-
 			const savedImageUri = await asset.getUri();
+
 			if (user) {
 				const data: UpdateUser = {
 					profil_pic: savedImageUri,
@@ -175,7 +176,7 @@ const ImageCropper = () => {
 						className="items-center justify-center bg-black relative"
 						style={{width: IMAGE_CONTAINER_WIDTH, height: IMAGE_CONTAINER_HEIGHT}}
 					>
-						<Image source={{uri: uri}} style={{width: IMAGE_WIDTH, height: IMAGE_HEIGHT}} />
+						<Image source={{uri: imageUri} as ImageSource} style={{width: IMAGE_WIDTH, height: IMAGE_HEIGHT}} />
 						<Animated.View pointerEvents={'none'} style={topOverlayStyle} />
 						<Animated.View pointerEvents="none" style={bottomOverlayStyle} />
 						<Animated.View pointerEvents={'none'} style={leftOverlayStyle} />

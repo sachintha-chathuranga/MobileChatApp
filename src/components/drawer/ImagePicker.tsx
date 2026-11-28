@@ -1,3 +1,4 @@
+import {setImageUri} from '@/src/services/store';
 import * as ImagePicker from 'expo-image-picker';
 import {router} from 'expo-router';
 import {useCallback, useState} from 'react';
@@ -31,7 +32,6 @@ const ImagePickerComponent: React.FC<ImagePickerProps> = ({redirectPath, dissmis
 
 			let result = await ImagePicker.launchImageLibraryAsync({
 				mediaTypes: ['images'],
-				allowsEditing: false,
 				quality: 1,
 			});
 			setLoading(false);
@@ -40,10 +40,11 @@ const ImagePickerComponent: React.FC<ImagePickerProps> = ({redirectPath, dissmis
 			if (!result.canceled) {
 				const assets = result.assets[0];
 				const aspectRatio = assets.width / assets.height;
+				setImageUri(assets.uri);
 				router.push({
 					pathname: redirectPath,
 					params: {
-						uri: assets.uri,
+						// uri: encodeURIComponent(assets.uri),
 						imageWidth: String(assets.width),
 						imageHeight: String(assets.height),
 						ratio: String(aspectRatio),

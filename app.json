@@ -1,5 +1,5 @@
 {
-  "expo": {
+	"expo": {
 		"name": "BlissChat",
 		"slug": "whatsapp",
 		"version": "1.0.0",
@@ -8,7 +8,6 @@
 		"scheme": "blisschat",
 		"userInterfaceStyle": "automatic",
 		"ios": {
-      "icon": "./assets/expo.icon",
 			"supportsTablet": true,
 			"bundleIdentifier": "com.thanujaherath.whatsapp"
 		},
@@ -82,5 +81,5 @@
 			}
 		},
 		"owner": "thanujaherath"
-  }
+	}
 }
