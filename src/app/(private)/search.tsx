@@ -1,7 +1,7 @@
 import FriendCard from '@/src/components/FriendCard';
 import SearchInputBar from '@/src/components/search/SearchInputBar';
 import useFriends from '@/src/hooks/useFriends';
-import React, {memo, useEffect, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import {FlatList, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 

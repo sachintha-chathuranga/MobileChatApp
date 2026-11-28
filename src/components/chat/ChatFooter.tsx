@@ -5,7 +5,7 @@ import React, {Ref, memo} from 'react';
 import {TextInput, TouchableWithoutFeedback, View} from 'react-native';
 
 type InputFieldProps = {
-	inputRef: Ref<TextInput> | undefined;
+	inputRef: Ref<any> | undefined;
 	onInputChange: (text: string) => void;
 	onSubmit: () => void;
 };

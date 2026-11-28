@@ -1,6 +1,6 @@
-import {images} from '@/src/assets/images';
-import React, {useEffect} from 'react';
-import {Image, Text, View} from 'react-native';
+import {images} from '@/assets/images';
+import {useEffect} from 'react';
+import {Image, View} from 'react-native';
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,

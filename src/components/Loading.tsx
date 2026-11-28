@@ -4,10 +4,12 @@ import {ActivityIndicator, Text, View} from 'react-native';
 import {useColorScheme} from 'nativewind';
 import {Colors} from '../constants/theme';
 import {ThemeType} from '../constants/types';
+
 type LoadingProps = {
 	text?: string;
 	theme?: ThemeType;
 };
+
 const Loading: React.FC<LoadingProps> = ({text, theme}) => {
 	const {colorScheme} = useColorScheme();
 	return (

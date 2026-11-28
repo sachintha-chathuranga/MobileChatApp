@@ -1,7 +1,6 @@
 import IconCard from '@/src/components/IconCard';
 import ProfileCard from '@/src/components/ProfileCard';
 import {router} from 'expo-router';
-import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SettingsScreen = () => {

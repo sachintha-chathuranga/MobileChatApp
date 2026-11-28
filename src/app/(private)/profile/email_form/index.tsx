@@ -8,7 +8,7 @@ import {checkEmail, sendEmailOTP} from '@/src/services/apiCalls';
 import handleError from '@/src/services/errorHandler';
 import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
-import React, {memo, useEffect, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import {
 	Alert,
 	Keyboard,

@@ -11,7 +11,7 @@ import useMessages from '@/src/hooks/useMessages';
 import {postMessage, readAllMessages} from '@/src/services/apiCalls';
 import handleError from '@/src/services/errorHandler';
 import {useLocalSearchParams} from 'expo-router';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, Keyboard, KeyboardAvoidingView, Platform, TextInput, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -22,7 +22,7 @@ const ChatScreen = () => {
 	const {user} = useAuth();
 	const {socket, isConnected} = useSocket();
 	const [input, setInput] = useState('');
-	const inputRef = useRef<TextInput | null>(null);
+	const inputRef = useRef<TextInput>(null);
 	const axiosPrivate = useAxiosPrivate();
 	const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 	const {theme} = useTheme();
@@ -33,7 +33,6 @@ const ChatScreen = () => {
 
 	useEffect(() => {
 		if (!socket || !isConnected) return;
-		console.log('ChatScreen getMessage listening...');
 		const handleMessage = async (data: any) => {
 			if (data.sender_id === Number(id)) {
 				await readAllMessages(axiosPrivate, Number(id));
@@ -43,7 +42,6 @@ const ChatScreen = () => {
 		socket.on('getMessage', handleMessage);
 
 		return () => {
-			console.log('ChatScreen listener Off');
 			socket.off('getMessage', handleMessage);
 		};
 		// eslint-disable-next-line

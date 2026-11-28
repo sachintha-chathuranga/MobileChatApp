@@ -11,7 +11,7 @@ import handleError from '@/src/services/errorHandler';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {Keyboard, KeyboardAvoidingView, Platform, Pressable, Text, TextInput, View} from 'react-native';
 import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -29,7 +29,7 @@ const AboutForm = () => {
 	const [input, setInput] = useState('');
 	const [showEmojiKeyboard, setShowEmojiKeyboard] = useState(false);
 	const [emoji, setEmoji] = useState('');
-	const inputRef = useRef<TextInput>(null);
+	const inputRef = useRef(null);
 	const {theme} = useTheme();
 	const {user, setUser} = useAuth();
 	const axiosPrivate = useAxiosPrivate();

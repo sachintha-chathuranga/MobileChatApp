@@ -1,5 +1,3 @@
-import './global.css';
-
 import {AuthProvider, useAuth} from '@/src/context/authContext';
 import {CustomThemeProvider} from '@/src/context/themeContext';
 import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
@@ -9,6 +7,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AlertHost from '../components/Alert';
 import Loading from '../components/Loading';
 import {SocketProvider} from '../context/socketContext';
+import './global.css';
 import SplashScreenController from './splash';
 
 export default function RootLayout() {

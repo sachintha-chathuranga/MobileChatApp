@@ -11,7 +11,7 @@ import {checkPhoneNumber, sendPhoneOTP} from '@/src/services/apiCalls';
 import handleError from '@/src/services/errorHandler';
 import BottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet';
 import {useRouter} from 'expo-router';
-import React, {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Alert, Keyboard, KeyboardAvoidingView, Platform, Text, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';

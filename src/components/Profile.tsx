@@ -1,4 +1,4 @@
-import {images} from '@/src/assets/images';
+import {images} from '@/assets/images';
 import IconCard from '@/src/components/IconCard';
 import ImagePickDrawer from '@/src/components/drawer/ImagePickDrawer';
 import {Colors} from '@/src/constants/theme';
@@ -11,11 +11,13 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {User} from '../constants/types';
 import Loading from './Loading';
+
 type ProfileComponentProps = {
 	isUser: boolean;
 	user: User | null;
 	isLoading: boolean;
 };
+
 const ProfileComponent: React.FC<ProfileComponentProps> = ({isUser, user, isLoading}) => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const {colorScheme} = useColorScheme();

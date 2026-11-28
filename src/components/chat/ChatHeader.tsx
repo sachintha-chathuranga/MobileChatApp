@@ -1,4 +1,4 @@
-import {images} from '@/src/assets/images';
+import {images} from '@/assets/images';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {router, useLocalSearchParams} from 'expo-router';
 import React, {memo, useCallback, useMemo} from 'react';
@@ -9,9 +9,11 @@ import {useTheme} from '../../context/themeContext';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import {clearMessages} from '../../services/apiCalls';
 import Menu from '../Menu';
+
 type ChatHeaderProps = {
 	clear: () => void;
 };
+
 const ChatHeader: React.FC<ChatHeaderProps> = ({clear}) => {
 	const {id, name, status, avatar} = useLocalSearchParams<{
 		id: string;

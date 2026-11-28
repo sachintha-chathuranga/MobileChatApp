@@ -1,4 +1,4 @@
-import {images} from '@/src/assets/images';
+import {images} from '@/assets/images';
 import {Friend, Message} from '@/src/constants/types';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
@@ -16,6 +16,7 @@ type FriendCardProps = {
 	isSelecionMode?: boolean;
 	handleLongPress?: (id: number) => void;
 };
+
 const FriendCard: React.FC<FriendCardProps> = ({
 	friend,
 	type,

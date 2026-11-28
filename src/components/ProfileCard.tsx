@@ -1,10 +1,10 @@
-import {images} from '@/src/assets/images';
+import {images} from '@/assets/images';
 import {Colors} from '@/src/constants/theme';
 import {useAuth} from '@/src/context/authContext';
 import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
-import React from 'react';
 import {Image, Pressable, Text, TouchableHighlight, View} from 'react-native';
+
 const ProfileCard = () => {
 	const router = useRouter();
 	const {colorScheme} = useColorScheme();

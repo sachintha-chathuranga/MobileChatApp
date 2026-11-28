@@ -3,7 +3,7 @@ import {CONSTANT} from '@/src/constants/values';
 import useFriends from '@/src/hooks/useFriends';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import {useRouter} from 'expo-router';
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {Pressable, ScrollView, Text, View} from 'react-native';
 import Loading from '../Loading';
 import GuestCard from './GuestCard';

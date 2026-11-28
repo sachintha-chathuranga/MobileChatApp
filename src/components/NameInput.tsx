@@ -10,7 +10,7 @@ type NameInputProps = {
 	setValidate: (val: boolean) => void;
 };
 const NameInput: React.FC<NameInputProps> = ({onIputChange, input, placeholder, setValidate}) => {
-	const inputRef = useRef<TextInput>(null);
+	const inputRef = useRef(null);
 	const [error, setError] = useState('');
 	const {colorScheme} = useColorScheme();
 

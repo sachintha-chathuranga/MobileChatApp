@@ -2,7 +2,7 @@ import {Colors} from '@/src/constants/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
-import React, {memo} from 'react';
+import {memo} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 const SearchButton = () => {

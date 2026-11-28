@@ -3,7 +3,7 @@ import {CONSTANT, COUNTRIES} from '@/src/constants/values';
 import {sendPhoneOTP} from '@/src/services/apiCalls';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {useRouter} from 'expo-router';
-import React, {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Keyboard, KeyboardAvoidingView, Platform, Text, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';

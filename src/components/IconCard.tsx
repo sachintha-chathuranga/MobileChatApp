@@ -1,17 +1,8 @@
 import {Colors} from '@/src/constants/theme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import {useColorScheme} from 'nativewind';
-
 import React from 'react';
 import {Text, TouchableHighlight, View} from 'react-native';
-type Friend = {
-	id: number;
-	fname: string;
-	lname: string;
-	lastMessage: string;
-	profil_pic: string;
-	status: boolean;
-};
 
 type IconCardProps = {
 	iconName: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
@@ -20,6 +11,7 @@ type IconCardProps = {
 	disabled?: boolean;
 	onPress: () => void;
 };
+
 const IconCard: React.FC<IconCardProps> = ({iconName, title, info, disabled, onPress}) => {
 	const {colorScheme} = useColorScheme();
 	return (

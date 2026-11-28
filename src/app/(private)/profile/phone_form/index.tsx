@@ -1,7 +1,6 @@
-import {images} from '@/src/assets/images';
+import {images} from '@/assets/images';
 import SubmitButton from '@/src/components/SubmitButton';
 import {useRouter} from 'expo-router';
-import React from 'react';
 import {Image, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 

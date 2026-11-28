@@ -1,5 +1,5 @@
 import {useColorScheme} from 'nativewind';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {BackHandler, Modal, Platform, Text, TouchableOpacity, View} from 'react-native';
 import {AlertButton, AlertRequest, AppAlert} from '../services/appAlert';
 

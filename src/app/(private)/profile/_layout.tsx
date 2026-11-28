@@ -2,7 +2,6 @@ import {Colors} from '@/src/constants/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {Stack, useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
-import React from 'react';
 
 const ProfileLayout = () => {
 	const router = useRouter();

@@ -8,7 +8,7 @@ import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
 import handleError from '@/src/services/errorHandler';
 import {useRouter} from 'expo-router';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Keyboard, KeyboardAvoidingView, Platform, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 

@@ -5,11 +5,11 @@ import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {userUpdateCall} from '@/src/services/apiCalls';
 import {TouchableOpacity} from '@gorhom/bottom-sheet';
 import {SaveFormat, useImageManipulator} from 'expo-image-manipulator';
-import {createAssetAsync, requestPermissionsAsync} from 'expo-media-library';
+import {Asset, requestPermissionsAsync} from 'expo-media-library';
 import {router, useLocalSearchParams} from 'expo-router';
-import React, {useCallback, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {Alert, Image, Text, View, useWindowDimensions} from 'react-native';
-import {Gesture, GestureDetector, GestureHandlerRootView} from 'react-native-gesture-handler';
+import {GestureDetector, GestureHandlerRootView, usePanGesture} from 'react-native-gesture-handler';
 import Animated, {useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTheme} from '../context/themeContext';
@@ -54,13 +54,15 @@ const ImageCropper = () => {
 	const y = useSharedValue(0);
 	const startY = useSharedValue(0);
 
-	const pan = Gesture.Pan()
-		.onBegin(() => {
+	const pan = usePanGesture({
+		onBegin: () => {
 			startY.value = y.value;
-		})
-		.onUpdate((event) => {
+		},
+
+		onUpdate: (event) => {
 			y.value = Math.max(0, Math.min(IMAGE_HEIGHT - IMAGE_WIDTH, startY.value + event.translationY));
-		});
+		},
+	});
 
 	const frameStyle = useAnimatedStyle(() => ({
 		transform: [{translateY: y.value}],
@@ -128,15 +130,15 @@ const ImageCropper = () => {
 			}
 
 			// Create an image asset in the gallery
-			const asset = await createAssetAsync(result.uri);
+			const asset = await Asset.create(result.uri);
 
-			console.log(asset.uri);
+			const savedImageUri = await asset.getUri();
 			if (user) {
 				const data: UpdateUser = {
-					profil_pic: asset.uri,
+					profil_pic: savedImageUri,
 				};
 				await userUpdateCall(axiosPrivate, data);
-				setUser({...user, profil_pic: asset.uri});
+				setUser({...user, profil_pic: savedImageUri});
 			}
 			setSaving(false);
 			Alert.alert(
@@ -149,7 +151,7 @@ const ImageCropper = () => {
 							router.dismissTo({
 								pathname: dissmissPath,
 								params: {
-									img_uri: asset.uri,
+									img_uri: savedImageUri,
 									name: user?.fname + ' ' + user?.lname,
 									editable: 'true',
 								},

@@ -4,10 +4,12 @@ import {useRouter} from 'expo-router';
 import {useColorScheme} from 'nativewind';
 import React, {memo} from 'react';
 import {TextInput, View} from 'react-native';
+
 type SearchBarProps = {
 	value: string;
 	onChangeText: (text: string) => void;
 };
+
 const SearchInputBar: React.FC<SearchBarProps> = ({value, onChangeText}) => {
 	const router = useRouter();
 	const {colorScheme} = useColorScheme();

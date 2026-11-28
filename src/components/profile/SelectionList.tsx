@@ -2,7 +2,6 @@ import {Colors} from '@/src/constants/theme';
 import {AboutItem} from '@/src/constants/types';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import {useColorScheme} from 'nativewind';
-
 import React, {memo, useState} from 'react';
 import {Pressable, Text, View} from 'react-native';
 

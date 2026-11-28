@@ -5,9 +5,11 @@ import React, {memo, useState} from 'react';
 import {Modal, Pressable, Text, TouchableHighlight, View} from 'react-native';
 import {MenuItem} from '../constants/types';
 import {useTheme} from '../context/themeContext';
+
 type MenuProps = {
 	list: MenuItem[];
 };
+
 const Menu: React.FC<MenuProps> = ({list}) => {
 	const [visible, setVisible] = useState(false);
 	const {theme} = useTheme();

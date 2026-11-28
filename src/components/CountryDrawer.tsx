@@ -10,6 +10,7 @@ type CountryDrawerProps = {
 	bottomSheetRef: React.RefObject<BottomSheet | null>;
 	setCountry: (country: Country) => void;
 };
+
 const CountryDrawer: React.FC<CountryDrawerProps> = ({bottomSheetRef, setCountry}) => {
 	const snapPoints = useMemo(() => ['30%', '50%'], []);
 	const {colorScheme} = useColorScheme();

@@ -2,7 +2,7 @@ import ProfileComponent from '@/src/components/Profile';
 import useAxiosPrivate from '@/src/hooks/useAxiosPrivate';
 import {fetchFriend} from '@/src/services/apiCalls';
 import {useLocalSearchParams} from 'expo-router';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 const FriendProfileScreen = () => {
 	const axiosPrivate = useAxiosPrivate();

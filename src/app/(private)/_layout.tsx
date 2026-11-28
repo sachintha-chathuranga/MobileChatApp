@@ -1,9 +1,6 @@
-import {Stack, useRouter} from 'expo-router';
-import {useColorScheme} from 'nativewind';
+import {Stack} from 'expo-router';
 
 export default function HomeLayout() {
-	const router = useRouter();
-	const {colorScheme} = useColorScheme();
 	return (
 		<Stack>
 			<Stack.Screen

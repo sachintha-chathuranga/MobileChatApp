@@ -1,6 +1,5 @@
 import ProfileComponent from '@/src/components/Profile';
 import {useAuth} from '@/src/context/authContext';
-import React from 'react';
 
 const ProfileScreen = () => {
 	const {user, loadingUser} = useAuth();

@@ -1,4 +1,4 @@
-import {images} from '@/src/assets/images';
+import {images} from '@/assets/images';
 import ImagePickDrawer from '@/src/components/drawer/ImagePickDrawer';
 import Loading from '@/src/components/Loading';
 import NameInput from '@/src/components/NameInput';
@@ -9,7 +9,7 @@ import {signUp} from '@/src/services/apiCalls';
 import handleError from '@/src/services/errorHandler';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {useLocalSearchParams} from 'expo-router';
-import React, {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Image, Keyboard, KeyboardAvoidingView, Platform, Pressable, Text, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';

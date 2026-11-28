@@ -165,7 +165,7 @@ const VerifyOTP: React.FC<VerifyOTPProps> = ({type}) => {
 							ref={ref}
 							{...props}
 							value={otp}
-							onChangeText={(text) => handleInputChange(text)}
+							onChangeText={(text: string) => handleInputChange(text)}
 							cellCount={CELL_COUNT}
 							rootStyle={{marginVertical: 30}}
 							keyboardType="number-pad"

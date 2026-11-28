@@ -3,11 +3,7 @@
 		"version": ">= 7.6.0"
 	},
 	"build": {
-		"base":{
-			"node": "20.19.4"
-		},
 		"development": {
-			"extends": "base",
 			"distribution": "internal",
 			"developmentClient": true,
 			"environment": "development",
@@ -17,7 +13,6 @@
 			}
 		},
 		"preview": {
-			"extends": "base",
 			"distribution": "internal",
 			"environment": "preview",
 			"android": {

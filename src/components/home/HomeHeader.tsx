@@ -10,12 +10,14 @@ import {useAuth} from '../../context/authContext';
 import {useSocket} from '../../context/socketContext';
 import {useTheme} from '../../context/themeContext';
 import Menu from '../Menu';
+
 type HomeHeaderProps = {
 	isSelctionMod: boolean;
 	clearSelection: (onlyClear: boolean) => void;
 	selectAll: () => void;
 	onDeletPress: () => void;
 };
+
 const HomeHeader: React.FC<HomeHeaderProps> = ({isSelctionMod, clearSelection, selectAll, onDeletPress}) => {
 	const router = useRouter();
 	const {toggleTheme, theme} = useTheme();
